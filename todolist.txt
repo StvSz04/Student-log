@@ -1,1 +1,2 @@
+- Left off here https://flask.palletsprojects.com/en/3.0.x/tutorial/templates/
 - Overhaul the base.html with my html
