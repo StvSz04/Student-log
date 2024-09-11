@@ -10,3 +10,8 @@ bp = Blueprint('dash', __name__, url_prefix='/dash')
 @bp.route('/dashboard')
 def go_to_dashboard():
     return render_template('dash/dashboard.html')
+
+# Dashboard page
+@bp.route('/log')
+def go_to_log():
+    return render_template('dash/log_page.html')

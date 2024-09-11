@@ -1,20 +1,28 @@
--- Need to remove these two lines
+-- Remove existing tables if they exist
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS course;
+DROP TABLE IF EXISTS logged_hours;
 
+-- Create user table with username as the primary key
 CREATE TABLE user (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT UNIQUE NOT NULL,
+  username TEXT PRIMARY KEY,  -- Use username as the primary key
   password TEXT NOT NULL
 );
 
-CREATE TABLE post (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER NOT NULL,
-  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  title TEXT NOT NULL,
-  body TEXT NOT NULL,
-  FOREIGN KEY (author_id) REFERENCES user (id)
+
+-- Table to store user-defined courses
+CREATE TABLE course (
+  user_username TEXT NOT NULL,  -- Reference to the username of the user
+  course_name TEXT NOT NULL,    -- Course name
+  PRIMARY KEY (user_username, course_name),  -- Composite primary key to ensure uniqueness
+  FOREIGN KEY (user_username) REFERENCES user(username)
 );
 
-
+-- Table to log hours spent by users on courses
+CREATE TABLE logged_hours (
+  user_username TEXT NOT NULL,  -- Reference to the username of the user
+  course_name TEXT NOT NULL,    -- Course name
+  hours DECIMAL(5, 2) NOT NULL,
+  log_date DATE NOT NULL,
+  FOREIGN KEY (user_username, course_name) REFERENCES course(user_username, course_name)
+);

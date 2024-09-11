@@ -13,30 +13,53 @@ body {
     line-height: 1.6; /* Better readability */
 }
 
+/* Header */
 header {
     text-align: center;
     padding: 40px;
+    background-color: #1a1a1a; /* Dark grey background for header */
 }
 
-.section-header {
-    background-color: #1a1a1a; /* Dark grey for header background */
+header h1 {
     color: #ffffff; /* White text for contrast */
-    padding: 30px;
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7); /* Deeper shadow for depth */
 }
 
-.section-header img {
-    margin: 20px 0;
-    border-radius: 50%; /* Circular image */
-    border: 4px solid #ffffff; /* White border around the image */
-}
-
-.nav {
+/* Navigation */
+nav {
+    background: lightgray;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
     margin-top: 20px;
 }
 
-.btn {
+nav h1 {
+    flex: auto;
+    margin: 0;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn, button {
     background-color: #007BFF; /* Bright blue button background */
     color: #ffffff; /* White text */
     border: 2px solid #0056b3; /* Darker blue border */
@@ -45,17 +68,14 @@ header {
     cursor: pointer;
     transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
 }
-.center nav {
-    text-align: center;
-}
 
-
-.btn:hover {
+.btn:hover, button:hover {
     background-color: #0056b3; /* Darker blue on hover */
     border-color: #004494; /* Even darker blue border on hover */
 }
 
-.features {
+/* Sections */
+.section-header, .form-section {
     background-color: #2a2a2a; /* Dark grey background for contrast */
     color: #e0e0e0; /* Light text color */
     padding: 30px;
@@ -65,46 +85,46 @@ header {
     max-width: 800px; /* Center content and limit width */
 }
 
-.features h2 {
+.section-header {
+    background-color: #1a1a1a; /* Darker grey for header background */
+}
+
+.section-header h2, .form-section h2 {
     background-color: #333333; /* Slightly lighter grey for headings */
     color: #ffffff; /* White text */
     padding: 15px;
     border-radius: 10px; /* Rounded corners */
     margin-bottom: 20px;
-    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
-.features h2:hover {
+.section-header h2:hover, .form-section h2:hover {
     background-color: #444444; /* Slightly lighter grey on hover */
 }
 
-.features ul {
-    list-style-type: none; /* Removes default list bullets */
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
 }
 
-.features li {
-    margin-bottom: 20px;
-    padding: 15px;
-    border-left: 5px solid #007BFF; /* Blue left border */
-    transition: border-color 0.3s ease; /* Smooth transition for border color */
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-.features li:hover {
-    border-color: #0056b3; /* Darker blue border on hover */
+input[type="text"], input[type="number"], input[type="date"], select {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.features p {
-    margin: 10px 0;
+input[type="submit"] {
+    align-self: start;
+    min-width: 10em;
 }
 
-.background {
-    background-image: url('images_folder/main_background_image.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    min-height: 100vh; /* Ensures background covers the viewport height */
-}
-
+/* Popup */
 .popup {
     width: 300px; /* Set a fixed width for the popup */
     height: auto; /* Height adjusts based on content */
@@ -121,6 +141,10 @@ header {
     visibility: hidden;
 }
 
+.popup.open-popup {
+    visibility: visible;
+}
+
 .popup form {
     display: flex;
     flex-direction: column; /* Stack form elements vertically */
@@ -134,7 +158,7 @@ header {
     width: 100%; /* Ensure input fields take the full width of the form */
     padding: 10px; /* Add padding inside input fields */
     border: none; /* Remove default border */
-    border-radius: 5px; /* Optional: Rounded corners for input fields */
+    border-radius: 5px; /* Rounded corners for input fields */
     margin-bottom: 10px; /* Space between input fields */
 }
 
@@ -143,7 +167,7 @@ header {
     background-color: #007BFF; /* Button color */
     color: #ffffff; /* Button text color */
     border: none; /* Remove default border */
-    border-radius: 5px; /* Optional: Rounded corners for button */
+    border-radius: 5px; /* Rounded corners for button */
     cursor: pointer; /* Change cursor to pointer on hover */
     font-size: 16px; /* Adjust font size */
 }
@@ -152,35 +176,68 @@ header {
     background-color: #0056b3; /* Darker color on hover */
 }
 
-
-.open-popup{
-    visibility: visible;
+/* Background Image */
+.background {
+    background-image: url('images_folder/main_background_image.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh; /* Ensures background covers the viewport height */
 }
 
+/* Features Section */
+.features {
+    background-color: #2a2a2a; /* Dark grey background for contrast */
+    color: #e0e0e0; /* Light text color */
+    padding: 40px;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    margin: 20px auto;
+    max-width: 900px; /* Center content and limit width */
+}
 
-html { font-family: sans-serif; background: #eee; padding: 1rem; }
-body { max-width: 960px; margin: 0 auto; background: white; }
-h1 { font-family: serif; color: #377ba8; margin: 1rem 0; }
-a { color: #377ba8; }
-hr { border: none; border-top: 1px solid lightgray; }
-nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5rem; }
-nav h1 { flex: auto; margin: 0; }
-nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
-nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
-nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
-.content { padding: 0 1rem 1rem; }
-.content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; }
-.content > header h1 { flex: auto; margin: 1rem 0 0.25rem 0; }
-.flash { margin: 1em 0; padding: 1em; background: #cae6f6; border: 1px solid #377ba8; }
-.post > header { display: flex; align-items: flex-end; font-size: 0.85em; }
-.post > header > div:first-of-type { flex: auto; }
-.post > header h1 { font-size: 1.5em; margin-bottom: 0; }
-.post .about { color: slategray; font-style: italic; }
-.post .body { white-space: pre-line; }
-.content:last-child { margin-bottom: 0; }
-.content form { margin: 1em 0; display: flex; flex-direction: column; }
-.content label { font-weight: bold; margin-bottom: 0.5em; }
-.content input, .content textarea { margin-bottom: 1em; }
-.content textarea { min-height: 12em; resize: vertical; }
-input.danger { color: #cc2f2e; }
-input[type=submit] { align-self: start; min-width: 10em; }
+.features h2 {
+    background-color: #333333; /* Slightly lighter grey for headings */
+    color: #ffffff; /* White text */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px; /* Larger font size for headings */
+    border-bottom: 3px solid #007BFF; /* Blue underline for emphasis */
+}
+
+.features h2:hover {
+    background-color: #444444; /* Slightly lighter grey on hover */
+}
+
+.features ul {
+    list-style: none; /* Remove default bullets */
+    padding: 0;
+}
+
+.features li {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    background-color: #333333; /* Dark grey background for list items */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for list items */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.features li:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Deeper shadow on hover */
+}
+
+.features li::before {
+    content: "✔"; /* Checkmark or icon before list item */
+    color: #007BFF; /* Blue color for the icon */
+    font-size: 18px; /* Size of the icon */
+    margin-right: 10px; /* Space between icon and text */
+}
+
+/* Modern look for lists and elements */
+.features p {
+    margin: 10px 0;
+}
