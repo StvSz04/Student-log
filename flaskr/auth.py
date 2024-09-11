@@ -39,10 +39,8 @@ def register():
 
     return render_template('auth/register.html')
 
-@bp.route('/login', methods=('GET', 'POST'))
-
-
 # This View allows user to login
+@bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -61,7 +59,8 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            # After user is verified it then redirects to the dashboard
+            return redirect(url_for('dash.go_to_dashboard'))
 
         flash(error)
 
@@ -84,7 +83,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('home.go_to_homepage'))
 
 #Checks if user is logged in otherwise redirects them// Decorator - A decorator can be used to check this for each view it’s applied to.
 def login_required(view):

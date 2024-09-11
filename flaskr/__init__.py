@@ -29,7 +29,7 @@ def create_app(test_config=None):
 
 
 
-
+    #These next lines include the blueprints and corresponding views
     from . import db
     db.init_app(app)
 
@@ -38,5 +38,8 @@ def create_app(test_config=None):
 
     from . import homepage
     app.register_blueprint(homepage.bp)
+
+    from . import dash
+    app.register_blueprint(dash.bp)
 
     return app
