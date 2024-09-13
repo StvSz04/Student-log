@@ -5,10 +5,10 @@ DROP TABLE IF EXISTS logged_hours;
 
 -- Create user table with username as the primary key
 CREATE TABLE user (
-  username TEXT PRIMARY KEY,  -- Use username as the primary key
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
 );
-
 
 -- Table to store user-defined courses
 CREATE TABLE course (

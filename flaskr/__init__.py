@@ -42,4 +42,7 @@ def create_app(test_config=None):
     from . import dash
     app.register_blueprint(dash.bp)
 
+    from . import log
+    app.register_blueprint(log.bp)
+
     return app

@@ -6,19 +6,21 @@
     <main>
         <section class="form-section">
             <h2>Add a New Course</h2>
-            <form id="add-course-form" method="post">
+            <form id="add-course-form" method="post" action="{{ url_for('log.register_class') }}">
                 <label for="course-name">Course Name:</label>
-                <input type="text" id="course-name" name="course-name" required>
+                <input type="text" id="course_name" name="course_name" required>
                 <button type="submit">Add Course</button>
             </form>
         </section>
 
         <section class="form-section">
             <h2>Log Hours</h2>
-            <form id="log-hours-form">
+            <form id="log-hours-form" method="post">
                 <label for="course-select">Select Course:</label>
                 <select id="course-select" name="course-select" required>
-                    <!-- Options will be added dynamically -->
+                    {% for course in courses %}
+                    <option value="{{ course['course_name'] }}">{{ course['course_name' ] }}</option>
+                    {% endfor %}
                 </select>
 
                 <label for="hours">Hours Spent:</label>

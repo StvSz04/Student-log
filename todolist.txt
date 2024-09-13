@@ -1,1 +1,4 @@
-- download sqlite for commands
+Note to self - use the init_app command from flask to reset db and add new things
+
+*Current*
+- Dynamically load courses into drop downselect in log_page.html
