@@ -7,6 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
 
+from jinja2 import Environment, FileSystemLoader
 
 bp = Blueprint('log', __name__, url_prefix='/log')
 
@@ -36,18 +37,14 @@ def register_class():
                 flash(error)
         else:
             flash(error)
+        
+        
+        user_id = session.get('user_id')
+        #Query the course table
+        courses = db.execute("SELECT course_name FROM course WHERE user_username = ?", (user_id,)).fetchall()
 
-    return render_template('dash/log_page.html')
+    return render_template('dash/log_page.html', courses = courses)
 
-def select_class():
-    if request.method == 'POST':
-        db = get_db()
-    # Query the course table
-        courses = db.execute("SELECT course_name WHERE user_username FROM course").fetchall()
-    
-    # Pass the result to the template
-
-    return render_template('dash/log_page.html', courses=courses )
 
 # This view will used to commit the changes to the database
 #def log_hours():
