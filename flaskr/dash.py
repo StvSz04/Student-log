@@ -14,4 +14,4 @@ def go_to_dashboard():
 # Log_courses page
 @bp.route('/log')
 def go_to_log():
-    return render_template('dash/log_page.html')
+    return redirect(url_for('log.log_hours'))

@@ -3,49 +3,88 @@ import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
-
-from jinja2 import Environment, FileSystemLoader
+import sqlite3
 
 bp = Blueprint('log', __name__, url_prefix='/log')
 
-# This view registers a users course into the database
-@bp.route('/register_course', methods=('GET', 'POST'))
-def register_class():
-    if request.method == 'POST':
-        course = request.form['course_name']
-        user_id = session.get('user_id')
+# Combined view for course registration and hour logging
+@bp.route('/log_hours', methods=('GET', 'POST'))
+def log_hours():
+    user_id = session.get('user_id')
+    db = get_db()
 
-        db = get_db()
+    # Fetch existing courses for the user
+    courses = db.execute("SELECT course_name FROM course WHERE user_username = ?", (user_id,)).fetchall()
+
+    # Handle POST request for both course registration and hour logging
+    if request.method == 'POST':
+        # Retrieve form data
+        new_course = request.form.get('new-course')
+        selected_course = request.form.get('course-select')
+        hours = request.form.get('hours')
+        log_date = request.form.get('log-date')
+        
         error = None
 
-        if not course:
-            error = 'Course name is required.'
+        # Register a new course if provided
+        if new_course:
+            if not new_course.strip():
+                error = 'Course name is required.'
+            else:
+                try:
+                    db.execute(
+                        "INSERT INTO course (user_username, course_name) VALUES (?, ?)",
+                        (user_id, new_course)
+                    )
+                    db.commit()
+                    flash('Course registered successfully.')
+                    courses = db.execute("SELECT course_name FROM course WHERE user_username = ?", (user_id,)).fetchall()
+                except sqlite3.IntegrityError:
+                    error = f"Course {new_course} is already registered."
+            #Updates the input into the
+            return redirect(url_for('log.log_hours'))
 
-        if error is None:
-            try:
-                db.execute(
-                    "INSERT INTO course (user_username, course_name) VALUES (?, ?)",
-                    (user_id, course)
-                )
-                db.commit()
-                flash('Course registered successfully.')
-            except db.IntegrityError:
-                error = f"Course {course} is already registered."
-                flash(error)
-        else:
-            flash(error)
+        # Log hours if course, hours, and date are provided
+        if selected_course or new_course:
+            course_name = selected_course or new_course
         
-        
-        user_id = session.get('user_id')
-        #Query the course table
-        courses = db.execute("SELECT course_name FROM course WHERE user_username = ?", (user_id,)).fetchall()
+            if hours and log_date:
+                try:
+                    # Check if the course already exists for the user
+                    existing_course = db.execute(
+                        "SELECT * FROM logged_hours WHERE user_username = ? AND course_name = ?",
+                        (user_id, course_name)
+                    ).fetchone()
 
-    return render_template('dash/log_page.html', courses = courses)
+                    if existing_course:
+                        # Course exists, update certain columns if needed (example: hours and log_date)
+                        db.execute(
+                            """
+                            UPDATE logged_hours 
+                            SET hours = ?, log_date = ?
+                            WHERE user_username = ? AND course_name = ?;
+                            """,
+                            (hours, log_date, user_id, course_name)
+                        )
+                        db.commit()
+                        print(user_id, course_name, hours, log_date)
+                        flash('Course updated successfully.')
+                    else:
+                        # If the course does not exist, insert a new course log
+                        db.execute(
+                            "INSERT INTO logged_hours (user_username, course_name, hours, log_date) VALUES (?, ?, ?, ?)",
+                            (user_id, course_name, hours, log_date)
+                        )
+                        db.commit()
+                        flash('Hours logged successfully.')
+                except Exception as e:
+                    flash(f"An error occurred: {e}")
+            else:
+                flash('Hours and log date are required to log time.')
 
 
-# This view will used to commit the changes to the database
-#def log_hours():
-     #return render_template('dash/log_page.html')
+    # Render the template with courses (for GET requests) or after processing POST request
+    return render_template('dash/log_page.html', courses=courses)
+

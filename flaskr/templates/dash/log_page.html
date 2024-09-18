@@ -6,32 +6,32 @@
     <main>
         <section class="form-section">
             <h2>Add a New Course</h2>
-            <form id="add-course-form" method="post" action="{{ url_for('log.register_class') }}">
+            <form id="add-course-form" method="post" action="{{ url_for('log.log_hours') }}">
                 <label for="course-name">Course Name:</label>
-                <input type="text" id="course_name" name="course_name" required>
+                <input type="text" id="course_name" name="new-course" required>
                 <button type="submit">Add Course</button>
             </form>
         </section>
 
         <section class="form-section">
             <h2>Log Hours</h2>
-            <form id="log-hours-form" method="post" >
+            <form id="log-hours-form" method="post" action="{{ url_for('log.log_hours') }}">
                 <label for="course-select">Select Course:</label>
                 <select id="course-select" name="course-select" required>
                     {% for course in courses %}
-                    <option value="{{ course['course_name'] }}">{{ course['course_name' ] }}</option>
+                    <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
                     {% endfor %}
                 </select>
-
+        
                 <label for="hours">Hours Spent:</label>
                 <input type="number" id="hours" name="hours" step="0.01" required>
-
+        
                 <label for="log-date">Date:</label>
                 <input type="date" id="log-date" name="log-date" required>
-
+        
                 <button type="submit">Log Hours</button>
             </form>
-        </section>
+        </section>        
     </main>
 {% endblock %}
 

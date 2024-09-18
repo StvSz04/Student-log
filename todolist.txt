@@ -1,4 +1,4 @@
 Note to self - use the init_app command from flask to reset db and add new things
 
 *Current*
-- Dynamically load courses into drop downselect in log_page.html
+- Implement feature where it adds already stored hours to new hours
