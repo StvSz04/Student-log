@@ -26,3 +26,4 @@ CREATE TABLE logged_hours (
   log_date DATE NOT NULL,
   FOREIGN KEY (user_username, course_name) REFERENCES course(user_username, course_name)
 );
+

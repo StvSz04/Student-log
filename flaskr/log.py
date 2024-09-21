@@ -59,7 +59,7 @@ def log_hours():
                     ).fetchone()
 
                     if existing_course:
-                        # Course exists, update certain columns if needed (example: hours and log_date)
+                        
                         db.execute(
                             """
                             UPDATE logged_hours 

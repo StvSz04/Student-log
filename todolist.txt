@@ -2,3 +2,4 @@ Note to self - use the init_app command from flask to reset db and add new thing
 
 *Current*
 - Implement feature where it adds already stored hours to new hours
+- Interesting probelm with tracking log date
