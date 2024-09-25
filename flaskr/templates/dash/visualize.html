@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualize Study Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Include Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+{% endblock %}
+
+{% block content %}
+<body class="background">
+    <div class="center-container">
+        <div class="slot" id="pie-chart">
+            <h2>Pie Chart</h2>
+            <div id="pie-chart-data"></div> <!-- Placeholder for the pie chart -->
+        </div>
+        <div class="slot" id="time-graph">
+            <h2>Time Graph</h2>
+            <div id="time-graph-slot"></div> <!-- Placeholder for the time graph -->
+        </div>
+    </div>
+
+    <footer>
+        <!-- Add footer content here if needed -->
+    </footer>
+
+    <script>
+        // Dynamic data from Flask
+        const classes = {{ study_data.classes | tojson }};
+        const hours = {{ study_data.hours | tojson }};
+        const weeks = {{ study_data.weeks | tojson }};
+        const studyHours = {{ study_data.study_hours | tojson }};
+
+        // Data for the pie chart
+        const pieData = [{
+            labels: classes,
+            values: hours,
+            type: 'pie'
+        }];
+
+        const pieLayout = {
+            title: 'Study Time Distribution',
+            margin: { t: 40, l: 40, r: 40, b: 40 }
+        };
+
+        // Plot the pie chart
+        const TESTER = document.getElementById('pie-chart-data');
+        Plotly.newPlot(TESTER, pieData, pieLayout);
+
+        // Data for the time graph (Line chart)
+        const timeData = [{
+            x: weeks,
+            y: studyHours,
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: { color: 'blue' }
+        }];
+
+        const timeLayout = {
+            title: 'Study Hours Over Time',
+            xaxis: { title: 'Weeks' },
+            yaxis: { title: 'Hours Studied' },
+            margin: { t: 40, l: 40, r: 40, b: 40 }
+        };
+
+        // Plot the time graph
+        const TIME_GRAPH_SLOT = document.getElementById('time-graph-slot');
+        Plotly.newPlot(TIME_GRAPH_SLOT, timeData, timeLayout);
+    </script>
+</body>
+{% endblock %}

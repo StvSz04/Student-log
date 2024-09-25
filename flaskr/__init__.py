@@ -45,4 +45,7 @@ def create_app(test_config=None):
     from . import log
     app.register_blueprint(log.bp)
 
+    from . import vis
+    app.register_blueprint(vis.bp)
+
     return app

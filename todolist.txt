@@ -1,5 +1,7 @@
 Note to self - use the init_app command from flask to reset db and add new things
 
 *Current*
-- Implement feature where it adds already stored hours to new hours
-- Interesting probelm with tracking log date
+- visulize hours now
+1. dynamically pull data into vis view dict
+
+*** Getting error with scope in visulize.html

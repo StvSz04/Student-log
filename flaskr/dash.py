@@ -15,3 +15,8 @@ def go_to_dashboard():
 @bp.route('/log')
 def go_to_log():
     return redirect(url_for('log.log_hours'))
+
+# Log_courses page
+@bp.route('/graphs')
+def go_to_vis():
+    return redirect(url_for('vis.display_graphs'))
