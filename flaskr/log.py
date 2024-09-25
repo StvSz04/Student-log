@@ -49,40 +49,21 @@ def log_hours():
         # Log hours if course, hours, and date are provided
         if selected_course or new_course:
             course_name = selected_course or new_course
-        
+
             if hours and log_date:
                 try:
-                    # Check if the course already exists for the user
-                    existing_course = db.execute(
-                        "SELECT * FROM logged_hours WHERE user_username = ? AND course_name = ?",
-                        (user_id, course_name)
-                    ).fetchone()
-
-                    if existing_course:
-                        
-                        db.execute(
-                            """
-                            UPDATE logged_hours 
-                            SET hours = ?, log_date = ?
-                            WHERE user_username = ? AND course_name = ?;
-                            """,
-                            (hours, log_date, user_id, course_name)
-                        )
-                        db.commit()
-                        print(user_id, course_name, hours, log_date)
-                        flash('Course updated successfully.')
-                    else:
-                        # If the course does not exist, insert a new course log
-                        db.execute(
-                            "INSERT INTO logged_hours (user_username, course_name, hours, log_date) VALUES (?, ?, ?, ?)",
-                            (user_id, course_name, hours, log_date)
-                        )
-                        db.commit()
-                        flash('Hours logged successfully.')
+                    # Insert a new course log without checking for existing entries
+                    db.execute(
+                        "INSERT INTO logged_hours (user_username, course_name, hours, log_date) VALUES (?, ?, ?, ?)",
+                        (user_id, course_name, hours, log_date)
+                    )
+                    db.commit()
+                    flash('Hours logged successfully.')
                 except Exception as e:
                     flash(f"An error occurred: {e}")
             else:
                 flash('Hours and log date are required to log time.')
+
 
 
     # Render the template with courses (for GET requests) or after processing POST request
