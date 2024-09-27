@@ -1,7 +1,4 @@
 Note to self - use the init_app command from flask to reset db and add new things
 
 *Current*
-- visulize hours now
-1. dynamically pull data into vis view dict
-
-*** Getting error with scope in visulize.html
+- set up dynamic data now

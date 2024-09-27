@@ -28,17 +28,26 @@
         <!-- Add footer content here if needed -->
     </footer>
 
+    <!-- JSON Data Embedding -->
+    <script id="study-data" type="application/json">
+        {{ study_data | tojson }}
+    </script>
+
     <script>
-        // Dynamic data from Flask
-        const classes = {{ study_data.classes | tojson }};
-        const hours = {{ study_data.hours | tojson }};
-        const weeks = {{ study_data.weeks | tojson }};
-        const studyHours = {{ study_data.study_hours | tojson }};
+    (function() {
+        // Retrieve the data from the JSON <script> tag
+        const studyData = JSON.parse(document.getElementById('study-data').textContent);
+
+        // Access individual data elements from the studyData object
+        const classesData = studyData.classes_data;
+        const hoursData = studyData.hours_data;
+        const weeksData = studyData.weeks_data;
+        const studyHoursData = studyData.study_hours_data;
 
         // Data for the pie chart
         const pieData = [{
-            labels: classes,
-            values: hours,
+            labels: classesData,
+            values: hoursData,
             type: 'pie'
         }];
 
@@ -53,8 +62,8 @@
 
         // Data for the time graph (Line chart)
         const timeData = [{
-            x: weeks,
-            y: studyHours,
+            x: weeksData,
+            y: studyHoursData,
             type: 'scatter',
             mode: 'lines+markers',
             marker: { color: 'blue' }
@@ -70,6 +79,9 @@
         // Plot the time graph
         const TIME_GRAPH_SLOT = document.getElementById('time-graph-slot');
         Plotly.newPlot(TIME_GRAPH_SLOT, timeData, timeLayout);
+    })();
     </script>
+
+        
 </body>
 {% endblock %}

@@ -12,10 +12,10 @@ bp = Blueprint('vis', __name__, url_prefix='/visualize')
 @bp.route('/graph')
 def display_graphs():
     study_data = {
-        'classes': ['Math', 'Science', 'History', 'Literature'],
-        'hours': [90, 10, 3, 7],
-        'weeks': ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        'study_hours': [5, 10, 15, 20]  # Example data for hours over weeks
+        'classes_data': ['Math', 'Science', 'History', 'Literature'],
+        'hours_data': [90, 10, 3, 7],
+        'weeks_data': ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        'study_hours_data': [5, 10, 15, 20]  # Example data for hours over weeks
     }
 
 
