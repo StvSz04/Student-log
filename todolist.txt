@@ -1,4 +1,4 @@
 Note to self - use the init_app command from flask to reset db and add new things
 
 *Current*
-- set up dynamic data now
+- fix graph
