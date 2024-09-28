@@ -6,21 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualize Study Data</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Include Plotly.js -->
+    <!-- Include Plotly.js for the pie chart -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Include Chart.js for the time graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 {% endblock %}
 
 {% block content %}
 <body class="background">
     <div class="center-container">
+        <!-- Pie Chart Slot -->
         <div class="slot" id="pie-chart">
             <h2>Pie Chart</h2>
             <div id="pie-chart-data"></div> <!-- Placeholder for the pie chart -->
         </div>
+
+        <!-- Time Graph Slot -->
         <div class="slot" id="time-graph">
             <h2>Time Graph</h2>
-            <div id="time-graph-slot"></div> <!-- Placeholder for the time graph -->
+            <canvas id="time-graph-slot" style="width: 600px; height: 400px;"></canvas>
         </div>
     </div>
 
@@ -44,7 +49,11 @@
         const weeksData = studyData.weeks_data;
         const studyHoursData = studyData.study_hours_data;
 
-        // Data for the pie chart
+        // Ensure data is consistent and in the right format
+        const validatedStudyHoursData = studyHoursData.map(Number);
+        const validatedWeeksData = weeksData.map(String);
+
+        // Data for the pie chart (Plotly)
         const pieData = [{
             labels: classesData,
             values: hoursData,
@@ -56,32 +65,65 @@
             margin: { t: 40, l: 40, r: 40, b: 40 }
         };
 
-        // Plot the pie chart
-        const TESTER = document.getElementById('pie-chart-data');
-        Plotly.newPlot(TESTER, pieData, pieLayout);
+        // Plot the pie chart using Plotly
+        const pieChartElement = document.getElementById('pie-chart-data');
+        Plotly.newPlot(pieChartElement, pieData, pieLayout);
 
-        // Data for the time graph (Line chart)
-        const timeData = [{
-            x: weeksData,
-            y: studyHoursData,
-            type: 'scatter',
-            mode: 'lines+markers',
-            marker: { color: 'blue' }
-        }];
+        // Set up the time graph with Chart.js
+        const ctx = document.getElementById('time-graph-slot').getContext('2d');
 
-        const timeLayout = {
-            title: 'Study Hours Over Time',
-            xaxis: { title: 'Weeks' },
-            yaxis: { title: 'Hours Studied' },
-            margin: { t: 40, l: 40, r: 40, b: 40 }
-        };
-
-        // Plot the time graph
-        const TIME_GRAPH_SLOT = document.getElementById('time-graph-slot');
-        Plotly.newPlot(TIME_GRAPH_SLOT, timeData, timeLayout);
+        const chart = new Chart(ctx, {
+            type: 'line',  // Line chart type
+            data: {
+                labels: validatedWeeksData,  // Weeks on the x-axis
+                datasets: [{
+                    label: 'Hours Studied',
+                    data: validatedStudyHoursData,  // Study hours on the y-axis
+                    borderColor: 'blue',
+                    borderWidth: 2,
+                    fill: false  // No fill under the line
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,  // Disable aspect ratio to prevent spreading
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Study Hours Over Time'
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Weeks'
+                        },
+                        type: 'category',  // Ensure x-axis is treated as categorical
+                        ticks: {
+                            autoSkip: false,  // Ensure all weeks are displayed
+                            maxRotation: 0,  // Avoid label rotation if unnecessary
+                            minRotation: 0,
+                            padding: 10  // Add padding to ensure labels have space
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Hours Studied'
+                        },
+                        beginAtZero: true,  // Ensure y-axis starts at 0
+                        suggestedMin: 0,  // Enforce minimum value for y-axis to be 0
+                        suggestedMax: Math.max(...validatedStudyHoursData) + 5,  // Add buffer to max value
+                        ticks: {
+                            stepSize: 5  // Set a step size to control tick intervals
+                        }
+                    }
+                }
+            }
+        });
     })();
     </script>
 
-        
 </body>
 {% endblock %}
