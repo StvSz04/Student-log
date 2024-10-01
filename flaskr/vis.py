@@ -14,7 +14,7 @@ def display_graphs():
     db = get_db()  # Get the database connection
     user = session.get('user_id')
 
-    # Query for classes and logged hours
+    # Query for classes and logged hours.
     study_data = {}
 
     # Get the list of courses for the user
