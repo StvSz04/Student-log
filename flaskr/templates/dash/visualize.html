@@ -17,15 +17,14 @@
 <body class="background">
     <div class="center-container">
         <!-- Pie Chart Slot -->
-        <div class="div" id="pie-chart" style="width:600px;height:250px;">
-            <h2>Pie Chart</h2>
+        <h2>Pie Chart</h2>
+        <div class="div" id="pie-chart" style="width:750px;height:500px;">
             <div id="pie-chart-data"></div> <!-- Placeholder for the pie chart -->
         </div>
 
         <!-- Time Graph Slot -->
+        <h2>Time Graph</h2>
         <div class="slot" id="time-graph">
-            <h2>Time Graph</h2>
-            <canvas id="time-graph-slot" style="width: 600px; height: 400px;"></canvas>
         </div>
 
     </div>
@@ -35,13 +34,16 @@
     </footer>
     
     <!-- Embed the study_data as JSON in the HTML -->
+     <!--  Script for pie chart-->
     <script>
         // Convert the passed study_data dictionary into a JavaScript object
         const studyData = {{study_data | tojson}};
         
-         // Prepare the data for the pie chart
+         //<Prepare the data for the pie chart
         const values = studyData['hours_data'];  // Extract hours data
         const labels = studyData['classes_data'];  // Extract course names
+        const weeklyHours = studyData['study_hours_data']; // Extract all weekly hours keyed to a course names
+
 
         var data = [{
             values: values,
@@ -52,9 +54,75 @@
         var layout = {
             title: 'Study Hours per Course'
         };
-
+        // Create pie chart using the div, data taken from json, and layout
         Plotly.newPlot('pie-chart', data, layout);
+
+        //----------------------------------------------------------------------
+        const numLines = labels.length; // get length for, for loop, lables contains course names
+        const allCourseLines = []; // Store all course lines in this array to pass to Plotly.newPlot() as the data parameter
+
+        for (let i = 0; i < numLines; i++) {
+            const CourseLines = {}; // Dict for each course storing needed date and time keys for a line
+            const dateList = []; // Array for dates
+            const hours = []; // Array for course hours
+
+            // Loop through each course in weeklyHours
+            for (const course in weeklyHours) {
+                // Use map to pull out the 'week' values and add them to dateList
+                const date = weeklyHours[course].map(entry => entry.week);
+                const time = weeklyHours[course].map(entry => entry.weekly_hours);
+
+                dateList.push(...date); // Append the date values for this course
+                hours.push(...time); // Append the time (weekly_hours) values for this course
+            }
+
+            CourseLines['x'] = dateList; // x-axis data (weeks)
+            CourseLines['y'] = hours; // y-axis data (hours studied)
+            CourseLines['type'] = 'scatter'; // Line type for Plotly graph
+
+            allCourseLines.push(CourseLines); // Push the course line data to the allCourseLines array\
+            console.log(allCourseLines);
+        }
+        // Graph design i.e axis titles
+         var layoutGraph = {
+
+                    title: {
+
+                    text: 'Title of the Graph'
+
+                    },
+
+                    xaxis: {
+
+                    title: {
+
+                        text: 'Weeks'
+
+                    }
+
+                    },
+
+                    yaxis: {
+
+                    title: {
+
+                        text: 'Hours'
+
+                    }
+
+                    }
+
+                    };
+
+
+        // Now you can pass allCourseLines to Plotly.newPlot() as the data parameter
+        Plotly.newPlot('time-graph', allCourseLines, layoutGraph);
+
+
+
+
     </script>
+
 
    
 
