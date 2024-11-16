@@ -1,5 +1,6 @@
 import functools
 
+from datetime import datetime
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -52,17 +53,39 @@ def log_hours():
 
             if hours and log_date:
                 try:
-                    # Insert a new course log without checking for existing entries
+                    # Ensure log_date is a datetime object
+                    if isinstance(log_date, str):
+                        log_date = datetime.strptime(log_date, '%Y-%m-%d').date()
+
+                    # Extract the week number directly from log_date using isocalendar()
+                    week_number = log_date.isocalendar()[1]  # Get the week number (second element of the tuple)
+
+                    # Insert a new course log
                     db.execute(
-                        "INSERT INTO logged_hours (user_username, course_name, hours, log_date) VALUES (?, ?, ?, ?)",
-                        (user_id, course_name, hours, log_date)
+                        "INSERT INTO logged_hours (user_username, course_name, hours, log_date, week_number) VALUES (?, ?, ?, ?, ?)",
+                        (user_id, course_name, hours, log_date, week_number)
                     )
                     db.commit()
+
+                    # Batch update week_number if necessary
+                    db.execute('''
+                        UPDATE logged_hours
+                        SET week_number = CAST(strftime('%W', log_date) AS INTEGER)
+                        WHERE week_number = 0
+                    ''')
+                    db.commit()
+
                     flash('Hours logged successfully.')
+                except sqlite3.IntegrityError:
+                    flash('An entry for this date and course already exists.')
                 except Exception as e:
                     flash(f"An error occurred: {e}")
             else:
                 flash('Hours and log date are required to log time.')
+        else:
+            flash('Please select or create a course.')
+
+
 
 
 

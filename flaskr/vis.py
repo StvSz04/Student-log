@@ -38,7 +38,7 @@ def display_graphs():
     weekly_hours = db.execute(
         'SELECT course_name, strftime("%W", log_date) as week, SUM(hours) as weekly_hours '
         'FROM logged_hours '
-        'WHERE user_username = ? '
+        'WHERE user_username = ? ' 
         'GROUP BY course_name, week '
         'ORDER BY week',
         (user,)
