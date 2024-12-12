@@ -2,6 +2,7 @@ Note to self - use the init_app command from flask to reset db and add new thing
 
 *Current*
 - Render data
+    - figure out how to store dates
 
 backup
 <script>
