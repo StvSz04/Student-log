@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block header %}
+
+{% endblock %}
+
+
+
+{% block content %}
+<main>
+    <section class="form-section">
+        <h2>Delete a Course</h2>
+        <form id="add-course-form" method="post" action="{{ url_for('del.delete_course') }}">
+            <label for="course-name">Course Name:</label>
+            <select id="course-select" name="course" required>
+                {% for course in courses %}
+                <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Delete Course</button>
+        </form>
+    </section>
+
+</main>
+{% endblock %}
+
+

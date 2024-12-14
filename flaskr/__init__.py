@@ -48,4 +48,7 @@ def create_app(test_config=None):
     from . import vis
     app.register_blueprint(vis.bp)
 
+    from . import delete_course
+    app.register_blueprint(delete_course.bp)
+
     return app

@@ -10,13 +10,14 @@ import sqlite3
 
 bp = Blueprint('log', __name__, url_prefix='/log')
 
+
+
 # Combined view for course registration and hour logging
 @bp.route('/log_hours', methods=('GET', 'POST'))
 def log_hours():
+    # Fetch existing courses for the user
     user_id = session.get('user_id')
     db = get_db()
-
-    # Fetch existing courses for the user
     courses = db.execute("SELECT course_name FROM course WHERE user_username = ?", (user_id,)).fetchall()
 
     # Handle POST request for both course registration and hour logging

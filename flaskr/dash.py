@@ -20,3 +20,8 @@ def go_to_log():
 @bp.route('/graphs')
 def go_to_vis():
     return redirect(url_for('vis.display_graphs'))
+
+# delete_courses page
+@bp.route('/delete')
+def go_to_del():
+    return redirect(url_for('del.delete_course'))

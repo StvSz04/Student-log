@@ -45,7 +45,6 @@ def display_graphs():
     ).fetchall()
 
     # Prepare the data to be passed to the template
-    # Prepare the data to be passed to the template
     study_data['classes_data'] = [row['course_name'] for row in courses]  # Course names
     study_data['hours_data'] = [row['total_hours'] for row in course_hours]  # Total hours per course
     study_data['weeks_data'] = sorted(set([f"Week {int(row['week']) + 1}" for row in weekly_hours]))  # Unique weeks
