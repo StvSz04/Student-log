@@ -21,6 +21,23 @@
         </form>
     </section>
 
+    <section>
+    
+        <table class = 'table'>
+            <tr>
+                <th>  <select id="course-select" name="course-select" required>
+                    {% for course in courses %}
+                    <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
+                    {% endfor %}
+                </select></th>
+                <th>Hours</th>
+                <th>Date</th>
+              </tr>
+              
+        </table>
+        
+    </section>
+
 </main>
 {% endblock %}
 

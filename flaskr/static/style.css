@@ -248,3 +248,51 @@ input[type="submit"] {
 .features p {
     margin: 10px 0;
 }
+
+/* Table Styling */
+.table {
+    width: 100%;                /* Full width of container */
+    border-collapse: collapse;  /* Remove spacing between table cells */
+    margin: 20px 0;             /* Add some spacing around the table */
+    font-size: 16px;            /* Font size */
+    text-align: left;           /* Align text to the left */
+    border: 1px solid #ddd;     /* Light gray border around table */
+    background-color: #f9f9f9;  /* Light background color */
+}
+
+/* Table Header */
+.table th {
+    background-color: #007BFF;  /* Blue header background */
+    color: white;               /* White text */
+    padding: 10px;              /* Space inside cells */
+    text-transform: uppercase;  /* Uppercase text */
+    letter-spacing: 1px;        /* Slight spacing between letters */
+}
+
+/* Table Rows */
+.table td {
+    padding: 10px;              /* Padding for cells */
+    border: 1px solid #ddd;     /* Light border between cells */
+    color: #333;                /* Dark gray text color */
+}
+
+/* Zebra Striping for Rows */
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;  /* Light gray for even rows */
+}
+
+/* Hover Effect for Rows */
+.table tr:hover {
+    background-color: #e9ecef;  /* Slightly darker background on hover */
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .table {
+        font-size: 14px;        /* Smaller text for smaller screens */
+    }
+    .table th, .table td {
+        padding: 8px;           /* Reduce padding */
+    }
+}
