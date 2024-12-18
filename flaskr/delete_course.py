@@ -16,12 +16,10 @@ def delete_course():
     db = get_db()
     user_id = session.get('user_id')
     courses = db.execute("SELECT course_name FROM course WHERE user_username = ?", (user_id,)).fetchall()
-    entries = []
 
     if request.method == 'POST':
-         course_to_remove = request.form.get('course') 
-         course_entry = request.form.get('course-entry')
-         if course_to_remove:
+        course_to_remove = request.form.get('course') 
+        if course_to_remove:
             if not course_to_remove.strip():
                 error = 'Course name is required.'
             else:
@@ -41,14 +39,11 @@ def delete_course():
                     error = f"Course {course_to_remove} does not exist."
             #Updates the input into the
             return redirect(url_for('del.delete_course'))
-         if course_entry:
-            entries = db.execute("SELECT course_name, hours, log_date FROM logged_hours WHERE user_username = ? AND course_name = ?"
-            , (user_id, course_entry)).fetchall()
-            return redirect(url_for('del.delete_course'))
          
+        course_entry = request.form.get('course_for_entries')
+        if course_entry:
+            entries = db.execute("SELECT hours, log_date FROM logged_hours WHERE user_username = ? AND course_name = ?",(user_id, course_entry)).fetchall()
+            return render_template('dash/delete_course.html', entries=entries, courses=courses, course_entry=course_entry)
                 
-
-         
-         
-    return render_template('dash/delete_course.html', courses=courses, entries=entries )
+    return render_template('dash/delete_course.html', courses=courses)
 

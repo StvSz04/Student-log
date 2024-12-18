@@ -10,7 +10,7 @@
 <main>
     <section class="form-section">
         <h2>Delete a Course</h2>
-        <form id="add-course-form" method="post" action="{{ url_for('del.delete_course') }}">
+        <form id="add-course-form" method="POST" action="{{ url_for('del.delete_course') }}">
             <label for="course-name">Course Name:</label>
             <select id="course-select" name="course" required>
                 {% for course in courses %}
@@ -20,30 +20,44 @@
             <button type="submit">Delete Course</button>
         </form>
     </section>
-
-    <section class = "form-section">
+    
+    
+    <section class="form-section">
         <h2>Delete an Entry</h2>
-        <table class = 'table'>
-            <tr>
-                <th>  <form method="POST">
-                    <label for="course">Choose a course:</label>
-                    <select id="course" name="course-entries">
-                        {% for course in courses %}
-                        <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit">Select Course</button>
-                </form>
-                <th>Hours</th>
-                <th>Date</th>
-              </tr>
-              {% for entry in entries %}
-                <td>{{ entry[0] }}</td> <!-- This is course_name -->
-                <td>{{ entry[1] }}</td> <!-- This is hours -->
-                <td>{{ entry[2] }}</td> <!-- This is log_date -->
-                 {% endfor %}
-
-            
+        <table class="table">
+            <!-- Table Header -->
+            <thead>
+                <tr>
+                    <th>
+                        <form method="POST" action="{{ url_for('del.delete_course') }}">
+                        <label for="course">Choose a course:</label>
+                        <select id="course" name="course_for_entries">
+                            {% for course in courses %}
+                            <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Select Course</button>
+                        Course
+                    </form></th>
+                    <th>Hours</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dropdown for selecting a course -->
+              
+                <!-- Table Rows for Entries -->
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ course_entry }}</td> <!-- course_name -->
+                    <td>{{ entry[0] }}</td> <!-- hours -->
+                    <td>{{ entry[1] }}</td> <!-- log_date -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    
               
         </table>
         
