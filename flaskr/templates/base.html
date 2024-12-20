@@ -6,9 +6,11 @@
   <h1>Studylog</h1> 
   <ul>
     {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-        <li><a href="{{ url_for('dash.go_to_dashboard') }}">Dashboard</a>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+      <li><span class = "username">{{ g.user['username'] }}</span>
+        <li><a href="{{ url_for('home.go_to_homepage') }}">Homepage</a></li>
+        <li><a href="{{ url_for('dash.go_to_dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+
     {% else %}
       <li><a href="{{ url_for('auth.register') }}">Register</a>
       <li><a href="{{ url_for('auth.login') }}">Log In</a>

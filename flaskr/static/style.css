@@ -67,9 +67,9 @@ nav a:hover {
 
 /* Buttons */
 .btn, button {
-    background-color: #007BFF; /* Bright blue button background */
+    background-color: #5a55a0; /* Bright blue button background */
     color: #ffffff; /* White text */
-    border: 2px solid #0056b3; /* Darker blue border */
+    border: 2px solid #5a55a0; /* Darker blue border */
     padding: 12px 24px;
     border-radius: 8px; /* Rounded corners */
     cursor: pointer;
@@ -190,7 +190,7 @@ table select {
 
 .popup button {
     padding: 10px 20px; /* Add padding inside button */
-    background-color: #007BFF; /* Button color */
+    background-color: #5a55a0; /* Button color */
     color: #ffffff; /* Button text color */
     border: none; /* Remove default border */
     border-radius: 5px; /* Rounded corners for button */
@@ -199,7 +199,7 @@ table select {
 }
 
 .popup button:hover {
-    background-color: #0056b3; /* Darker color on hover */
+    background-color: #5a55a0; /* Darker color on hover */
 }
 
 /* Background Image */
@@ -230,7 +230,7 @@ table select {
     margin-bottom: 20px;
     text-align: center;
     font-size: 24px; /* Larger font size for headings */
-    border-bottom: 3px solid #007BFF; /* Blue underline for emphasis */
+    border-bottom: 3px solid #5a55a0; /* Blue underline for emphasis */
 }
 
 .features h2:hover {
@@ -258,7 +258,7 @@ table select {
 
 .features li::before {
     content: "✔"; /* Checkmark or icon before list item */
-    color: #007BFF; /* Blue color for the icon */
+    color: #5a55a0; /* Blue color for the icon */
     font-size: 18px; /* Size of the icon */
     margin-right: 10px; /* Space between icon and text */
 }
@@ -317,3 +317,53 @@ table select {
         padding: 8px;           /* Reduce padding */
     }
 }
+
+
+/* ul,li, and a tags */
+ul {
+    list-style-type: none; /* Removes the default bullet points */
+    padding: 0; /* Removes default padding */
+    align-items: center;  /* Centers the items vertically */
+  }
+
+  ul li {
+    padding: 10px;
+    margin: 5px 0;
+  }
+  ul li a {
+    text-decoration: none; /* Removes the underline from links */
+    color: #5a55a0; /* Set text color */
+    font-weight: bold; /* Makes the text bold */
+    display: block; /* Makes the entire <a> tag clickable */
+    padding: 10px 20px; /* Adds padding around the link */
+  }
+  
+  ul li a:hover {
+    background-color: #f0f0f0; /* Changes background color on hover */
+    color: #5a55a0; /* Changes text color on hover */
+  }
+
+
+/*username section */
+/* Style the username */
+li .username {
+    font-weight: bold;
+    color: #5a55a0;
+    font-size: 1.2em; /* Optional: Adjust font size */
+    padding-left: 5px; /* Optional: Add padding */
+    vertical-align: middle;  /* Aligns vertically with surrounding text */
+  }
+  
+  /* Hover effect on username */
+  li .username:hover {
+    color: #5a55a0;
+    cursor: pointer;
+  }
+  
+  /* Style the entire li when hovering */
+  li:hover .username {
+    font-size: 1.3em;  /* Increases the font size on hover */
+  }
+  
+    
+  
