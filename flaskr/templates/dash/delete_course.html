@@ -28,6 +28,7 @@
             <!-- Table Header -->
             <thead>
                 <tr>
+                    <!-- Dropdown for selecting a course -->
                     <th>
                         <form method="POST" action="{{ url_for('del.delete_course') }}">
                         <label for="course">Choose a course:</label>
@@ -37,31 +38,43 @@
                             {% endfor %}
                         </select>
                         <button type="submit">Select Course</button>
-                        Course
-                    </form></th>
+                        </form>
+                    </th>
                     <th>Hours</th>
                     <th>Date</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Dropdown for selecting a course -->
-              
-                <!-- Table Rows for Entries -->
-                {% for entry in entries %}
-                <tr>
-                    <td>{{ course_entry }}</td> <!-- course_name -->
-                    <td>{{ entry[0] }}</td> <!-- hours -->
-                    <td>{{ entry[1] }}</td> <!-- log_date -->
-                </tr>
-                {% endfor %}
-            </tbody>
+            <form method="POST" action="{{ url_for('del.delete_course') }}">
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td>{{ course_entry }}</td> <!-- course_name -->
+                        <td>{{ entry[0] }}</td> <!-- hours -->
+                        <td>{{ entry[1] }}</td> <!-- log_date -->
+                        <td>
+                            <label for="myCheck">Checkbox:</label>
+                            <input type="checkbox" 
+                                class="entry-checkbox" 
+                                name="entries_to_delete" 
+                                value="{{ course_entry }},{{ entry[0] }},{{ entry[1] }}">
+                                
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <button type="submit" id="entry_delete">Submit Deletions</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </form>
         </table>
     </section>
     
-              
-        </table>
-        
-    </section>
+    
 
 </main>
 {% endblock %}
