@@ -58,7 +58,7 @@ nav ul li {
 
 nav a {
     text-decoration: none;
-    color: #007bff;
+    color: #5a55a0;
 }
 
 nav a:hover {
@@ -74,11 +74,11 @@ nav a:hover {
     border-radius: 8px; /* Rounded corners */
     cursor: pointer;
     transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
-}
+}   
 
 .btn:hover, button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    border-color: #004494; /* Even darker blue border on hover */
+    background-color: #a95ff2; /* Darker blue on hover */
+    border-color: #a95ff2; /* Even darker blue border on hover */
 }
 
 /* Sections */
@@ -90,7 +90,7 @@ nav a:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
     margin: 20px auto;
     max-width: 800px; /* Center content and limit width */
-}
+}   
 
 .section-header {
     background-color: #1a1a1a; /* Darker grey for header background */
@@ -308,6 +308,8 @@ table select {
     transition: background-color 0.2s ease-in-out;
 }
 
+
+
 /* Responsive Table */
 @media (max-width: 768px) {
     .table {
@@ -365,5 +367,5 @@ li .username {
     font-size: 1.3em;  /* Increases the font size on hover */
   }
   
-    
+
   
