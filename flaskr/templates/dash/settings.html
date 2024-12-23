@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<main>
+    <section class="form-section">
+        <h2>Delete Your Account</h2>
+        <p class="warning-text">
+            Warning: Deleting your account is permanent and cannot be undone. All your data will be lost.
+        </p>
+        <form id="delete-account-form" method="POST" action="{{ url_for('setting.delete_account') }}">
+            <label for="confirmation">Type "DELETE" to confirm:</label>
+            <input 
+                type="text" 
+                id="confirmation" 
+                name="confirmation" 
+                placeholder="Type DELETE to confirm" 
+                required 
+                class="input-field">
+            <button type="submit" id="delete-account-button" class="danger-button">
+                Delete My Account
+            </button>
+        </form>
+    </section>
+</main>
+{% endblock %}

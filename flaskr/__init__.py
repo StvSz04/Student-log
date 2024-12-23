@@ -51,4 +51,7 @@ def create_app(test_config=None):
     from . import delete_course
     app.register_blueprint(delete_course.bp)
 
+    from . import settings
+    app.register_blueprint(settings.bp)
+
     return app

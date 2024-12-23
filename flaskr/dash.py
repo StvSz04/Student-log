@@ -25,3 +25,9 @@ def go_to_vis():
 @bp.route('/delete')
 def go_to_del():
     return redirect(url_for('del.delete_course'))
+
+# settings page
+@bp.route('/settings')
+def go_to_settings():
+    return redirect(url_for('setting.delete_account'))
+
