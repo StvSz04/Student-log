@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main>
+
+    <section class="form-section">
+        <h2>Log Hours</h2>
+        <form id="log-hours-form" method="post" action="{{ url_for('log.log_hours') }}">
+            <label for="course-select">Select Course:</label>
+            <select id="course-select" name="course-select" required>
+                {% for course in courses %}
+                <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Log Hours</button>
+        </form>
+    </section>       
+</main>
+
+{% endblock %}

@@ -3,12 +3,14 @@
 <title>{% block title %}{% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1>Studylog</h1> 
+  <h1>Studylog</h1>
+  
+
   <ul>
     {% if g.user %}
-      <li><span class = "username">{{ g.user['username'] }}</span>
-        <li><a href="{{ url_for('home.go_to_homepage') }}">Homepage</a></li>
+        <li><span class = "username">{{ g.user['username'] }}</span>
         <li><a href="{{ url_for('dash.go_to_dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('home.go_to_homepage') }}">Homepage</a></li>
         <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
 
     {% else %}

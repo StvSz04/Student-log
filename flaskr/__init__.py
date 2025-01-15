@@ -54,4 +54,7 @@ def create_app(test_config=None):
     from . import settings
     app.register_blueprint(settings.bp)
 
+    from . import timer
+    app.register_blueprint(timer.bp)
+
     return app

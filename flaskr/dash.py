@@ -30,4 +30,7 @@ def go_to_del():
 @bp.route('/settings')
 def go_to_settings():
     return redirect(url_for('setting.delete_account'))
-
+# timer page
+@bp.route('/timer')
+def go_to_timer():
+    return redirect(url_for('time.get_time'))
