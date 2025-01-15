@@ -6,16 +6,22 @@ let time = 0; // time in seconds
 const timer_start_button = document.getElementById("timer_start_button");
 const timer_stop_button = document.getElementById("timer_stop_button");
 
+
+// define interval to add the ease of starting and stopping the interval for the clock within the function
+let interval
+
 // Set initial time on the label
 document.getElementById('timer-label').innerHTML = time_text;
 
 // Function to update the time
-function set_time() {
+function start_timer() {
     // Disable the button to prevent multiple clicks
     timer_start_button.disabled = true;
+    timer_stop_button.disabled = false;
+
 
     // Use setInterval to update the time every 1 second (1000ms)
-    let interval = setInterval(function() {
+    interval = setInterval(function() {
         time += 1; // Increment time by 1 second
         
         // Convert seconds to hours, minutes, and seconds
@@ -36,12 +42,20 @@ function set_time() {
 }
 
 // Add event listener to the button to start the timer
-timer_start_button.addEventListener("click", set_time);
+timer_start_button.addEventListener("click", start_timer);
 
 
 // Stop timer function
 
 function stop_timer(){
 
+    clearInterval(interval);
+
+    timer_stop_button.disabled = true;
+    timer_start_button.disabled = false;
+
+
 }
 
+// Add event listener to the button to stop the timer
+timer_stop_button.addEventListener("click", stop_timer);
