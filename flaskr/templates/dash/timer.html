@@ -2,9 +2,8 @@
 
 {% block content %}
 <main>
-
     <section class="form-section">
-        <h2>Log Hours</h2>
+        <h2>Auto-Log Hours</h2>
         <form id="log-hours-form" method="post" action="{{ url_for('log.log_hours') }}">
             <label for="course-select">Select Course:</label>
             <select id="course-select" name="course-select" required>
@@ -13,9 +12,19 @@
                 {% endfor %}
             </select>
 
+            <!-- Timer section-->
+            <div id="timer">
+                <label for="timer" id="timer-label"></label>
+                <button id="timer_start_button"> Start </button>
+                <button id="timer_stop_button">Stop</button>
+            </div>
+
             <button type="submit">Log Hours</button>
+        
         </form>
     </section>       
 </main>
 
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}
+
