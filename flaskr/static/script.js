@@ -10,6 +10,7 @@ const label = document.getElementById("timer-label");
 const submission_button = document.getElementById("submit");
 
 
+
 // define interval to add the ease of starting and stopping the interval for the clock within the function
 let interval
 
@@ -40,6 +41,7 @@ function start_timer() {
         // Update the time_text and the timer label
         time_text = `${hours}:${minutes}:${seconds}`;
         document.getElementById('timer-label').innerHTML = time_text;
+        document.getElementById("labelInput").value = time_text;
 
     }, 1000); // Run the function every second
 }
@@ -54,6 +56,7 @@ function stop_timer(){
 
     clearInterval(interval);
 
+    document.getElementById("labelInput").value = time_text;
     timer_stop_button.disabled = true;
     timer_start_button.disabled = false;
 
@@ -71,18 +74,9 @@ function reset_timer(){
     clearInterval(interval);
     time_text = "00:00:00";
     document.getElementById('timer-label').innerHTML = time_text;
+    document.getElementById("labelInput").value = time_text;
+
 
 }
 
 timer_reset_button.addEventListener("click",reset_timer);
-
-// Function to grab time
-
-function get_time(){
-    timer_string = label.textContent;
-
-    return timer_string;
-}
-
-//Event listener for submission
-submission_button.addEventListener("click", get_time);

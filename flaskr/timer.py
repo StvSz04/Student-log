@@ -19,7 +19,9 @@ def get_time():
 
     if request.method == 'POST':
         course = request.form.get('course-select')
-        #time_string = request.form.get('timer-label')
+        time_string = request.form.get('labelValue')
+        print(course)
+        print(time_string)
 
         #hours = time_string[:2]
         #minutes = time_string[4:5]
