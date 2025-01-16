@@ -18,5 +18,12 @@ def get_time():
 
 
     if request.method == 'POST':
-        return 0
+        course = request.form.get('course-select')
+        #time_string = request.form.get('timer-label')
+
+        #hours = time_string[:2]
+        #minutes = time_string[4:5]
+        #seconds = time_string[7:8]
+
+        return render_template('dash/timer.html',  courses=courses)
     return render_template('dash/timer.html',  courses=courses)

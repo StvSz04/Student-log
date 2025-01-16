@@ -5,6 +5,9 @@ let time = 0; // time in seconds
 // Define button
 const timer_start_button = document.getElementById("timer_start_button");
 const timer_stop_button = document.getElementById("timer_stop_button");
+const timer_reset_button = document.getElementById("timer_reset_button");
+const label = document.getElementById("timer-label");
+const submission_button = document.getElementById("submit");
 
 
 // define interval to add the ease of starting and stopping the interval for the clock within the function
@@ -59,3 +62,27 @@ function stop_timer(){
 
 // Add event listener to the button to stop the timer
 timer_stop_button.addEventListener("click", stop_timer);
+
+
+
+// Function to reset timer
+function reset_timer(){
+    //End the current interval,reset time_text, update html
+    clearInterval(interval);
+    time_text = "00:00:00";
+    document.getElementById('timer-label').innerHTML = time_text;
+
+}
+
+timer_reset_button.addEventListener("click",reset_timer);
+
+// Function to grab time
+
+function get_time(){
+    timer_string = label.textContent;
+
+    return timer_string;
+}
+
+//Event listener for submission
+submission_button.addEventListener("click", get_time);

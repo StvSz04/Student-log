@@ -4,7 +4,7 @@
 <main>
     <section class="form-section">
         <h2>Auto-Log Hours</h2>
-        <form id="log-hours-form" method="post" action="{{ url_for('log.log_hours') }}">
+        <form id="log-hours-form" method="post" action="{{ url_for('time.get_time') }}"> 
             <label for="course-select">Select Course:</label>
             <select id="course-select" name="course-select" required>
                 {% for course in courses %}
@@ -15,11 +15,12 @@
             <!-- Timer section-->
             <div id="timer">
                 <label for="timer" id="timer-label"></label>
-                <button id="timer_start_button"> Start </button>
-                <button id="timer_stop_button">Stop</button>
+                <button type="button" id="timer_start_button"> Start </button>
+                <button type="button" id="timer_stop_button">Stop</button>
+                <button type="button" id="timer_reset_button">Reset</button>
             </div>
 
-            <button type="submit">Log Hours</button>
+            <button type="submit" id="submit">Log Hours</button>
         
         </form>
     </section>       
