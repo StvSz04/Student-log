@@ -68,7 +68,7 @@ def log_hours():
                     )
                     db.commit()
 
-                    # Batch update week_number if necessary
+                    # Batch update week_number if necessary might need to delete
                     db.execute('''
                         UPDATE logged_hours
                         SET week_number = CAST(strftime('%W', log_date) AS INTEGER)
