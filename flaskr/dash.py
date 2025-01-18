@@ -17,7 +17,11 @@ def go_to_dashboard():
     db = get_db()
     user_id = session.get('user_id')
 
-    badge_level = db.execute("SELECT badge FROM user WHERE id = ?", (user_id,)).fetchall()
+    # Fetch row object from sql db and extract badge_level
+    row = db.execute("SELECT badge FROM user WHERE id = ?", (user_id,)).fetchone()
+    badge_level = row[0] if row else None
+
+    
 
 
     return render_template('dash/dashboard.html', badge_level=badge_level)

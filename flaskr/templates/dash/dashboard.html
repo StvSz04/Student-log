@@ -17,9 +17,12 @@
 
 <!-- Achievement display-->
 <div> 
-  <!--<img src="{{ url_for('static', filename='images_folder/pixil-frame-0.png') }}" alt="10 hr badge" width="500" height="600"> -->
+  
   <div class="badge-info">
     <p>Your badge level: {{ badge_level }}</p>
+    {% if badge_level == 1 %}
+    <img src="{{ url_for('static', filename='images_folder/pixil-frame-0.png') }}" alt="10 hr badge" width="500" height="600">
+    {% endif %}
 </div>
 </div>
 {% endblock %}
