@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<!-- Links to different user modules-->
 <div class="dashboard-container">
   <aside class="sidebar">
     <ul>
-      <li><a href="{{ url_for('dash.go_to_log') }}">Log hours</a></li>
+      <li><a href="{{ url_for('dash.go_to_log') }}">Log Hours</a></li>
       <li><a href="{{ url_for('dash.go_to_timer') }}">Auto-Logger</a></li>
-      <li><a href="{{ url_for('dash.go_to_vis') }}">Visualize hours</a></li>
-      <li><a href="{{ url_for('dash.go_to_del') }}">Delete course</a></li>
+      <li><a href="{{ url_for('dash.go_to_vis') }}">Visualize Hours</a></li>
+      <li><a href="{{ url_for('dash.go_to_del') }}">Delete Course/Entry</a></li>
       <li><a href="{{ url_for('dash.go_to_settings') }}">Settings</a></li>
     </ul>
   </aside>
 
+</div>
+
+<!-- Achievement display-->
+<div> 
+  <!--<img src="{{ url_for('static', filename='images_folder/pixil-frame-0.png') }}" alt="10 hr badge" width="500" height="600"> -->
+  <div class="badge-info">
+    <p>Your badge level: {{ badge_level }}</p>
+</div>
 </div>
 {% endblock %}
 

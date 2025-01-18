@@ -381,4 +381,33 @@ li .username {
   }
   
 
-  
+/* naivagation */
+
+.sidebar ul {
+    list-style: none; /* Removes bullet points from the list */
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px; /* Adds spacing between list items */
+}
+
+.sidebar ul li a {
+    display: inline-block; /* Makes the anchor a block element */
+    padding: 10px 20px; /* Adds space inside the box */
+    border: 2px solid #5a55a0; /* Adds a green border around the box */
+    border-radius: 5px; /* Rounds the corners */
+    text-decoration: none; /* Removes underline from the link text */
+    background-color: #f9f9f9; /* Light background color */
+    color: #333; /* Dark text color */
+    font-weight: bold; /* Makes the text bold */
+    text-align: center; /* Centers the text inside the box */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.sidebar ul li a:hover {
+    background-color: #5a55a0; /* Changes background to green on hover */
+    color: #fff; /* Changes text color to white on hover */
+}
+

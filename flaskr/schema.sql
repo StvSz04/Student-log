@@ -4,10 +4,12 @@ DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS logged_hours;
 
 -- Create user table with username as the primary key
+-- The number in the badge key refers to how many and what badge they have. i.e badges are linear in progression
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  badge INTEGER       -- badge level/progress
 );
 
 -- Table to store user-defined courses

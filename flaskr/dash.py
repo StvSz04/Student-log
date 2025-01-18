@@ -1,15 +1,26 @@
 import functools
 
+from datetime import datetime
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
+from flaskr.db import get_db
+import sqlite3
+
+
 bp = Blueprint('dash', __name__, url_prefix='/dash')
 
 # Dashboard page
-@bp.route('/dashboard')
+@bp.route('/dashboard', methods=('GET', 'POST'))
 def go_to_dashboard():
-    return render_template('dash/dashboard.html')
+    db = get_db()
+    user_id = session.get('user_id')
+
+    badge_level = db.execute("SELECT badge FROM user WHERE id = ?", (user_id,)).fetchall()
+
+
+    return render_template('dash/dashboard.html', badge_level=badge_level)
 
 # Log_courses page
 @bp.route('/log')
@@ -34,3 +45,5 @@ def go_to_settings():
 @bp.route('/timer')
 def go_to_timer():
     return redirect(url_for('time.get_time'))
+
+
