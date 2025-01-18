@@ -13,7 +13,6 @@
     margin-right: auto;      /* Centers horizontally */
 }
 
-
 body {
     color: #f0f0f0; /* Light text color for contrast against black */
     background-color: #000000; /* Black background for the entire website */
@@ -81,6 +80,13 @@ nav a:hover {
     border-color: #a95ff2; /* Even darker blue border on hover */
 }
 
+#timer-buttons {
+    display: flex;
+    justify-content: center; /* Centers items horizontally */
+    gap: 10px; /* Adds space between the buttons */
+    margin-top: 20px; /* Optional: Adds space above the buttons */
+}
+
 /* Sections */
 .section-header, .form-section {
     background-color: #2a2a2a; /* Dark grey background for contrast */
@@ -117,6 +123,13 @@ form {
 label {
     margin-bottom: 5px;
     font-weight: bold;
+}
+
+#timer-label {
+    display: block;
+    text-align: center;
+    line-height: 150%;
+    font-size: 5em;
 }
 
 input[type="text"], input[type="number"], input[type="date"], select {
