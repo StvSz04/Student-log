@@ -1,4 +1,14 @@
 {% extends 'base.html' %}
+{% block header%}
+ <!-- Achievement display -->
+ <nav>
+  <p>Your badge level: {{ badge_level }}</p>
+  {% if badge_level == 1 %}
+    <ul> <p> Badge logo</p></ul>
+  {% endif %}
+</div>
+</nav>
+{% endblock %}
 
 {% block content %}
 <!-- Links to different user modules-->
@@ -13,18 +23,6 @@
     </ul>
   </aside>
 
-</div>
-
-<!-- Achievement display-->
-<div> 
-  
-  <div class="badge-info">
-    <p>Your badge level: {{ badge_level }}</p>
-    {% if badge_level == 1 %}
-    <img src="{{ url_for('static', filename='images_folder/pixil-frame-0.png') }}" alt="10 hr badge" width="500" height="600">
-    {% endif %}
-</div>
-</div>
 {% endblock %}
 
 

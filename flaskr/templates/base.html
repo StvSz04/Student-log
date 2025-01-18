@@ -8,6 +8,7 @@
 
   <ul>
     {% if g.user %}
+    {% block header %}{% endblock %}
         <li><span class = "username">{{ g.user['username'] }}</span>
         <li><a href="{{ url_for('dash.go_to_dashboard') }}">Dashboard</a></li>
         <li><a href="{{ url_for('home.go_to_homepage') }}">Homepage</a></li>
@@ -22,7 +23,7 @@
 
 <section class="content">
   <header>
-    {% block header %}{% endblock %}
+
   </header>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
