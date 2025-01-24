@@ -76,6 +76,29 @@ def log_hours():
                     ''')
                     db.commit()
 
+                    # Update the user badge level after every new entry
+                    db.execute('''
+                            UPDATE user
+                            SET badge = (
+                                SELECT
+                                    CASE
+                                        WHEN SUM(lh.hours) >= 100 THEN 4  -- Platinum badge
+                                        WHEN SUM(lh.hours) >= 50 THEN 3   -- Gold badge
+                                        WHEN SUM(lh.hours) >= 25 THEN 2   -- Silver badge
+                                        WHEN SUM(lh.hours) >= 10 THEN 1   -- Bronze badge
+                                        ELSE 0                            -- No badge
+                                    END
+                                FROM logged_hours lh
+                                WHERE lh.user_username = user.username
+                            )
+                            WHERE EXISTS (
+                                SELECT 1
+                                FROM logged_hours lh
+                                WHERE lh.user_username = user.username
+                            )
+                        ''')
+                    db.commit()
+
                     flash('Hours logged successfully.')
                 except sqlite3.IntegrityError:
                     flash('An entry for this date and course already exists.')
