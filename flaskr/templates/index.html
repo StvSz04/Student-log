@@ -3,23 +3,23 @@
  {% extends 'base.html' %}
 
 {% block header %}
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>StudyLog</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-        <section class="section-header">
-            <h1>Track Your Study Habits</h1>
-            <p>Log your study hours and view your progress over time. Customize your goals and stay on track!</p>
-            <img src="{{ url_for('static', filename='images_folder/studylog.png') }}" alt="Image description" width="100" height="100">  
-        
-        </section>
-    </head>
 {% endblock %}
 
 {% block content %}
     <body class="background">
         <header>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>StudyLog</title>
+                <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+                <section class="section-header">
+                    <h1>Track Your Study Habits</h1>
+                    <p>Log your study hours and view your progress over time. Customize your goals and stay on track!</p>
+                    <img src="{{ url_for('static', filename='images_folder/studylog.png') }}" alt="Image description" width="100" height="100">  
+                
+                </section>
+            </head>
 
             <!-- Features Section -->
             <section class="features">
