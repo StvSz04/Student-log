@@ -73,6 +73,7 @@ function reset_timer(){
     //End the current interval,reset time_text, update html
     clearInterval(interval);
     time_text = "00:00:00";
+    time = 0;
     document.getElementById('timer-label').innerHTML = time_text;
     document.getElementById("labelInput").value = time_text;
 
