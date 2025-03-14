@@ -22,10 +22,23 @@
             <div id="pie-chart-data"></div> <!-- Placeholder for the pie chart -->
         </div>
 
+
+
+
         <!-- Time Graph Slot -->
         <h2>Time Graph</h2>
+          <!-- User input for ranges-->
         <div class="slot" id="time-graph">
         </div>
+        <div> 
+            <form id="log-hours-form" method="post" action="">
+                <label for="hours">Range Low</label>
+                <input type="range" id="low" name="low" min="0" max="52">
+
+                <label for="high">Range High</label>
+                <input type="range" id="high" name="high" min="0" max="52">
+            </form>
+         </div>
 
     </div>
 
@@ -40,12 +53,35 @@
         // so that the Js on the server can actually render this python dictionary, Jinja expression
         const studyData = {{study_data | tojson}};
         
-         //<Prepare the data for the pie chart
+         //<Prepare the data for the pie chart & graph
         const values = studyData['hours_data'];  // Extract hours data
         const labels = studyData['classes_data'];  // Extract course names
         const weeklyHours = studyData['study_hours_data']; // Extract all weekly hours keyed to a course names
 
+        //Section - Define the colors for each course
 
+        function getRandomHexColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+
+            return color;
+        }
+
+        // Assign each course to a color
+        const courseColors = {}; // Define dict to hold data for course and corresponding colors
+        for (let i = 0; i < labels.length; i++){
+            const tempName = labels[i];
+            console.log(tempName)
+            courseColors[tempName] = {};  // Create a nested object for each course name
+            //courseColors[tempName]['name'] = tempName; // Set the name for the line
+            courseColors[tempName]['colors'] = getRandomHexColor(); // Set a random color for the course
+        }
+
+        // Pie Chart section
         var data = [{
             values: values,
             labels: labels,
@@ -80,39 +116,35 @@
             CourseLine['x'] = dateList; // x-axis data (weeks)
             CourseLine['y'] = hours; // y-axis data (hours studied)
             CourseLine['type'] = 'scatter'; // Line type for Plotly graph
+            CourseLine['name'] = courseName; // Set the name for the line
+            CourseLine['line'] = {color: courseColors[courseName]['colors']}
 
             allCourseLines.push(CourseLine); // Push the course line data to the allCourseLines array
         }
+
+        // Add submission to catch the value of ranges the user wants
+
         // Graph design i.e axis titles
-         var layoutGraph = {    
+        var layoutGraph = {    
 
                     title: {
-
-                    text: 'Timeline of Weekly Study Hours'
-
+                        text: 'Timeline of Weekly Study Hours'
                     },
 
                     xaxis: {
-
-                    title: {
-
-                        text: 'Weeks'
-
-                    }
-
+                        title: {
+                            text: 'Weeks'
+                        },
+                        range: [ 1, 52 ]
                     },
 
                     yaxis: {
-
-                    title: {
-
-                        text: 'Hours'
-
+                        title: {
+                            text: 'Hours'
+                        }
                     }
 
-                    }
-
-                    };
+        };
 
 
         // Now pass allCourseLines to Plotly.newPlot() as the data parameter

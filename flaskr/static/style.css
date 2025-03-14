@@ -122,6 +122,7 @@ form {
 
 label {
     margin-bottom: 5px;
+    width: auto;
     font-weight: bold;
 }
 
@@ -140,6 +141,12 @@ input[type="text"], input[type="number"], input[type="date"], select {
 }
 
 input[type="submit"] {
+    align-self: start;
+    min-width: 10em;
+}
+
+
+input[type="range"] {
     align-self: start;
     min-width: 10em;
 }
