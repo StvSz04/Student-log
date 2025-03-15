@@ -32,12 +32,36 @@
         </div>
         <div> 
             <form id="log-hours-form" method="post" action="">
-                <label for="hours">Range Low</label>
-                <input type="range" id="low" name="low" min="0" max="52">
+                <label for="hours">Week Range Low</label>
+                <input type="range" id="low" name="low" min="0" max="52" value = "0">
+                <p>Current Value: <span id="rangeValueLow">0 </span></p>
 
-                <label for="high">Range High</label>
-                <input type="range" id="high" name="high" min="0" max="52">
+                <label for="high">Week Range High</label>
+                <input type="range" id="high" name="high" min="0" max="52"  value = "52">
+                <p>Current Value: <span id="rangeValueHigh">52</span></p>
             </form>
+            <div>
+                <button onclick="updateGraph()" width = 40>Update Graph</button> 
+            </div>
+            <!-- Range value script-->
+            <script>
+                // Define parts of range input
+                const rangeInputLow = document.getElementById("low");
+                const rangeValueDisplayL = document.getElementById("rangeValueLow");
+                const rangeInputHigh = document.getElementById("high");
+                const rangeValueDisplayH = document.getElementById("rangeValueHigh");
+
+                // Function to update the displayed value
+                function updateValue() {
+                    rangeValueDisplayL.textContent = rangeInputLow.value;
+                    rangeValueDisplayH.textContent = rangeInputHigh.value;
+                }
+
+                // Update value on input change
+                rangeInputLow.addEventListener("input", updateValue);
+                rangeInputHigh.addEventListener("input", updateValue);
+
+            </script>
          </div>
 
     </div>
@@ -76,7 +100,6 @@
         const customColors = []; // List to hold color order
         for (let i = 0; i < labels.length; i++){
             const tempName = labels[i];
-            console.log(tempName)
             courseColors[tempName] = {};  // Create a nested object for each course name
             //courseColors[tempName]['name'] = tempName; // Set the name for the line
             courseColors[tempName]['colors'] = getRandomHexColor(); // Set a random color for the course
@@ -130,6 +153,8 @@
         }
 
         // Add submission to catch the value of ranges the user wants
+        //const L = document.getElementById("low").value; 
+        //const H = document.getElementById("high").value;
 
         // Graph design i.e axis titles
         var layoutGraph = {    
@@ -142,7 +167,7 @@
                         title: {
                             text: 'Weeks'
                         },
-                        range: [ 1, 52 ]
+                        range: [0,52]
                     },
 
                     yaxis: {
@@ -152,7 +177,22 @@
                     }
 
         };
+        // Function uses low and high range values to update graph
+        function updateGraph() {
+            const L = parseFloat(document.getElementById("low").value);
+            const H = parseFloat(document.getElementById("high").value);
+            console.log("Test");
+            var layoutGraph = {    
+                title: { text: 'Timeline of Weekly Study Hours' },
+                xaxis: {
+                    title: { text: 'Weeks' },
+                    range: [L, H] 
+                },
+                yaxis: { title: { text: 'Hours' } }
+            };
 
+            Plotly.newPlot('time-graph', allCourseLines, layoutGraph);
+        }
 
         // Now pass allCourseLines to Plotly.newPlot() as the data parameter
         Plotly.newPlot('time-graph', allCourseLines, layoutGraph);
