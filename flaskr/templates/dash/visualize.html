@@ -73,12 +73,14 @@
 
         // Assign each course to a color
         const courseColors = {}; // Define dict to hold data for course and corresponding colors
+        const customColors = []; // List to hold color order
         for (let i = 0; i < labels.length; i++){
             const tempName = labels[i];
             console.log(tempName)
             courseColors[tempName] = {};  // Create a nested object for each course name
             //courseColors[tempName]['name'] = tempName; // Set the name for the line
             courseColors[tempName]['colors'] = getRandomHexColor(); // Set a random color for the course
+            customColors.push(courseColors[tempName]['colors']);
         }
 
         // Pie Chart section
@@ -87,7 +89,10 @@
             labels: labels,
             textinfo: "label+percent",
             //textposition: "outside",
-            type: 'pie'  // Pie chart type
+            type: 'pie',  // Pie chart type
+            marker: {
+                colors: customColors
+            }
         }];
 
         var layout = {
