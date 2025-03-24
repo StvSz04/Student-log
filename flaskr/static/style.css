@@ -13,17 +13,38 @@
     margin-right: auto;      /* Centers horizontally */
 }
 
+
+/* Body */ 
 body {
     color: #f0f0f0; /* Light text color for contrast against black */
-    background-color: #000000; /* Black background for the entire website */
+    /*background-color: #000000; /* Black background for the entire website
+    background-image: linear-gradient(to bottom, #131212, #4d4a79); */
     line-height: 1.6; /* Better readability */
+    animation: colorChange 5s ease infinite;
 }
+
+
+@keyframes colorChange {
+    0% {
+      background-color: #131212; /* Start with blue */
+    }
+    50% {
+      background-color: #35334d; /* Midpoint color (red) */
+    }
+    100% {
+      background-color: #131212; /* End with green */
+    }
+  }
 
 /* Header */
 header {
     text-align: center;
     padding: 40px;
+    animation: colorChange 8s ease infinite
     background-color: #1a1a1a; /* Dark grey background for header */
+}
+footer{
+    background-image: linear-gradient(to bottom, #5a55a0, #43415e);
 }
 
 header h1 {
@@ -65,6 +86,24 @@ nav a:hover {
 }
 
 /* Buttons */
+
+@keyframes shake {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-10px); /* Move left */
+    }
+    50% {
+      transform: translateX(10px); /* Move right */
+    }
+    75% {
+      transform: translateX(-10px); /* Move left again */
+    }
+    100% {
+      transform: translateX(0); /* Back to the original position */
+    }
+  }
 .btn, button {
     background-color: #5a55a0; /* Bright blue button background */
     color: #ffffff; /* White text */
@@ -73,6 +112,9 @@ nav a:hover {
     border-radius: 8px; /* Rounded corners */
     cursor: pointer;
     transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+    animation: shake 2s ease infinite; /* Apply the shake animation */
+    animation-iteration-count: 2;
+    animation-delay: 1s;
 }   
 
 .btn:hover, button:hover {
