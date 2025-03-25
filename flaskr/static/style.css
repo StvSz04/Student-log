@@ -21,6 +21,7 @@ body {
     background-image: linear-gradient(to bottom, #131212, #4d4a79); */
     line-height: 2; /* Better readability */
     animation: colorChange 5s ease infinite;
+    min-height: auto;
 }
 
 
@@ -39,12 +40,12 @@ body {
 /* Header */
 header {
     text-align: center;
-    padding: 40px;
+    padding: 10px;
     animation: colorChange 8s ease infinite
-    background-color: #1a1a1a; /* Dark grey background for header */
 }
 footer{
     background-image: linear-gradient(to bottom, #5a55a0, #43415e);
+    position: relative;
 }
 
 header h1 {
@@ -113,7 +114,7 @@ nav a:hover {
     cursor: pointer;
     transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
     animation: shake 2s ease infinite; /* Apply the shake animation */
-    animation-iteration-count: 2;
+    animation-iteration-count: 1;
     animation-delay: 1s;
 }   
 
