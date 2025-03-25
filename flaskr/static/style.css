@@ -19,7 +19,7 @@ body {
     color: #f0f0f0; /* Light text color for contrast against black */
     /*background-color: #000000; /* Black background for the entire website
     background-image: linear-gradient(to bottom, #131212, #4d4a79); */
-    line-height: 1.6; /* Better readability */
+    line-height: 2; /* Better readability */
     animation: colorChange 5s ease infinite;
 }
 
