@@ -89,12 +89,12 @@ def log_hours():
                                         ELSE 0                            -- No badge
                                     END
                                 FROM logged_hours lh
-                                WHERE lh.user_username = user.username
+                                WHERE lh.user_username = user.id
                             )
                             WHERE EXISTS (
                                 SELECT 1
                                 FROM logged_hours lh
-                                WHERE lh.user_username = user.username
+                                WHERE lh.user_username = user.id
                             )
                         ''')
                     db.commit()
