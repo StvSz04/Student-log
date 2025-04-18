@@ -49,5 +49,10 @@ def go_to_settings():
 @bp.route('/timer')
 def go_to_timer():
     return redirect(url_for('time.get_time'))
+# Comparison page
+@bp.route('/comp')
+def go_to_comp():
+    return redirect(url_for('comp.compare_hours'))
+
 
 
