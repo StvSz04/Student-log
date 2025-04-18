@@ -30,10 +30,10 @@ body {
       background-color: #131212; /* Start with blue */
     }
     50% {
-      background-color: #35334d; /* Midpoint color (red) */
+      background-color: #272729; /* Midpoint color (red) */
     }
     100% {
-      background-color: #131212; /* End with green */
+      background-color: #131212; /* End */
     }
   }
 
@@ -54,16 +54,22 @@ header h1 {
 
 /* Navigation */
 nav {
-    background: lightgray;
+    background: #f2f2f2; /* softer gray */
     display: flex;
     align-items: center;
-    padding: 0 0.5rem;
-    margin-top: 20px;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 nav h1 {
-    flex: auto;
     margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 1000;
 }
 
 nav ul {
@@ -71,40 +77,25 @@ nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-nav ul li {
-    margin: 0 10px;
+    gap: 1.25rem; /* cleaner spacing than margin on li */
 }
 
 nav a {
     text-decoration: none;
     color: #5a55a0;
+    font-size: 1rem;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 nav a:hover {
+    color: #3a3790;
     text-decoration: underline;
 }
 
+
 /* Buttons */
 
-@keyframes shake {
-    0% {
-      transform: translateX(0);
-    }
-    25% {
-      transform: translateX(-10px); /* Move left */
-    }
-    50% {
-      transform: translateX(10px); /* Move right */
-    }
-    75% {
-      transform: translateX(-10px); /* Move left again */
-    }
-    100% {
-      transform: translateX(0); /* Back to the original position */
-    }
-  }
+
 .btn, button {
     background-color: #5a55a0; /* Bright blue button background */
     color: #ffffff; /* White text */
@@ -113,9 +104,6 @@ nav a:hover {
     border-radius: 8px; /* Rounded corners */
     cursor: pointer;
     transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
-    animation: shake 2s ease infinite; /* Apply the shake animation */
-    animation-iteration-count: 1;
-    animation-delay: 1s;
 }   
 
 .btn:hover, button:hover {

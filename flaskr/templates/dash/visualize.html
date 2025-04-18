@@ -122,7 +122,7 @@
             title: 'Study Hours per Course'
         };
         // Create pie chart using the div, data taken from json, and layout
-        Plotly.newPlot('pie-chart', data, layout);
+        Plotly.newPlot('pie-chart', data, layout,  {displayModeBar: false});
 
         //----------------------------------------------------------------------
         const numLines = labels.length; // get length for, for loop, lables contains course names
@@ -195,7 +195,7 @@
         }
 
         // Now pass allCourseLines to Plotly.newPlot() as the data parameter
-        Plotly.newPlot('time-graph', allCourseLines, layoutGraph);
+        Plotly.newPlot('time-graph', allCourseLines, layoutGraph,  {staticPlot: true}, {displayModeBar: false});
 
 
 
