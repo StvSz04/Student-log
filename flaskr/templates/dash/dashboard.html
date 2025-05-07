@@ -2,20 +2,9 @@
 {% block header%}
  <!-- Achievement display -->
  <nav>
-
-  <p>Badge Level: {{badge_level}}</p>
-  {% if badge_level == 1 %}
-    <ul>                    
-    <img src="{{ url_for('static', filename='images_folder/5hrbadge.png') }}" alt="Image description" width="100" height="100">  
-    </ul>
-  {% endif %}
-  {% if badge_level == 2 %}
-    <ul>                    
-    <img src="{{ url_for('static', filename='images_folder/10hr.png') }}" alt="Image description" width="100" height="100">  
-    </ul>
-  {% endif %}
-
-</div>
+  <ul >
+    <li> <p>Badge Level: {{badge_level}} </p> </li>
+  </ul>
 </nav>
 {% endblock %}
 

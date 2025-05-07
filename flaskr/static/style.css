@@ -93,6 +93,13 @@ nav a:hover {
     text-decoration: underline;
 }
 
+nav ul li p{
+    font-weight: bold;
+    color: #5a55a0;
+    font-size: 1em; /* Optional: Adjust font size */
+    padding-left: 5px; /* Optional: Add padding */
+    vertical-align: middle;  /* Aligns vertically with surrounding text */
+}
 
 /* Buttons */
 
