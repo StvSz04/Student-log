@@ -14,6 +14,7 @@
 }
 
 
+
 /* Body */ 
 body {
     color: #f0f0f0; /* Light text color for contrast against black */
@@ -451,3 +452,52 @@ li .username {
 
 
 
+/* Dashboard*/
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh; /* Full screen height */
+    box-sizing: border-box;
+  }
+  
+  .explore {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    margin: 0 auto;
+  }
+  
+  .explore ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .explore li {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #333333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+  }
+  
+  .explore li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  
+  .explore h1 {
+    background-color: #333333; /* Slightly lighter grey for headings */
+    color: #ffffff; /* White text */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px; /* Larger font size for headings */
+    border-bottom: 3px solid #5a55a0; /* Blue underline for emphasis */
+  }
+  

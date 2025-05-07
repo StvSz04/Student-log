@@ -14,7 +14,7 @@ CREATE TABLE user (
 
 -- Table to store user-defined courses
 CREATE TABLE course (
-  user_username TEXT NOT NULL,  -- Reference to the username of the user *This is actually id
+  user_username TEXT NOT NULL,  -- Reference to the username of the user *This is actually id *actually no
   course_name TEXT NOT NULL,    -- Course name
   PRIMARY KEY (user_username, course_name),  -- Composite primary key to ensure uniqueness
   FOREIGN KEY (user_username) REFERENCES user(username)
@@ -22,7 +22,7 @@ CREATE TABLE course (
 
 -- Table to log hours spent by users on courses
 CREATE TABLE logged_hours (
-  user_username TEXT NOT NULL,         -- Reference to the username of the user *This is actually id
+  user_username TEXT NOT NULL,         -- Reference to the username of the user *This is actually id *actually no
   course_name TEXT NOT NULL,           -- Course name
   hours DECIMAL(5, 2) NOT NULL,        -- Hours logged
   week_number INTEGER DEFAULT 0,       -- Week number (default is 0)

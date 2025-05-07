@@ -22,7 +22,7 @@
 {% block content %}
 <!-- Links to different user modules-->
 <div class="dashboard-container">
- 
+    <section class="explore"> <h1>Explore</h1>
     <ul>
       <li><a href="{{ url_for('dash.go_to_log') }}">Log Hours</a></li>
       <li><a href="{{ url_for('dash.go_to_timer') }}">Auto-Logger</a></li>
@@ -31,6 +31,8 @@
       <li><a href="{{ url_for('dash.go_to_comp') }}">Compare</a></li>
       <li><a href="{{ url_for('dash.go_to_settings') }}">Settings</a></li>
     </ul>
+
+    </section>
 </div>
 
 {% endblock %}
