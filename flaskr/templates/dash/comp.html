@@ -20,7 +20,8 @@
                         <form method="POST" action="{{ url_for('comp.compare_hours') }}">
                         <label for="course">Choose a course:</label>
                         <select id="course" name="course_for_entries">
-                            <option value="" disabled selected>Select a course...</option>                            {% for course in courses %}
+                            <option value="" disabled selected>Select a course...</option> 
+                            {% for course in courses %}
                             <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
                             {% endfor %}
                         </select>

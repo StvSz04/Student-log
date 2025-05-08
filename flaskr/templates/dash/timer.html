@@ -7,6 +7,7 @@
         <form id="log-hours-form" method="post" action="{{ url_for('time.get_time') }}"> 
             <label for="course-select">Select Course:</label>
             <select id="course-select" name="course-select" required>
+                <option value="" disabled selected>Select a course...</option> 
                 {% for course in courses %}
                 <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
                 {% endfor %}

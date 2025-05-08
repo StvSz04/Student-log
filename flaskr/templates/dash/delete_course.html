@@ -13,6 +13,7 @@
         <form id="add-course-form" method="POST" action="{{ url_for('del.delete_course') }}">
             <label for="course-name">Course Name:</label>
             <select id="course-select" name="course" required>
+                <option value="" disabled selected>Select a course...</option> 
                 {% for course in courses %}
                 <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
                 {% endfor %}
@@ -33,6 +34,7 @@
                         <form method="POST" action="{{ url_for('del.delete_course') }}">
                         <label for="course">Choose a course:</label>
                         <select id="course" name="course_for_entries">
+                            <option value="" disabled selected>Select a course...</option> 
                             {% for course in courses %}
                             <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
                             {% endfor %}
