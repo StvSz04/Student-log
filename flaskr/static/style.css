@@ -522,10 +522,13 @@ li .username {
     box-sizing: border-box;
   }
 .auth{
+    background-color: #333333;
     width: 100%;
     max-width: 600px;
+    border-radius: 10px; /* Rounded corners */
     padding: 20px;
     margin: 0 auto;
+    font-size: 24px; /* Larger font size for headings */
   }
 
 .authDiv{
