@@ -470,10 +470,13 @@ li .username {
   }
   
   .explore {
+    background-color: #2a2a2a;
     width: 100%;
     max-width: 600px;
     padding: 20px;
     margin: 0 auto;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
   }
   
   .explore ul {
