@@ -508,3 +508,25 @@ li .username {
     border-bottom: 3px solid #5a55a0; /* Blue underline for emphasis */
   }
   
+
+/* Authentication section*/
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 65vh; /* Full screen height */
+    box-sizing: border-box;
+  }
+.auth{
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    margin: 0 auto;
+  }
+
+.authDiv{
+    width: fit-content;      /* Ensures the div takes up only as much space as needed */
+    margin-left: auto;       /* Centers horizontally */
+    margin-right: auto; 
+}
