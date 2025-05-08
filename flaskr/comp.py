@@ -46,6 +46,9 @@ def compare_hours():
 
                 totalHours.append(x)
 
+            # Sort the hours after appending all users
+            totalHours.sort(reverse=True)
+
             return render_template('dash/comp.html', listUsers = listUsers, course_entry=course_entry, totalHours=totalHours, courses=courses)
     
     

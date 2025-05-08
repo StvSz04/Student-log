@@ -15,6 +15,10 @@
 
 {% block content %}
 <body class = "visualize_body">
+    <div id="courseColors">
+        <!-- Color pickers will be injected here by JavaScript -->
+    </div>
+
     <div class="center-container">
         <!-- Pie Chart Slot -->
         <h2>Pie Chart</h2>
@@ -95,16 +99,61 @@
             return color;
         }
 
-        // Assign each course to a color
-        const courseColors = {}; // Define dict to hold data for course and corresponding colors
-        const customColors = []; // List to hold color order
-        for (let i = 0; i < labels.length; i++){
+        // Assign each course to an initial color
+        const courseColors = {}; // Object to hold course-color mapping
+        const customColors = []; // Array to hold ordered list of colors
+
+        for (let i = 0; i < labels.length; i++) {
             const tempName = labels[i];
-            courseColors[tempName] = {};  // Create a nested object for each course name
-            //courseColors[tempName]['name'] = tempName; // Set the name for the line
-            courseColors[tempName]['colors'] = getRandomHexColor(); // Set a random color for the course
-            customColors.push(courseColors[tempName]['colors']);
+            courseColors[tempName] = {
+                colors: getRandomHexColor()
+            };
+            customColors.push(courseColors[tempName].colors);
         }
+
+        // Update customColors array from courseColors
+        function updateCustomColors() {
+            customColors.clear()
+            customColors.length = 0; // Instead of `.clear()`, use this in JS
+            labels.forEach(course => {
+                customColors.push(courseColors[course].colors);
+            });
+        }
+
+        // Generate color pickers
+        function createColorPickers() {
+            const courseColorsDiv = document.getElementById('courseColors');
+            courseColorsDiv.innerHTML = ''; // Clear previous inputs
+
+            labels.forEach(course => {
+                const label = document.createElement('label');
+                label.innerHTML = course;
+                label.style.marginRight = "10px";
+
+                const colorInput = document.createElement('input');
+                colorInput.type = 'color';
+                colorInput.id = course;
+                colorInput.value = courseColors[course].colors;
+
+                // Add the event listener *here*, inside the loop!
+                colorInput.addEventListener('input', () => {
+                    courseColors[course].colors = colorInput.value;
+                    updateCustomColors(); // Updates customColors after every input change
+                    updateGraph();
+                });
+
+                const container = document.createElement('div');
+                container.appendChild(label);
+                container.appendChild(colorInput);
+                courseColorsDiv.appendChild(container);
+            });
+        }
+
+
+        // Call the function to initialize
+        createColorPickers();
+
+
 
         // Pie Chart section
         var data = [{
@@ -181,7 +230,6 @@
         function updateGraph() {
             const L = parseFloat(document.getElementById("low").value);
             const H = parseFloat(document.getElementById("high").value);
-            console.log("Test");
             var layoutGraph = {    
                 title: { text: 'Timeline of Weekly Study Hours' },
                 xaxis: {
