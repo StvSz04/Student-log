@@ -469,7 +469,7 @@ li .username {
     box-sizing: border-box;
   }
   
-  .explore {
+.explore {
     background-color: #2a2a2a;
     width: 100%;
     max-width: 600px;
@@ -479,26 +479,35 @@ li .username {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
   }
   
-  .explore ul {
+.explore ul {
     list-style: none;
     padding: 0;
     margin: 0;
   }
   
-  .explore li {
+.explore li {
     margin-bottom: 20px;
     padding: 20px;
     border-radius: 10px;
     background-color: #333333;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-  }
-  
-  .explore li:hover {
+}
+
+.explore a::before {
+    content: "\27A4";  /* icon */
+    color: #5a55a0;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.explore li:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
+}
+
+
+  
   
   .explore h1 {
     background-color: #333333; /* Slightly lighter grey for headings */
