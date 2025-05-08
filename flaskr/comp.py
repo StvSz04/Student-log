@@ -19,6 +19,7 @@ def compare_hours():
 
     if request.method == 'POST':
         course_entry = request.form.get('course_for_entries')
+        
         if course_entry:
             # Queries
             listUsers = db.execute(
