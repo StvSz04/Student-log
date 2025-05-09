@@ -132,7 +132,6 @@
         function update_colors(){
             // Clear old colors
             customColors.length = 0;
-            allCourseLines.length = 0;
             // Obtain attr
             const input = event.target;
             const new_color = input.value
@@ -142,7 +141,7 @@
             for (let i = 0; i < labels.length; i++) {
                 const tempName = labels[i];
                 customColors.push(courseColors[tempName].colors);
-                set_lines();
+                update_lines();
             }
 
             
@@ -200,7 +199,9 @@
         //----------------------------------------------------------------------
         const numLines = labels.length; // get length for, for loop, lables contains course names
         const allCourseLines = []; // Store all course lines in this array to pass to Plotly.newPlot() as the data parameter
-        function set_lines(){
+        function update_lines(){
+            allCourseLines.length = 0;  // Clear old data
+            
             for (let i = 0; i < numLines; i++) {
                 const CourseLine = {}; // Dict for each course storing needed date and time keys for a line
                 const dateList = []; // Array for dates
@@ -226,7 +227,7 @@
             }
         }
 
-        set_lines();
+        update_lines();
 
 
         // Add submission to catch the value of ranges the user wants
@@ -278,7 +279,6 @@
             };
         // Function to update graph colors
         function update_graph_colors(){
-            console.log(allCourseLines);
             Plotly.newPlot('time-graph', allCourseLines, layoutGraph);
         }
         // Function uses low and high range values to update graph
