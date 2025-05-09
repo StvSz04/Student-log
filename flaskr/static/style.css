@@ -17,7 +17,7 @@
 
 /* Body */ 
 body {
-    color: #f0f0f0; /* Light text color for contrast against black */
+    color: #ffffff; /* Light text color for contrast against black */
     /*background-color: #000000; /* Black background for the entire website
     background-image: linear-gradient(to bottom, #131212, #4d4a79); */
     line-height: 2; /* Better readability */
@@ -45,7 +45,7 @@ header {
     animation: colorChange 8s ease infinite
 }
 footer{
-    background-image: linear-gradient(to bottom, #5a55a0, #43415e);
+    background-image: linear-gradient(to bottom, #979494, #43415e);
     position: relative;
 }
 
@@ -55,7 +55,7 @@ header h1 {
 
 /* Navigation */
 nav {
-    background: #f2f2f2; /* softer gray */
+    background: #000000; /* softer gray */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -69,7 +69,7 @@ nav {
 nav h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #333;
+    color: #ffffff;
     font-weight: 1000;
 }
 
@@ -83,19 +83,19 @@ nav ul {
 
 nav a {
     text-decoration: none;
-    color: #5a55a0;
+    color: #1b1a1a;
     font-size: 1rem;
     transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 nav a:hover {
-    color: #3a3790;
+    color: #979494;
     text-decoration: underline;
 }
 
 nav ul li p{
     font-weight: bold;
-    color: #5a55a0;
+    color: #979494;
     font-size: 1em; /* Optional: Adjust font size */
     padding-left: 5px; /* Optional: Add padding */
     vertical-align: middle;  /* Aligns vertically with surrounding text */
@@ -105,18 +105,18 @@ nav ul li p{
 
 
 .btn, button {
-    background-color: #5a55a0; /* Bright blue button background */
+    background-color: #000000; /* Bright blue button background */
     color: #ffffff; /* White text */
-    border: 2px solid #5a55a0; /* Darker blue border */
+    border: 2px solid #979494; /* Darker blue border */
     padding: 12px 24px;
     border-radius: 8px; /* Rounded corners */
     cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+    transition: background-color 0.3s    ease, border-color 0.3s ease; /* Smooth transition */
 }   
 
 .btn:hover, button:hover {
-    background-color: #a95ff2; /* Darker blue on hover */
-    border-color: #a95ff2; /* Even darker blue border on hover */
+    background-color: #424040; /* Darker blue on hover */
+    border-color: #ffffff; /* Even darker blue border on hover */
 }
 
 #timer-buttons {
@@ -249,7 +249,7 @@ table select {
 
 .popup button {
     padding: 10px 20px; /* Add padding inside button */
-    background-color: #5a55a0; /* Button color */
+    background-color: #979494; /* Button color */
     color: #ffffff; /* Button text color */
     border: none; /* Remove default border */
     border-radius: 5px; /* Rounded corners for button */
@@ -258,7 +258,7 @@ table select {
 }
 
 .popup button:hover {
-    background-color: #5a55a0; /* Darker color on hover */
+    background-color: #979494; /* Darker color on hover */
 }
 
 /* Background Image */
@@ -271,6 +271,11 @@ table select {
 }
 
 /* Features Section */
+@keyframes borderPulse {
+    0%   { border-bottom-color: #1f1d1d; }
+    50%  { border-bottom-color: #3b3b3d; }
+    100% { border-bottom-color: #1f1d1d; }
+}
 .features {
     background-color: #2a2a2a; /* Dark grey background for contrast */
     color: #e0e0e0; /* Light text color */
@@ -289,7 +294,8 @@ table select {
     margin-bottom: 20px;
     text-align: center;
     font-size: 24px; /* Larger font size for headings */
-    border-bottom: 3px solid #5a55a0; /* Blue underline for emphasis */
+    border-bottom: 3px solid #000000; /* Blue underline for emphasis */
+    animation: borderPulse 8s ease infinite;
 }
 
 .features h2:hover {
@@ -317,7 +323,7 @@ table select {
 
 .features li::before {
     content: "✔"; /* Checkmark or icon before list item */
-    color: #5a55a0; /* Blue color for the icon */
+    color: #979494; /* Blue color for the icon */
     font-size: 18px; /* Size of the icon */
     margin-right: 10px; /* Space between icon and text */
 }
@@ -393,15 +399,15 @@ ul {
   }
   ul li a {
     text-decoration: none; /* Removes the underline from links */
-    color: #5a55a0; /* Set text color */
+    color: #979494; /* Set text color */
     font-weight: bold; /* Makes the text bold */
     display: block; /* Makes the entire <a> tag clickable */
     padding: 10px 20px; /* Adds padding around the link */
   }
   
   ul li a:hover {
-    background-color: #f0f0f0; /* Changes background color on hover */
-    color: #5a55a0; /* Changes text color on hover */
+    background-color: #646464; /* Changes background color on hover */
+    color: #131212; /* Changes text color on hover */
   }
 
 
@@ -409,7 +415,7 @@ ul {
 /* Style the username */
 li .username {
     font-weight: bold;
-    color: #5a55a0;
+    color: #979494;
     font-size: 1.2em; /* Optional: Adjust font size */
     padding-left: 5px; /* Optional: Add padding */
     vertical-align: middle;  /* Aligns vertically with surrounding text */
@@ -417,7 +423,7 @@ li .username {
   
   /* Hover effect on username */
   li .username:hover {
-    color: #5a55a0;
+    color: #979494;
     cursor: pointer;
   }
   
@@ -442,7 +448,7 @@ li .username {
 .sidebar ul li a {
     display: inline-block; /* Makes the anchor a block element */
     padding: 10px 20px; /* Adds space inside the box */
-    border: 2px solid #5a55a0; /* Adds a green border around the box */
+    border: 2px solid #979494; /* Adds a green border around the box */
     border-radius: 5px; /* Rounds the corners */
     text-decoration: none; /* Removes underline from the link text */
     background-color: #f9f9f9; /* Light background color */
@@ -453,8 +459,8 @@ li .username {
 }
 
 .sidebar ul li a:hover {
-    background-color: #5a55a0; /* Changes background to green on hover */
-    color: #fff; /* Changes text color to white on hover */
+    background-color: #979494; /* Changes background to green on hover */
+    color: #131212; /* Changes text color to white on hover */
 }
 
 
@@ -496,7 +502,7 @@ li .username {
 
 .explore a::before {
     content: "\27A4";  /* icon */
-    color: #5a55a0;
+    color: #979494;
     font-size: 20px;
     margin-right: 10px;
 }
@@ -517,7 +523,8 @@ li .username {
     margin-bottom: 20px;
     text-align: center;
     font-size: 24px; /* Larger font size for headings */
-    border-bottom: 3px solid #5a55a0; /* Blue underline for emphasis */
+    border-bottom: 3px solid #000000; /* Blue underline for emphasis */
+    animation: borderPulse 5s ease infinite;
   }
   
 

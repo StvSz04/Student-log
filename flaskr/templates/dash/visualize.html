@@ -168,7 +168,20 @@
         }];
 
         var layout = {
-            title: 'Study Hours per Course'
+            title: {
+                text: 'Study Hours per Course',
+                font: { color: 'white' }
+            },
+            paper_bgcolor: 'rgba(64, 64, 64, 1)', // Dark gray background
+            plot_bgcolor: '#979494', // Lighter gray plot area
+            font: {
+                color: 'white' // Applies to all text: axis labels, legend, etc.
+            },
+            legend: {
+                font: {
+                    color: 'white'
+                }
+            }
         };
         // Create pie chart using the div, data taken from json, and layout
         Plotly.newPlot('pie-chart', data, layout,  {displayModeBar: false});
@@ -206,37 +219,94 @@
         //const H = document.getElementById("high").value;
 
         // Graph design i.e axis titles
-        var layoutGraph = {    
-
+            var layoutGraph = {    
+                title: {
+                text: 'Timeline of Weekly Study Hours',
+                font: { color: 'white' }
+            },
+               xaxis: {
                     title: {
-                        text: 'Timeline of Weekly Study Hours'
+                        text: 'Weeks',
+                        font: { color: 'white' }
                     },
+                    tickfont: { color: 'white' },
+                    range: [0, 52],
+                    gridcolor: 'black',         // Dark gray grid
+                    zerolinecolor: 'black',     // Axis zero-line
+                    linecolor: 'black'          // Axis line
+                },
 
-                    xaxis: {
-                        title: {
-                            text: 'Weeks'
-                        },
-                        range: [0,52]
+                yaxis: {
+                    title: {
+                        text: 'Hours',
+                        font: { color: 'white' }
                     },
+                    tickfont: { color: 'white' },
+                    gridcolor: 'black',         // Dark gray grid
+                    zerolinecolor: 'black',     // Axis zero-line
+                    linecolor: 'black'          // Axis line
+                },
 
-                    yaxis: {
-                        title: {
-                            text: 'Hours'
-                        }
+                paper_bgcolor: 'rgba(64, 64, 64, 1)', // Dark background
+                plot_bgcolor: 'rgba(80, 80, 80, 1)', // Darker gray for plot area
+
+
+                font: {
+                    color: 'white' // General fallback font color
+                },
+
+                legend: {
+                    font: {
+                        color: 'white'
                     }
+                }
+            };
 
-        };
         // Function uses low and high range values to update graph
         function updateGraph() {
             const L = parseFloat(document.getElementById("low").value);
             const H = parseFloat(document.getElementById("high").value);
             var layoutGraph = {    
-                title: { text: 'Timeline of Weekly Study Hours' },
-                xaxis: {
-                    title: { text: 'Weeks' },
-                    range: [L, H] 
+                title: {
+                text: 'Timeline of Weekly Study Hours',
+                font: { color: 'white' }
+            },
+               xaxis: {
+                    title: {
+                        text: 'Weeks',
+                        font: { color: 'white' }
+                    },
+                    tickfont: { color: 'white' },
+                    range: [L, H],
+                    gridcolor: 'black',         // Dark gray grid
+                    zerolinecolor: 'black',     // Axis zero-line
+                    linecolor: 'black'          // Axis line
                 },
-                yaxis: { title: { text: 'Hours' } }
+
+                yaxis: {
+                    title: {
+                        text: 'Hours',
+                        font: { color: 'white' }
+                    },
+                    tickfont: { color: 'white' },
+                    gridcolor: 'black',         // Dark gray grid
+                    zerolinecolor: 'black',     // Axis zero-line
+                    linecolor: 'black'          // Axis line
+                },
+
+                paper_bgcolor: 'rgba(64, 64, 64, 1)', // Dark background
+                plot_bgcolor: 'rgba(80, 80, 80, 1)', // Darker gray for plot area
+
+
+                font: {
+                    color: 'white' // General fallback font color
+                },
+
+                legend: {
+                    font: {
+                        color: 'white'
+                    }
+                }
             };
 
             Plotly.newPlot('time-graph', allCourseLines, layoutGraph);
