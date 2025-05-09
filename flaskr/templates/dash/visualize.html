@@ -15,8 +15,14 @@
 
 {% block content %}
 <body class = "visualize_body">
-    <div id="courseColors">
-        <!-- Color pickers will be injected here by JavaScript -->
+    <div>
+        <label> Choose Custom Colors</label>
+    </div>
+    <div id="courseColors" class = "courseColors">
+        {% for course in study_data['classes_data'] %}
+        <label for="custom_color"> {{course}}</label>
+        <input type="color" id="input-{{ loop.index }}" class="color-picker" value="#000000" data-course="{{ course }}">
+        {% endfor %}
     </div>
 
     <div class="center-container">
@@ -99,60 +105,61 @@
             return color;
         }
 
+
         // Assign each course to an initial color
         const courseColors = {}; // Object to hold course-color mapping
         const customColors = []; // Array to hold ordered list of colors
-
+        
         for (let i = 0; i < labels.length; i++) {
-            const tempName = labels[i];
-            courseColors[tempName] = {
-                colors: getRandomHexColor()
-            };
-            customColors.push(courseColors[tempName].colors);
+                const tempName = labels[i];
+                courseColors[tempName] = {
+                    colors: getRandomHexColor()
+                    };
+                customColors.push(courseColors[tempName].colors);
+        }
+        
+        // Function to match intial colors for color picker with randomly generated intial colors
+        function set_colors() {
+            const inputs = document.querySelectorAll('.color-picker');
+            inputs.forEach(input => {
+                const course = input.dataset.course;
+                input.value = courseColors[course].colors;
+                
+            });  
         }
 
-        // Update customColors array from courseColors
-        function updateCustomColors() {
-            customColors.clear()
-            customColors.length = 0; // Instead of `.clear()`, use this in JS
-            labels.forEach(course => {
-                customColors.push(courseColors[course].colors);
-            });
+        // Function to update colors based on user input
+        function update_colors(){
+            // Clear old colors
+            customColors.length = 0;
+            allCourseLines.length = 0;
+            // Obtain attr
+            const input = event.target;
+            const new_color = input.value
+            const course = input.dataset.course;
+            // Update color
+            courseColors[course].colors = new_color;
+            for (let i = 0; i < labels.length; i++) {
+                const tempName = labels[i];
+                customColors.push(courseColors[tempName].colors);
+                set_lines();
+            }
+
+            
+            
+            // Replot with new colors
+            update_graph_colors();
+            update_pie_chart();
         }
 
-        // Generate color pickers
-        function createColorPickers() {
-            const courseColorsDiv = document.getElementById('courseColors');
-            courseColorsDiv.innerHTML = ''; // Clear previous inputs
+        document.addEventListener("DOMContentLoaded", function () {
+            set_colors();
+        });
 
-            labels.forEach(course => {
-                const label = document.createElement('label');
-                label.innerHTML = course;
-                label.style.marginRight = "10px";
-
-                const colorInput = document.createElement('input');
-                colorInput.type = 'color';
-                colorInput.id = course;
-                colorInput.value = courseColors[course].colors;
-
-                // Add the event listener *here*, inside the loop!
-                colorInput.addEventListener('input', () => {
-                    courseColors[course].colors = colorInput.value;
-                    updateCustomColors(); // Updates customColors after every input change
-                    updateGraph();
-                });
-
-                const container = document.createElement('div');
-                container.appendChild(label);
-                container.appendChild(colorInput);
-                courseColorsDiv.appendChild(container);
-            });
-        }
-
-
-        // Call the function to initialize
-        createColorPickers();
-
+       const inputs = document.querySelectorAll('.color-picker');
+        inputs.forEach(input => {
+            input.addEventListener('input', update_colors);
+        });
 
 
         // Pie Chart section
@@ -183,36 +190,44 @@
                 }
             }
         };
+
+        function update_pie_chart(){
+            Plotly.newPlot('pie-chart', data, layout,  {displayModeBar: false});
+        }
         // Create pie chart using the div, data taken from json, and layout
         Plotly.newPlot('pie-chart', data, layout,  {displayModeBar: false});
 
         //----------------------------------------------------------------------
         const numLines = labels.length; // get length for, for loop, lables contains course names
         const allCourseLines = []; // Store all course lines in this array to pass to Plotly.newPlot() as the data parameter
+        function set_lines(){
+            for (let i = 0; i < numLines; i++) {
+                const CourseLine = {}; // Dict for each course storing needed date and time keys for a line
+                const dateList = []; // Array for dates
+                const hours = []; // Array for course hours
 
-        for (let i = 0; i < numLines; i++) {
-            const CourseLine = {}; // Dict for each course storing needed date and time keys for a line
-            const dateList = []; // Array for dates
-            const hours = []; // Array for course hours
+                const courseName = labels[i]; // Get the current course name from the labels array
+                const courseData = weeklyHours[courseName]; // Get the weekly data for this course
 
-            const courseName = labels[i]; // Get the current course name from the labels array
-            const courseData = weeklyHours[courseName]; // Get the weekly data for this course
+                // Loop through each entry for the current course
+                const date = courseData.map(entry => entry.week);
+                const time = courseData.map(entry => entry.weekly_hours);
 
-            // Loop through each entry for the current course
-            const date = courseData.map(entry => entry.week);
-            const time = courseData.map(entry => entry.weekly_hours);
+                dateList.push(...date); // Append the date values for this course
+                hours.push(...time); // Append the time (weekly_hours) values for this course
 
-            dateList.push(...date); // Append the date values for this course
-            hours.push(...time); // Append the time (weekly_hours) values for this course
+                CourseLine['x'] = dateList; // x-axis data (weeks)
+                CourseLine['y'] = hours; // y-axis data (hours studied)
+                CourseLine['type'] = 'scatter'; // Line type for Plotly graph
+                CourseLine['name'] = courseName; // Set the name for the line
+                CourseLine['line'] = {color: courseColors[courseName].colors}
 
-            CourseLine['x'] = dateList; // x-axis data (weeks)
-            CourseLine['y'] = hours; // y-axis data (hours studied)
-            CourseLine['type'] = 'scatter'; // Line type for Plotly graph
-            CourseLine['name'] = courseName; // Set the name for the line
-            CourseLine['line'] = {color: courseColors[courseName]['colors']}
-
-            allCourseLines.push(CourseLine); // Push the course line data to the allCourseLines array
+                allCourseLines.push(CourseLine); // Push the course line data to the allCourseLines array
+            }
         }
+
+        set_lines();
+
 
         // Add submission to catch the value of ranges the user wants
         //const L = document.getElementById("low").value; 
@@ -261,7 +276,11 @@
                     }
                 }
             };
-
+        // Function to update graph colors
+        function update_graph_colors(){
+            console.log(allCourseLines);
+            Plotly.newPlot('time-graph', allCourseLines, layoutGraph);
+        }
         // Function uses low and high range values to update graph
         function updateGraph() {
             const L = parseFloat(document.getElementById("low").value);

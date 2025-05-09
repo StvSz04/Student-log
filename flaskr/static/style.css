@@ -552,3 +552,8 @@ li .username {
     margin-left: auto;       /* Centers horizontally */
     margin-right: auto; 
 }
+/* Color picker attr*/
+
+.courseColors{
+    background-color: #333333;
+}
