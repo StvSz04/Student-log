@@ -25,6 +25,54 @@ body {
     min-height: auto;
 }
 
+select {
+  background-color: #000000;
+  color: #fffbfb;
+}
+
+input{
+    background-color: #000000;
+    color: #fffbfb;
+}
+
+/* Table*/
+/* Styling for the entire table */
+.table {
+  background-color: #979494;
+  color: white; /* Text color to make it readable */
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Header Row */
+.table thead tr {
+  background-color: #000000; /* Slightly lighter black for header */
+}
+
+/* Table Header Text */
+.table tr th {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #000000; /* Dark gray border for better visibility */
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Table Body */
+.table tbody tr td {
+  background-color: #111010;
+  color: #ffffff;
+}
+
+/* Table foot */
+.table tfoot{
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #000000; /* Dark gray border for better visibility */
+    background-color: #000000;
+    color: #ffffff;
+}
+
 
 @keyframes colorChange {
     0% {
@@ -55,7 +103,7 @@ header h1 {
 
 /* Navigation */
 nav {
-    background: #000000; /* softer gray */
+    background: #000000;
     display: flex;
     align-items: center;
     justify-content: space-between;
