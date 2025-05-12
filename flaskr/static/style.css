@@ -38,7 +38,7 @@ input{
 /* Table*/
 /* Styling for the entire table */
 .table {
-  background-color: #979494;
+  background-color: #111010;
   color: white; /* Text color to make it readable */
   border-collapse: collapse;
   width: 100%;
@@ -46,7 +46,7 @@ input{
 
 /* Header Row */
 .table thead tr {
-  background-color: #000000; /* Slightly lighter black for header */
+  background-color: #111010; /* Slightly lighter black for header */
 }
 
 /* Table Header Text */
@@ -54,7 +54,7 @@ input{
   padding: 10px;
   text-align: left;
   border: 1px solid #000000; /* Dark gray border for better visibility */
-  background-color: #000000;
+  background-color: #111010;
   color: #ffffff;
 }
 
@@ -69,7 +69,7 @@ input{
     padding: 10px;
     text-align: left;
     border: 1px solid #000000; /* Dark gray border for better visibility */
-    background-color: #000000;
+    background-color: #111010;
     color: #ffffff;
 }
 
