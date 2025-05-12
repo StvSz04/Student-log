@@ -141,12 +141,9 @@
             for (let i = 0; i < labels.length; i++) {
                 const tempName = labels[i];
                 customColors.push(courseColors[tempName].colors);
-                update_lines();
-            }
-
-            
-            
+            } 
             // Replot with new colors
+            update_lines();
             update_graph_colors();
             update_pie_chart();
         }
@@ -200,15 +197,19 @@
         const numLines = labels.length; // get length for, for loop, lables contains course names
         const allCourseLines = []; // Store all course lines in this array to pass to Plotly.newPlot() as the data parameter
         function update_lines(){
-            allCourseLines.length = 0;  // Clear old data
-            
+        allCourseLines.length = 0;  // Clear old data
+
             for (let i = 0; i < numLines; i++) {
                 const CourseLine = {}; // Dict for each course storing needed date and time keys for a line
                 const dateList = []; // Array for dates
+                let courseData = [];// Get the weekly data for this course
                 const hours = []; // Array for course hours
-
                 const courseName = labels[i]; // Get the current course name from the labels array
-                const courseData = weeklyHours[courseName]; // Get the weekly data for this course
+
+                // Check if there is weekly hours otherwise keep it blank
+                if (courseName in weeklyHours){
+                    courseData = weeklyHours[courseName];
+                }
 
                 // Loop through each entry for the current course
                 const date = courseData.map(entry => entry.week);
@@ -226,7 +227,8 @@
                 allCourseLines.push(CourseLine); // Push the course line data to the allCourseLines array
             }
         }
-
+        
+        //
         update_lines();
 
 
