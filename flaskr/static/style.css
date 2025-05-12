@@ -53,7 +53,7 @@ input{
 .table tr th {
   padding: 10px;
   text-align: left;
-  border: 1px solid #000000; /* Dark gray border for better visibility */
+  border-bottom: 1px solid #ffffff; /* Dark gray border for better visibility */
   background-color: #111010;
   color: #ffffff;
 }
@@ -65,12 +65,11 @@ input{
 }
 
 /* Table foot */
-.table tfoot{
+.table tfoot tr td{
     padding: 10px;
     text-align: left;
-    border: 1px solid #000000; /* Dark gray border for better visibility */
+    border: 1px solid #ffffff; /* Dark gray border for better visibility */
     background-color: #111010;
-    color: #ffffff;
 }
 
 
