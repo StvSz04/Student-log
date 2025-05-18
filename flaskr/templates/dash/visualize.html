@@ -25,6 +25,17 @@
         {% endfor %}
     </div>
 
+    <div>
+        <label> Choose Semesters/Years</label>
+    </div>
+    <div id="semesters" class = "semesters_div">
+        <form  id = "semester_range_form" method = "post" action = "{{ url_for('vis.display_graphs') }}">
+            <input type="date" id="low-date" name="low-date" required>
+            <input type="date" id="high-date" name="high-date" required>
+            <button type="submit"> Submit Semesters</button>
+        </form>
+    </div>
+
     <div class="center-container">
         <!-- Pie Chart Slot -->
         <h2>Pie Chart</h2>
@@ -91,6 +102,13 @@
         const values = studyData['hours_data'];  // Extract hours data
         const labels = studyData['classes_data'];  // Extract course names
         const weeklyHours = studyData['study_hours_data']; // Extract all weekly hours keyed to a course names
+
+        // Funciton for updating semester/range
+        const form = document.getElementById('semester_range_form');
+        form.addEventListener('submit', function(event) {
+            update_pie_chart();
+            updateGraph();
+        });
 
         //Section - Define the colors for each course
 

@@ -604,3 +604,9 @@ li .username {
 .courseColors{
     background-color: #333333;
 }
+
+
+/* Semester divs*/
+.semesters_div{
+    width: fit-content;
+}
