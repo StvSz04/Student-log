@@ -1,11 +1,5 @@
 {% extends 'base.html' %}
 {% block header%}
- <!-- Achievement display -->
- <nav>
-  <ul >
-    <li> <p>Badge Level: {{badge_level}} </p> </li>
-  </ul>
-</nav>
 {% endblock %}
 
 {% block content %}
@@ -20,6 +14,7 @@
         <li><a href="{{ url_for('dash.go_to_del') }}">Delete Course/Entry</a></li>
         <li><a href="{{ url_for('dash.go_to_comp') }}">Compare</a></li>
         <li><a href="{{ url_for('dash.go_to_settings') }}">Settings</a></li>
+        
       </ul>
 
       </section>
