@@ -15,6 +15,7 @@ Database Section
  
 cd C:\Users\iamst\OneDrive\Desktop\Student-Log\instance
 sqlite3 flaskr.sqlite
+flask --app flaskr init-db
 
 
 Pythonanwhere Section
