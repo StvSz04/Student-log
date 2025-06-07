@@ -17,17 +17,36 @@ function createButton(id, text,type) {
 createbtn.addEventListener("click", function () {
     sandbox.innerHTML = '';
 
-    let cardCount = 0;
-    let name = prompt("Enter a card set name");
-    if (!name) return;
+    // Initialize set name
+    const nameText = document.createElement('p');
+    nameText.textContent = prompt("Enter a card set name");
+    nameText.name = nameText.textContent;
+    if(!nameText.textContent){
+        return;
+    }
+    // Create the hidden input for submission
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'set-name';
+    hiddenInput.value = nameText.name;
+    
+    const hiddenInputTwo = document.createElement('input');
+    hiddenInputTwo.type = 'hidden';
+    hiddenInputTwo.name = 'card-count';
 
+    // Define basic elements of form
+    let cardCount = 1;
     const card = document.createElement("div");
     const flashForm = document.createElement("form");
+    flashForm.method = "POST";
+    flashForm.action = "/flash_card/flash";
     const frontInput = document.createElement("input");
-    frontInput.name = 'front ' + ++cardCount;
+    frontInput.name = 'front' + cardCount;
     const backInput = document.createElement("input");
-    backInput.name = 'back ' + ++cardCount;
+    backInput.name = 'back' + cardCount;
 
+    flashForm.appendChild(hiddenInput);
+    flashForm.appendChild(hiddenInputTwo);
     flashForm.appendChild(frontInput);
     flashForm.appendChild(backInput);
 
@@ -37,17 +56,19 @@ createbtn.addEventListener("click", function () {
     flashForm.appendChild(newFlashCardbtn);
     flashForm.appendChild(submitbtn);
     card.appendChild(flashForm);
+    sandbox.appendChild(nameText);
     sandbox.appendChild(card);
 
     newFlashCardbtn.addEventListener("click", function (event) {
-        // Grab the last element, used for insertion
+        // Grab the last element, used for insertion, - 3 to account for newcard and submit buttons
         let lastInput = flashForm.elements[flashForm.elements.length - 3];
 
         // Now create the next flashcard input
+        cardCount += 1 // Increment
         const newFront = document.createElement("input");
-        newFront.name = 'front ' + ++cardCount;
+        newFront.name = 'front' + cardCount;
         const newBack = document.createElement("input");
-        newBack.name = 'back ' + ++cardCount;
+        newBack.name = 'back' + cardCount;
 
         // Simulate insertAfter
         flashForm.insertBefore(newBack, lastInput.nextSibling);
@@ -55,13 +76,10 @@ createbtn.addEventListener("click", function () {
 
     });
 
-    submitbtn.addEventListener("click", () => alert("Created flashcard set! " + name))
-
-    // flashForm.addEventListener('submit', function (event) {
-        // for (const element of flashForm.elements) {
-            // console.log(element.name, element.value);
-        // }
-    // });
+    // submitbtn.addEventListener("click", () => alert("Created flashcard set! " + name))
+    flashForm.addEventListener('submit', function (event) {
+        hiddenInputTwo.value = cardCount;
+    });
 });
 
 

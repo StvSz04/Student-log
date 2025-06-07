@@ -16,8 +16,20 @@ def flashcard():
     db = get_db()
     
     if request.method == 'POST':
-        # Need to recieve JSON object of flash cards 
+        # Recieve data from POST
+        print("Full form data:", request.form)
+        setName = request.form.get("set-name") 
+        cardCount = request.form.get("card-count")
+        cardsFront = []
+        cardsBack = []
+        for i in range(1, int(cardCount) + 2):
+            cardsFront.append(request.form.get(f"front{i}"))
+            cardsBack.append(request.form.get(f"back{i}"))
+
         # And then send to db
-        return render_template('dash/flashcard.html')
+        
+
+
+        return redirect(url_for('flash.flashcard'))
      
     return render_template('dash/flashcard.html')

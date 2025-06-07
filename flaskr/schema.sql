@@ -34,15 +34,19 @@ CREATE TABLE logged_hours (
 
 CREATE TABLE FlashcardSet (
   set_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  set_name TEXT NOT NULL,
   user_username TEXT NOT NULL,
-  FOREIGN KEY (user_username) REFERENCES user(username)
+  FOREIGN KEY (user_username) REFERENCES user(username) ON DELETE CASCADE
+  -- if a user is deleted, their sets are automatically deleted
 );
 
 CREATE TABLE Flashcard (
   flashcard_id INTEGER PRIMARY KEY AUTOINCREMENT,
   set_id INTEGER NOT NULL,
+  place INTEGER NOT NULL,
   front TEXT NOT NULL,
   back TEXT NOT NULL,
-  FOREIGN KEY (set_id) REFERENCES FlashcardSet(set_id)
+  FOREIGN KEY (set_id) REFERENCES FlashcardSet(set_id) ON DELETE CASCADE,
+  UNIQUE (set_id, place) -- Prevents duplicate card positions in a single set
 );
 
