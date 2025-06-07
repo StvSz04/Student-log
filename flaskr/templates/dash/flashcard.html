@@ -4,7 +4,18 @@
 
 {% block content %}
 
+    <div id ="optionBar">
+        <li><button id = "create"> Create flashcard Set</button></li>
+        <li><button id = "use"> Use flashcard Set</button></li>
+        <li><button id = "delete"> Delete flashcard Set</button></li>
+    </div>
+
+    <div id = "sandbox-div">
+
+    </div>
 {% endblock %}
 
 {% block extra_scripts %}
+    <script src="{{ url_for('static', filename='flashcard.js') }}"></script>
 {% endblock %}
+

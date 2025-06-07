@@ -12,4 +12,12 @@ bp = Blueprint('flash', __name__, url_prefix='/flash_card')
 
 @bp.route('/flash', methods=('GET','POST'))
 def flashcard():
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    if request.method == 'POST':
+        # Need to recieve JSON object of flash cards 
+        # And then send to db
+        return render_template('dash/flashcard.html')
+     
     return render_template('dash/flashcard.html')

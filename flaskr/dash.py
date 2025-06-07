@@ -54,5 +54,9 @@ def go_to_timer():
 def go_to_comp():
     return redirect(url_for('comp.compare_hours'))
 
+@bp.route('/flash')
+def go_to_flash():
+    return redirect(url_for('flash.flashcard'))
+
 
 
