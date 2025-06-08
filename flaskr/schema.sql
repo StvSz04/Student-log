@@ -24,7 +24,7 @@ CREATE TABLE course (
 
 -- Table to log hours spent by users on courses
 CREATE TABLE logged_hours (
-  user_username TEXT NOT NULL,         -- Reference to the username of the user 
+  user_username TEXT NOT NULL,         -- Reference to the username of the user, refers to id
   course_name TEXT NOT NULL,           -- Course name
   hours DECIMAL(5, 2) NOT NULL,        -- Hours logged
   week_number INTEGER DEFAULT 0,       -- Week number (default is 0)

@@ -35,7 +35,7 @@ createbtn.addEventListener("click", function () {
     hiddenInputTwo.name = 'card-count';
 
     // Define basic elements of form
-    let cardCount = 1;
+    let cardCount = 0;
     const card = document.createElement("div");
     const flashForm = document.createElement("form");
     flashForm.method = "POST";
@@ -78,7 +78,7 @@ createbtn.addEventListener("click", function () {
 
     // submitbtn.addEventListener("click", () => alert("Created flashcard set! " + name))
     flashForm.addEventListener('submit', function (event) {
-        hiddenInputTwo.value = cardCount;
+        hiddenInputTwo.value = cardCount + 1;
     });
 });
 

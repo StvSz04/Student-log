@@ -22,12 +22,38 @@ def flashcard():
         cardCount = request.form.get("card-count")
         cardsFront = []
         cardsBack = []
-        for i in range(1, int(cardCount) + 2):
+
+        # Insert flashcard set to db
+        db.execute(
+            "INSERT INTO FlashcardSet (set_name, user_username) VALUES (?, ?)",
+            (setName,user_id)
+        )
+
+        cursor = db.execute(
+            "SELECT set_id FROM FlashcardSet WHERE set_name = ? AND user_username = ?",
+            (setName, user_id)
+        )
+
+        row = cursor.fetchone()  # This is the result row
+        
+        # Extract the set_id safely
+        if row:
+            setId = row[0]
+        else:
+            setId = None  # Handle the case where the set was not found
+    
+        # For each flash card insert into db
+        for i in range(0, int(cardCount)):
             cardsFront.append(request.form.get(f"front{i}"))
             cardsBack.append(request.form.get(f"back{i}"))
+            print(cardsFront[i])
+            print(cardsBack[i])
 
-        # And then send to db
-        
+            db.execute(
+                "INSERT INTO Flashcard (set_id,place,front,back) VALUES (?, ?,?,?)",
+                (setId,i,cardsFront[i],cardsBack[i])
+             )
+
 
 
         return redirect(url_for('flash.flashcard'))
