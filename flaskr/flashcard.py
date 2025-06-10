@@ -1,4 +1,6 @@
 import functools
+import json
+from flask import jsonify
 
 from datetime import datetime
 from flask import (
@@ -10,8 +12,14 @@ import sqlite3
 
 bp = Blueprint('flash', __name__, url_prefix='/flash_card')
 
+# Render base html for page
 @bp.route('/flash', methods=('GET','POST'))
 def flashcard():
+    return redirect(url_for('flash.flashcardCreate')) # A bit jank
+
+# For creating
+@bp.route('/flashCreate', methods=('GET','POST'))
+def flashcardCreate():
     user_id = session.get('user_id')
     db = get_db()
     
@@ -28,6 +36,8 @@ def flashcard():
             "INSERT INTO FlashcardSet (set_name, user_username) VALUES (?, ?)",
             (setName,user_id)
         )
+
+        db.commit()
 
         cursor = db.execute(
             "SELECT set_id FROM FlashcardSet WHERE set_name = ? AND user_username = ?",
@@ -46,16 +56,41 @@ def flashcard():
         for i in range(0, int(cardCount)):
             cardsFront.append(request.form.get(f"front{i}"))
             cardsBack.append(request.form.get(f"back{i}"))
-            print(cardsFront[i])
-            print(cardsBack[i])
 
+            print("Sending to DB......")
             db.execute(
                 "INSERT INTO Flashcard (set_id,place,front,back) VALUES (?, ?,?,?)",
                 (setId,i,cardsFront[i],cardsBack[i])
              )
+            db.commit()
+            print("Sent to DB!")
 
-
-
-        return redirect(url_for('flash.flashcard'))
+        return redirect(url_for('flash.flashcardCreate'))
+     
      
     return render_template('dash/flashcard.html')
+
+
+# Render base html for page
+@bp.route('/flashUse', methods=('GET','POST'))  
+def flashcardUse():
+    user_id = session.get('user_id')
+    db = get_db()
+
+    if request.method == 'GET':
+        # Select all flashcard sets from the db
+        cursor = db.execute(
+            "SELECT set_name FROM FlashcardSet WHERE user_username = ?",
+            (user_id,)
+        )
+
+        data = [dict(row) for row in cursor.fetchall()]
+
+        return jsonify(data)
+    
+    
+    return render_template('dash/flashcard.html')
+
+
+
+     

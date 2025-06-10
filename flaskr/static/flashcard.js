@@ -39,7 +39,7 @@ createbtn.addEventListener("click", function () {
     const card = document.createElement("div");
     const flashForm = document.createElement("form");
     flashForm.method = "POST";
-    flashForm.action = "/flash_card/flash";
+    flashForm.action = "/flash_card/flashCreate";
     const frontInput = document.createElement("input");
     frontInput.name = 'front' + cardCount;
     const backInput = document.createElement("input");
@@ -89,27 +89,37 @@ usebtn.addEventListener("click", function(){
 
     sandbox.innerHTML = ''; // Clear the sanbox
 
+
     // Create elements of card
     const card = document.createElement("div");
-    const next = createButton("next", "Next","Button");
-    const backbtn = createButton("back", "Back", "Button");
-    const flip = createButton("flip", "Flip", "Button");
+    const flashForm = document.createElement("form");
+    const flashTable = document.createElement("table");
+    const choose = createButton("choose","Choose","Button");
+    
+
+    // Make a GET request to backend
+    async function retrieve() {
+        const response = await fetch("/flash_card/flashUse");
+        if (!response.ok) throw new Error("Fetch failed");
+        const data = await response.json(); // or response.text() if not JSON
+        return data;
+    }
+
+    // When user chooses which set make another get request
 
     // Attach front and "back" inputs to the card, just make and illusion of flipping with replacing innerhtml/text
-    let text = "";
-    let front = "";
-    let back = "";
+
 
     // Attach elements to sandbox
-    sandbox.appendChild(card);
-    sandbox.appendChild(next);
-    sandbox.appendChild(flip);
-    sandbox.appendChild(backbtn);
+    card.appendChild(flashTable);
+    flashForm.appendChild(card);
+    flashForm.appendChild(choose);
+    sandbox.appendChild(flashForm);
 
     // Add functionality
-    next.addEventListener("click", () => alert("Next button works"));
-    back.addEventListener("click", () => alert("Back button works"));
-    flip.addEventListener("click", () => alert("Flip button works"));
+    retrieve().then(data => {
+    console.log(data);  // Should log: {name: "John", age: 30, city: "New York"}
+    });
 
 })
 
