@@ -1,8 +1,46 @@
+
+// Define class
+class Flashcard {
+  constructor(frontText, backText) {
+    this.frontText = frontText;
+    this.backText = backText;
+    this.cardDiv = document.createElement('div');
+    this.cardDiv.className = 'flashcard';
+    this.frontLabel = document.createElement('label');
+    this.frontLabel.textContent = frontText;
+    this.backLabel = document.createElement('label');
+    this.backLabel.textContent = backText;
+    this.cardDiv.appendChild(this.frontLabel);
+    this.cardDiv.appendChild(this.backLabel);
+  }
+  
+    // Used to display card
+    render(parentElement) {
+        parentElement.appendChild(this.cardDiv);
+    }
+
+    // Upadate text info on card
+    update(frontText, backText) {
+        this.frontText = frontText;
+        this.backText = backText;
+        this.frontLabel.textContent = frontText;
+        this.backLabel.textContent = backText;
+    }
+
+    addButton(button) {
+        this.cardDiv.appendChild(button);
+    }
+
+}
+
+let flashcardArr = [];
 const createbtn = document.getElementById("create");
 const usebtn = document.getElementById("use");
 const deletebtn = document.getElementById("delete");
 // sanbox correpsonds to the div that all 3 buttons will use to diplay info
 let sandbox = document.getElementById("sandbox-div") 
+
+
 
 // This function creates instances of buttons;
 function createButton(id, text,type) {
@@ -22,7 +60,7 @@ function createTable(rowAmnt, colAmnt,data) {
         checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.name = data[i].set_name;
-        checkbox.value = data[i].set_name; 
+        checkbox.value = data[i].set_name; // + 1 to match sqlite tabel autoincrement starting at 1
         const label = document.createElement("label");
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(data[i].set_name));
@@ -126,14 +164,16 @@ usebtn.addEventListener("click", function(){
     sandbox.innerHTML = ''; // Clear the sanbox
 
 
-    // Create elements of card
-    const card = document.createElement("div");
-    card.id = "card";
+    // Create elements of selection menu
     const flashForm = document.createElement("form");
-    const choose = createButton("choose","Choose","Button");
+
+    // Create table div
+    const tableDiv = document.createElement('div');
+    choose  = createButton("choose", "Choose", "button");
 
     // Attach elements to sandbox
-    flashForm.appendChild(card);
+    // flashForm.appendChild(card.cardDiv);
+    flashForm.appendChild(tableDiv);
     flashForm.appendChild(choose);
     sandbox.appendChild(flashForm);
     
@@ -145,7 +185,7 @@ usebtn.addEventListener("click", function(){
     rowAmnt = Object.keys(data).length;
     console.log(rowAmnt);
     const flashtable = createTable(rowAmnt,1,data);
-    card.appendChild(flashtable);
+    tableDiv.appendChild(flashtable);
     });
     
 
@@ -169,9 +209,10 @@ usebtn.addEventListener("click", function(){
             let setIds = []; // Default decleration
 
             for(let i = 0; i < Object.keys(data).length; i++){
-                if(values[i] == data[i].set_name){
+                // If the set was selected add to setIds
+                if(values.includes(data[i].set_name)){
                     //Flashcard set is within values so extract
-                    setIds.push(i);
+                    setIds.push(i + 1);
                 }
                 else{
                     continue;
@@ -179,7 +220,10 @@ usebtn.addEventListener("click", function(){
             }
             return  setIds;
         })
-        .then( setIds => retrieve("/flash_card/renderCards",setIds,"set_id"));       
+        .then( setIds => retrieve("/flash_card/renderCards",setIds,"set_id"))
+        .then(function generateDeck(data){
+            
+        });       
 
     });
 

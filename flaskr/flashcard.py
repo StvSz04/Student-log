@@ -79,10 +79,12 @@ def showSet():
 
     if request.method == 'GET':
         # Select all flashcard sets from the db
+        print("Selecting from DB showSets......")
         cursor = db.execute(
             "SELECT set_name FROM FlashcardSet WHERE user_username = ?",
             (user_id,)
         )
+        print("Grabbed showSets")
 
         data = [dict(row) for row in cursor.fetchall()]
 
@@ -98,17 +100,26 @@ def renderCards():
     db = get_db()
     
     if request.method == 'GET':
+        print("Recieved choose click")
         # Retreive appeneded data
         set_ids = request.args.getlist('set_id') 
+        print("Set ids",set_ids)
         set_ids = [int(sid) for sid in set_ids] # Convert data into int
-        print("Received set_ids:", set_ids)
-        
-        # data = db.execute("SELECT set_name FROM Flashcard WHERE user_username = ?",
-            # (user_id,))
+        data = []  # initialize as an empty list to store results
 
-        test = {"name" : "john"}
+        for i in range(len(set_ids)):
+            print("Selecting from DB renderCards......")
+            cursor = db.execute("SELECT * FROM Flashcard WHERE set_id = ?", (set_ids[i],))
+            print("Grabbed renderCards")
 
-        return test
+            if cursor:
+                data.extend([dict(r) for r in cursor.fetchall()])  # append the all the row(flashcard) info to data
+            else:
+                data.append(None)  # or skip, or handle no-match case as you want
+
+        print(json.dumps(data, indent=2))
+
+        return jsonify(data)
     
     return render_template('dash/flashcard.html')
 
