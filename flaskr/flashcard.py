@@ -25,7 +25,6 @@ def flashcardCreate():
     
     if request.method == 'POST':
         # Recieve data from POST
-        print("Full form data:", request.form)
         setName = request.form.get("set-name") 
         cardCount = request.form.get("card-count")
         cardsFront = []
@@ -57,13 +56,11 @@ def flashcardCreate():
             cardsFront.append(request.form.get(f"front{i}"))
             cardsBack.append(request.form.get(f"back{i}"))
 
-            print("Sending to DB......")
             db.execute(
                 "INSERT INTO Flashcard (set_id,place,front,back) VALUES (?, ?,?,?)",
                 (setId,i,cardsFront[i],cardsBack[i])
              )
             db.commit()
-            print("Sent to DB!")
 
         return redirect(url_for('flash.flashcardCreate'))
      
@@ -79,12 +76,10 @@ def showSet():
 
     if request.method == 'GET':
         # Select all flashcard sets from the db
-        print("Selecting from DB showSets......")
         cursor = db.execute(
             "SELECT set_name FROM FlashcardSet WHERE user_username = ?",
             (user_id,)
         )
-        print("Grabbed showSets")
 
         data = [dict(row) for row in cursor.fetchall()]
 
@@ -100,24 +95,20 @@ def renderCards():
     db = get_db()
     
     if request.method == 'GET':
-        print("Recieved choose click")
         # Retreive appeneded data
         set_ids = request.args.getlist('set_id') 
-        print("Set ids",set_ids)
+
         set_ids = [int(sid) for sid in set_ids] # Convert data into int
         data = []  # initialize as an empty list to store results
 
         for i in range(len(set_ids)):
-            print("Selecting from DB renderCards......")
             cursor = db.execute("SELECT * FROM Flashcard WHERE set_id = ?", (set_ids[i],))
-            print("Grabbed renderCards")
-
+    
             if cursor:
                 data.extend([dict(r) for r in cursor.fetchall()])  # append the all the row(flashcard) info to data
             else:
                 data.append(None)  # or skip, or handle no-match case as you want
 
-        print(json.dumps(data, indent=2))
 
         return jsonify(data)
     

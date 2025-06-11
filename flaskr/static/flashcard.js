@@ -2,33 +2,14 @@
 // Define class
 class Flashcard {
   constructor(frontText, backText) {
-    this.frontText = frontText;
-    this.backText = backText;
-    this.cardDiv = document.createElement('div');
-    this.cardDiv.className = 'flashcard';
-    this.frontLabel = document.createElement('label');
-    this.frontLabel.textContent = frontText;
-    this.backLabel = document.createElement('label');
-    this.backLabel.textContent = backText;
-    this.cardDiv.appendChild(this.frontLabel);
-    this.cardDiv.appendChild(this.backLabel);
+    this.front = frontText;
+    this.back = backText;
   }
   
-    // Used to display card
-    render(parentElement) {
-        parentElement.appendChild(this.cardDiv);
-    }
-
     // Upadate text info on card
     update(frontText, backText) {
-        this.frontText = frontText;
-        this.backText = backText;
-        this.frontLabel.textContent = frontText;
-        this.backLabel.textContent = backText;
-    }
-
-    addButton(button) {
-        this.cardDiv.appendChild(button);
+        this.front = frontText;
+        this.back = backText;
     }
 
 }
@@ -166,6 +147,8 @@ usebtn.addEventListener("click", function(){
 
     // Create elements of selection menu
     const flashForm = document.createElement("form");
+    // Create div to hold cards
+    const cardDiv = document.createElement("div");
 
     // Create table div
     const tableDiv = document.createElement('div');
@@ -180,7 +163,7 @@ usebtn.addEventListener("click", function(){
 
     // Recieve response
     retrieve("/flash_card/showSets").then(data => {
-    console.log(data);
+
     // Make a table with user options
     rowAmnt = Object.keys(data).length;
     console.log(rowAmnt);
@@ -222,12 +205,30 @@ usebtn.addEventListener("click", function(){
         })
         .then( setIds => retrieve("/flash_card/renderCards",setIds,"set_id"))
         .then(function generateDeck(data){
-            
-        });       
+            for(let i = 0; i < Object.keys(data).length;i++){
+                flashcardArr.push(new Flashcard(data[i].front,data[i].back));
+            }
+        })
+        .then(function renderCards(){
+            sandbox.innerHTML = ''; // Clear the sanbox
+            // Add buttons for back,flip,and next actions
+            cardDiv.appendChild(createButton("back","Back","button"));
+            cardDiv.appendChild(createButton("flip","Flip","button"));
+            cardDiv.appendChild(createButton("next","Next","button"));
+            console.log(flashcardArr);
 
+
+            // Add label to display the flashcard text
+            flashlabel = document.createElement("label");
+            flashlabel.textContent = flashcardArr[0].front; // Display the front of the first flashcard
+            cardDiv.appendChild(flashlabel);
+
+            // Add newly created card to the sandbox
+            sandbox.append(cardDiv);
+        });       
     });
 
-
+    
 })
 
 
