@@ -1,6 +1,6 @@
-let createbtn = document.getElementById("create");
-let usebtn = document.getElementById("use");
-let deletebtn = document.getElementById("delete");
+const createbtn = document.getElementById("create");
+const usebtn = document.getElementById("use");
+const deletebtn = document.getElementById("delete");
 // sanbox correpsonds to the div that all 3 buttons will use to diplay info
 let sandbox = document.getElementById("sandbox-div") 
 
@@ -11,6 +11,42 @@ function createButton(id, text,type) {
     btn.id = id;
     btn.textContent = text;
     return btn;
+}
+
+function createTable(rowAmnt, colAmnt,data) {
+    const table = document.createElement("table");
+
+    for (let i = 0; i < rowAmnt; i++) {
+        const row = table.insertRow(); // Create row
+        const cell = row.insertCell(); // Create cell in row
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = data[i].set_name;
+        checkbox.value = data[i].set_name; 
+        const label = document.createElement("label");
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(data[i].set_name));
+        cell.appendChild(label);
+    }
+
+    return table;
+}
+
+// Make a GET request to backend
+async function retrieve(destination,data,string) {
+    let response = null;
+
+    if (data){
+        const queryString = data.map(id => `${string}=${id}`).join('&');
+        response = await fetch(destination + "?" + queryString);
+    }
+    else{
+        response = await fetch(destination);
+    }
+
+    if (!response.ok) throw new Error("Fetch failed");
+    const answer = await response.json(); // or response.text() if not JSON
+    return answer;
 }
 
 // This eventListner here correspond to creating a flashcard set
@@ -92,34 +128,61 @@ usebtn.addEventListener("click", function(){
 
     // Create elements of card
     const card = document.createElement("div");
+    card.id = "card";
     const flashForm = document.createElement("form");
-    const flashTable = document.createElement("table");
     const choose = createButton("choose","Choose","Button");
-    
-
-    // Make a GET request to backend
-    async function retrieve() {
-        const response = await fetch("/flash_card/flashUse");
-        if (!response.ok) throw new Error("Fetch failed");
-        const data = await response.json(); // or response.text() if not JSON
-        return data;
-    }
-
-    // When user chooses which set make another get request
-
-    // Attach front and "back" inputs to the card, just make and illusion of flipping with replacing innerhtml/text
-
 
     // Attach elements to sandbox
-    card.appendChild(flashTable);
     flashForm.appendChild(card);
     flashForm.appendChild(choose);
     sandbox.appendChild(flashForm);
+    
 
-    // Add functionality
-    retrieve().then(data => {
-    console.log(data);  // Should log: {name: "John", age: 30, city: "New York"}
+    // Recieve response
+    retrieve("/flash_card/showSets").then(data => {
+    console.log(data);
+    // Make a table with user options
+    rowAmnt = Object.keys(data).length;
+    console.log(rowAmnt);
+    const flashtable = createTable(rowAmnt,1,data);
+    card.appendChild(flashtable);
     });
+    
+
+
+    // When user chooses which set make another get request
+    choose.addEventListener('click', () => {
+        // 1. Get all checkboxes (adjust selector as needed)
+        const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
+
+        // 2. Filter checked ones
+        const checked = Array.from(checkboxes).filter(box => box.checked);
+
+        // 3. Extract their values
+        const values = checked.map(box => box.value);
+
+        // 4. Use the values
+
+        // Make a query to retrieve all the flashcards from each set
+        retrieve("/flash_card/showSets")
+        .then(function extractIds(data){
+            let setIds = []; // Default decleration
+
+            for(let i = 0; i < Object.keys(data).length; i++){
+                if(values[i] == data[i].set_name){
+                    //Flashcard set is within values so extract
+                    setIds.push(i);
+                }
+                else{
+                    continue;
+                }
+            }
+            return  setIds;
+        })
+        .then( setIds => retrieve("/flash_card/renderCards",setIds,"set_id"));       
+
+    });
+
 
 })
 

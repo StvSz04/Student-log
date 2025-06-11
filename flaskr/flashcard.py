@@ -72,8 +72,8 @@ def flashcardCreate():
 
 
 # Render base html for page
-@bp.route('/flashUse', methods=('GET','POST'))  
-def flashcardUse():
+@bp.route('/showSets', methods=('GET','POST'))  
+def showSet():
     user_id = session.get('user_id')
     db = get_db()
 
@@ -90,6 +90,28 @@ def flashcardUse():
     
     
     return render_template('dash/flashcard.html')
+
+# Render base html for page
+@bp.route('/renderCards', methods=('GET','POST'))  
+def renderCards():
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    if request.method == 'GET':
+        # Retreive appeneded data
+        set_ids = request.args.getlist('set_id') 
+        set_ids = [int(sid) for sid in set_ids] # Convert data into int
+        print("Received set_ids:", set_ids)
+        
+        # data = db.execute("SELECT set_name FROM Flashcard WHERE user_username = ?",
+            # (user_id,))
+
+        test = {"name" : "john"}
+
+        return test
+    
+    return render_template('dash/flashcard.html')
+
 
 
 
