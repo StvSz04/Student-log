@@ -28,7 +28,6 @@ const deletebtn = document.getElementById("delete");
 let sandbox = document.getElementById("sandbox-div") 
 
 
-
 // This function creates instances of buttons;
 function createButton(id, text,type) {
     const btn = document.createElement("button");
@@ -203,21 +202,21 @@ usebtn.addEventListener("click", function(){
         // Make a query to retrieve all the flashcards from each set
         retrieve("/flash_card/showSets")
         .then(function extractIds(data){
-            let setIds = []; // Default decleration
+            let set_name = []; // Default decleration
 
             for(let i = 0; i < Object.keys(data).length; i++){
-                // If the set was selected add to setIds
+                // If the set was selected add to set_name
                 if(values.includes(data[i].set_name)){
                     //Flashcard set is within values so extract
-                    setIds.push(i + 1);
+                    set_name.push(data[i].set_name);
                 }
                 else{
                     continue;
                 }
             }
-            return  setIds;
+            return  set_name;
         })
-        .then( setIds => retrieve("/flash_card/renderCards",setIds,"set_id"))
+        .then( set_name => retrieve("/flash_card/renderCards",set_name,"set_name"))
         .then(function generateDeck(data){
             for(let i = 0; i < Object.keys(data).length;i++){
                 flashcardArr.push(new Flashcard(data[i].front,data[i].back));
@@ -226,7 +225,7 @@ usebtn.addEventListener("click", function(){
         })
         .then(function renderCards(){
             sandbox.innerHTML = ''; // Clear the sanbox
-            console.log("Current max " + count.max);
+          
             // Add buttons for back,flip,and next actions
             cardDiv.appendChild(createButton("back","Back","button"));
             cardDiv.appendChild(createButton("flip","Flip","button"));
@@ -298,5 +297,65 @@ usebtn.addEventListener("click", function(){
 deletebtn.addEventListener("click", function(){
     sandbox.innerHTML = ''; // Clear the sanbox
 
-})
+    // Create elements of selection menu
+    const flashForm = document.createElement("form");
+    // Create div to hold cards
+    const cardDiv = document.createElement("div");
 
+    // Create table div
+    const tableDiv = document.createElement('div');
+    deletebtnTwo  = createButton("delete", "Delete", "button");
+
+    // Attach elements to sandbox
+    // flashForm.appendChild(card.cardDiv);
+    flashForm.appendChild(tableDiv);
+    flashForm.appendChild(deletebtnTwo);
+    sandbox.appendChild(flashForm);
+    
+
+    // Recieve response
+    retrieve("/flash_card/showSets").then(data => {
+
+    // Make a table with user options
+    rowAmnt = Object.keys(data).length;
+    const flashtable = createTable(rowAmnt,1,data);
+    tableDiv.appendChild(flashtable);
+    });
+
+
+    deletebtnTwo.addEventListener('click', () => {
+
+        // 1. Get all checkboxes (adjust selector as needed)
+        const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
+
+        // 2. Filter checked ones
+        const checked = Array.from(checkboxes).filter(box => box.checked);
+
+        // 3. Extract their values
+        const values = checked.map(box => box.value);
+
+        // Make a query to retrieve all the flashcard sets
+        //This retrieve returns the set_names
+        retrieve("/flash_card/showSets")
+        .then(function extractIds(data){
+            let set_name = []; // Default decleration
+
+            // Determine which sets are selected from user input
+            for(let i = 0; i < Object.keys(data).length; i++){
+                // If the set was selected add to set_name
+                if(values.includes(data[i].set_name)){
+                    //Flashcard set is within values so extract
+                    set_name.push(data[i].set_name);
+                }
+                else{
+                    continue;
+                }
+            }
+            return  set_name;
+        })
+        .then((set_name) => retrieve("/flash_card/deleteSets",set_name,"set_name"))
+        .then(() => window.location.reload());
+
+
+    })
+})

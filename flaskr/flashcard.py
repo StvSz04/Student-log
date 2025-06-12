@@ -96,12 +96,16 @@ def renderCards():
     
     if request.method == 'GET':
         # Retreive appeneded data
-        set_ids = request.args.getlist('set_id') 
+        set_name = request.args.getlist('set_name') 
 
-        set_ids = [int(sid) for sid in set_ids] # Convert data into int
+        #set_ids = [int(sid) for sid in set_ids] # Convert data into int
         data = []  # initialize as an empty list to store results
+        set_ids = []
+        for i in range(len(set_name)):
+            cursor = db.execute("SELECT * FROM FlashcardSet WHERE set_name = ?", (set_name[i],))
+            result = cursor.fetchone()
+            set_ids.append(result[0])
 
-        for i in range(len(set_ids)):
             cursor = db.execute("SELECT * FROM Flashcard WHERE set_id = ?", (set_ids[i],))
     
             if cursor:
@@ -112,6 +116,39 @@ def renderCards():
 
         return jsonify(data)
     
+    return render_template('dash/flashcard.html')
+
+
+# Render base html for page
+@bp.route('/deleteSets', methods=('GET','POST'))  
+def deleteSets():
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    if request.method == 'GET':\
+    
+        # Retreive appeneded data
+        set_name = request.args.getlist('set_name') 
+
+        #set_ids = [int(sid) for sid in set_ids] # Convert data into int
+        data = []  # initialize as an empty list to store results
+        set_ids = []
+        for i in range(len(set_name)):
+            cursor = db.execute("SELECT * FROM FlashcardSet WHERE set_name = ?", (set_name[i],))
+            result = cursor.fetchone()
+            set_ids.append(result[0])
+
+            # Delete from the database where the set_id matches
+            db.execute("DELETE FROM FlashcardSet WHERE set_id = ?", (set_ids[i],))
+
+        db.commit()
+
+        data = {"Response" : True}
+
+        return jsonify(data)
+
+
+
     return render_template('dash/flashcard.html')
 
 
