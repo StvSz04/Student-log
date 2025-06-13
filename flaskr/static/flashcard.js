@@ -105,6 +105,7 @@ createbtn.addEventListener("click", function () {
     // Define basic elements of form
     let cardCount = 0;
     const card = document.createElement("div");
+    card.classList.add("flashcard");
     const flashForm = document.createElement("form");
     flashForm.method = "POST";
     flashForm.action = "/flash_card/flashCreate";
@@ -162,6 +163,8 @@ usebtn.addEventListener("click", function(){
     const flashForm = document.createElement("form");
     // Create div to hold cards
     const cardDiv = document.createElement("div");
+    cardDiv.classList.add("flashcard");
+
 
     // Create table div
     const tableDiv = document.createElement('div');
@@ -226,16 +229,16 @@ usebtn.addEventListener("click", function(){
         .then(function renderCards(){
             sandbox.innerHTML = ''; // Clear the sanbox
           
+            // Add label to display the flashcard text
+            textlabel = createLabel("fliplabel","");
+            textlabel.textContent = flashcardArr[0].front; // Display the front of the first flashcard
+            cardDiv.appendChild(textlabel);
+            
             // Add buttons for back,flip,and next actions
             cardDiv.appendChild(createButton("back","Back","button"));
             cardDiv.appendChild(createButton("flip","Flip","button"));
             cardDiv.appendChild(createButton("next","Next","button"));
         
-
-            // Add label to display the flashcard text
-            textlabel = createLabel("flip","");
-            textlabel.textContent = flashcardArr[0].front; // Display the front of the first flashcard
-            cardDiv.appendChild(textlabel);
 
             // Add functionality to the previously created buttons
         
@@ -247,9 +250,9 @@ usebtn.addEventListener("click", function(){
                 if (count.value + 1 < count.max) {
                     count.value++; // increment
                     textlabel.textContent = flashcardArr[count.value].front;
-                } else {
-                    alert("At end of cards. Cannot go next.");
                 }
+                    
+                
             }
 
             // Define functionality for the back button
@@ -260,8 +263,6 @@ usebtn.addEventListener("click", function(){
                 if (count.value - 1 >= 0) {
                     count.value--; // decrement
                     textlabel.textContent = flashcardArr[count.value].front;
-                } else {
-                    alert("At start of cards. Cannot go back.");
                 }
             }
 
@@ -301,6 +302,8 @@ deletebtn.addEventListener("click", function(){
     const flashForm = document.createElement("form");
     // Create div to hold cards
     const cardDiv = document.createElement("div");
+    cardDiv.classList.add("flashcard");
+
 
     // Create table div
     const tableDiv = document.createElement('div');

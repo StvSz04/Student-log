@@ -610,3 +610,26 @@ li .username {
 .semesters_div{
     width: fit-content;
 }
+
+
+/* Flash card section *//* Style for the flashcard container */
+.flashcard {
+    margin: 2rem auto;
+    padding: 2rem;
+    max-width: 500px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: sans-serif;
+}
+
+
+/* Optional: Label for text content */
+.flashcard label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
