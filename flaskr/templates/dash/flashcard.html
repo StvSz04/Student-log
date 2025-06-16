@@ -3,17 +3,24 @@
 {% block title %}Flashcards{% endblock %}
 
 {% block content %}
+<div>
+  <div id="optionBar" class="optionBar">
+    <ul>
+        <li><button id ="create-folder"> Create a Flashcard Folder</button></li>
+        <li><button id="create-set">Create Flashcard Set</button></li>
+        <li><button id="use">Use Flashcard Set</button></li>
+        <li><button id="delete">Delete Flashcard Set</button></li>
+    </ul>
+</div>
 
-    <div id ="optionBar">
-        <li><button id = "create"> Create flashcard Set</button></li>
-        <li><button id = "use"> Use flashcard Set</button></li>
-        <li><button id = "delete"> Delete flashcard Set</button></li>
-    </div>
+</div>
+<div>
+         <div id = "sandbox-div">
+        </div>
 
-    <div id = "sandbox-div">
-
-    </div>
+</div>
 {% endblock %}
+
 
 {% block extra_scripts %}
     <script src="{{ url_for('static', filename='flashcard.js') }}"></script>

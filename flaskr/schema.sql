@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS logged_hours;
 DROP TABLE IF EXISTS FlashcardSet;
 DROP TABLE IF EXISTS Flashcard;
+DROP TABLE IF EXISTS Folders;
 
 -- Create user table with username as the primary key
 -- The number in the badge key refers to how many and what badge they have. i.e badges are linear in progression
@@ -36,6 +37,7 @@ CREATE TABLE FlashcardSet (
   set_id INTEGER PRIMARY KEY AUTOINCREMENT,
   set_name TEXT NOT NULL,
   user_username TEXT NOT NULL,
+  folder_name TEXT NOT NULL,
   FOREIGN KEY (user_username) REFERENCES user(user_username) ON DELETE CASCADE
   -- if a user is deleted, their sets are automatically deleted
 );
@@ -50,3 +52,11 @@ CREATE TABLE Flashcard (
   UNIQUE (set_id, place) -- Prevents duplicate card positions in a single set
 );
 
+
+-- Table for flashcard folders
+CREATE TABLE Folders (
+  folder_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_username TEXT NOT NULL,
+  folder_name TEXT NOT NULL,
+  FOREIGN KEY (user_username) REFERENCES user(user_username) ON DELETE CASCADE
+);

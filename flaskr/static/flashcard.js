@@ -21,9 +21,12 @@ class Flashcard {
 }
 
 let flashcardArr = [];
-const createbtn = document.getElementById("create");
+
+const createbtnCard = document.getElementById("create-set");
+const createbtnFolder = document.getElementById("create-folder");
 const usebtn = document.getElementById("use");
 const deletebtn = document.getElementById("delete");
+
 // sanbox correpsonds to the div that all 3 buttons will use to diplay info
 let sandbox = document.getElementById("sandbox-div") 
 
@@ -64,7 +67,7 @@ function createTable(rowAmnt, colAmnt,data) {
     return table;
 }
 
-// Make a GET request to backend
+// Make a request to backend
 async function retrieve(destination,data,string) {
     let response = null;
 
@@ -81,26 +84,47 @@ async function retrieve(destination,data,string) {
     return answer;
 }
 
+// This function sends a request to the backend for all user folders
+function selectAddOptions(){
+    return retrieve('/flash_card/sendFolders');
+}
+
+
 // This eventListner here correspond to creating a flashcard set
-createbtn.addEventListener("click", function () {
+createbtnCard.addEventListener("click", function () {
     sandbox.innerHTML = '';
 
-    // Initialize set name
-    const nameText = document.createElement('p');
-    nameText.textContent = prompt("Enter a card set name");
-    nameText.name = nameText.textContent;
-    if(!nameText.textContent){
-        return;
-    }
-    // Create the hidden input for submission
-    const hiddenInput = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.name = 'set-name';
-    hiddenInput.value = nameText.name;
     
+  // Initialize set name input and label
+    const setName = document.createElement('input');
+    setName.type = 'text';                 // text input
+    setName.name = 'set-name';            // form submission key
+    setName.placeholder = 'Enter set name'; // Optional user-friendly hints
+
     const hiddenInputTwo = document.createElement('input');
     hiddenInputTwo.type = 'hidden';
     hiddenInputTwo.name = 'card-count';
+
+    // Define folder selection
+    const folderSelect = document.createElement("select");
+    folderSelect.name = "folder-name";
+    // Create default prompt for user
+    defualtOption = document.createElement('option');
+    defualtOption.textContent = "Choose folder";
+    defualtOption.disabled = true;
+    defualtOption.selected = true;     
+    folderSelect.add(defualtOption);
+
+    // Add options to select from respsonse
+    selectAddOptions()
+    .then(folders => {
+        folders.forEach(folder => {
+            const option = document.createElement('option');
+            option.value = folder.folder_name;
+            option.textContent = folder.folder_name;
+            folderSelect.appendChild(option); 
+        });
+    });
 
     // Define basic elements of form
     let cardCount = 0;
@@ -114,8 +138,9 @@ createbtn.addEventListener("click", function () {
     const backInput = document.createElement("input");
     backInput.name = 'back' + cardCount;
 
-    flashForm.appendChild(hiddenInput);
+    flashForm.appendChild(setName);
     flashForm.appendChild(hiddenInputTwo);
+    flashForm.appendChild(folderSelect);
     flashForm.appendChild(frontInput);
     flashForm.appendChild(backInput);
 
@@ -125,7 +150,6 @@ createbtn.addEventListener("click", function () {
     flashForm.appendChild(newFlashCardbtn);
     flashForm.appendChild(submitbtn);
     card.appendChild(flashForm);
-    sandbox.appendChild(nameText);
     sandbox.appendChild(card);
 
     newFlashCardbtn.addEventListener("click", function (event) {
@@ -151,6 +175,35 @@ createbtn.addEventListener("click", function () {
     });
 });
 
+createbtnFolder.addEventListener("click", function () {
+    
+    // Clear sandbox
+    sandbox.innerHTML = '';
+
+    // Create card to hold content
+    const card = document.createElement("div");
+    card.classList.add("flashcard");
+
+    // Initialize folder input for name
+    const nameText = document.createElement('input');
+    nameText.name = "folder-name";
+    nameText.required = true;
+
+    // Create submit button
+    const submitbtn = createButton("submit", "Submit", "Submit");
+
+    // Create form to be used to submuit
+    const flashForm = document.createElement("form");
+    flashForm.method = "POST";
+    flashForm.action = "/flash_card/folderCreate";
+
+    // Attach button to form
+    flashForm.appendChild(nameText);
+    flashForm.appendChild(submitbtn);
+    card.appendChild(flashForm);
+    sandbox.append(card);
+
+})
 
 
 // ALL eventListners here correspond to using a flashcard set
@@ -159,22 +212,25 @@ usebtn.addEventListener("click", function(){
     sandbox.innerHTML = ''; // Clear the sanbox
 
 
-    // Create elements of selection menu
+    // Create entry form
     const flashForm = document.createElement("form");
-    // Create div to hold cards
+    // Create div to hold form
     const cardDiv = document.createElement("div");
     cardDiv.classList.add("flashcard");
 
 
     // Create table div
     const tableDiv = document.createElement('div');
+    const buttondiv = document.createElement('div');
     choose  = createButton("choose", "Choose", "button");
 
     // Attach elements to sandbox
     // flashForm.appendChild(card.cardDiv);
+    buttondiv.appendChild(choose);
     flashForm.appendChild(tableDiv);
-    flashForm.appendChild(choose);
-    sandbox.appendChild(flashForm);
+    flashForm.appendChild(buttondiv);
+    cardDiv.appendChild(flashForm);
+    sandbox.appendChild(cardDiv);
     
 
     // Recieve response
@@ -201,6 +257,10 @@ usebtn.addEventListener("click", function(){
 
         // 3. Extract their values
         const values = checked.map(box => box.value);
+
+
+        // Remove the form from the card to allow space to present actual card front and back
+        cardDiv.removeChild(flashForm);
 
         // Make a query to retrieve all the flashcards from each set
         retrieve("/flash_card/showSets")
@@ -233,7 +293,7 @@ usebtn.addEventListener("click", function(){
             textlabel = createLabel("fliplabel","");
             textlabel.textContent = flashcardArr[0].front; // Display the front of the first flashcard
             cardDiv.appendChild(textlabel);
-            
+
             // Add buttons for back,flip,and next actions
             cardDiv.appendChild(createButton("back","Back","button"));
             cardDiv.appendChild(createButton("flip","Flip","button"));
@@ -313,7 +373,8 @@ deletebtn.addEventListener("click", function(){
     // flashForm.appendChild(card.cardDiv);
     flashForm.appendChild(tableDiv);
     flashForm.appendChild(deletebtnTwo);
-    sandbox.appendChild(flashForm);
+    cardDiv.appendChild(flashForm);
+    sandbox.appendChild(cardDiv);
     
 
     // Recieve response
