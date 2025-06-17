@@ -97,20 +97,23 @@ def folderCreate():
     return render_template('dash/flashcard.html')
 
 
-# Render base html for page
-@bp.route('/showSets', methods=('GET','POST'))  
-def showSet():
+# Send set info
+@bp.route('/listSet', methods = ('GET',))
+def listSet():
     user_id = session.get('user_id')
     db = get_db()
 
     if request.method == 'GET':
-        # Select all flashcard sets from the db
-        cursor = db.execute(
-            "SELECT set_name FROM FlashcardSet WHERE user_username = ?",
-            (user_id,)
-        )
+        folder_list = request.args.getlist('folder_list') 
 
-        data = [dict(row) for row in cursor.fetchall()]
+        data = []
+
+        for i in range(len(folder_list)):
+            cursor = db.execute(
+                "SELECT set_name FROM FlashcardSet WHERE folder_name = ? AND user_username = ?",
+                (folder_list[i], user_id)
+            )
+            data.extend([dict(row) for row in cursor.fetchall()])
 
         return jsonify(data)
     
@@ -198,7 +201,7 @@ def sendFolders():
 
         
         folder_list = [dict(row) for row in folders]
-
+    
         return jsonify(folder_list)
     
     return render_template('dash/flashcard.html')

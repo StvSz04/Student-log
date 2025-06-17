@@ -48,7 +48,7 @@ function createLabel(id,text){
     return flashlabel;
 }
 
-function createTable(rowAmnt, colAmnt,data) {
+function createTable(rowAmnt, colAmnt,data,field) {
     const table = document.createElement("table");
 
     for (let i = 0; i < rowAmnt; i++) {
@@ -56,11 +56,11 @@ function createTable(rowAmnt, colAmnt,data) {
         const cell = row.insertCell(); // Create cell in row
         checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.name = data[i].set_name;
-        checkbox.value = data[i].set_name; // + 1 to match sqlite tabel autoincrement starting at 1
+        checkbox.name = data[i][field];
+        checkbox.value = data[i][field];
         const label = document.createElement("label");
         label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(data[i].set_name));
+        label.appendChild(document.createTextNode(data[i][field]));
         cell.appendChild(label);
     }
 
@@ -87,6 +87,23 @@ async function retrieve(destination,data,string) {
 // This function sends a request to the backend for all user folders
 function selectAddOptions(){
     return retrieve('/flash_card/sendFolders');
+}
+
+// This funciton sends a request to the backend for user selected flashcards
+async function retrieveFlashcards(destination,data,string){
+    let response = null;
+
+    if (data){
+        const queryString = data.map(id => `${string}=${id.set_name}`).join('&');
+        response = await fetch(destination + "?" + queryString);
+    }
+    else{
+        response = await fetch(destination);
+    }
+
+    if (!response.ok) throw new Error("Fetch failed");
+    const answer = await response.json(); // or response.text() if not JSON
+    return answer;
 }
 
 
@@ -138,6 +155,7 @@ createbtnCard.addEventListener("click", function () {
     const backInput = document.createElement("input");
     backInput.name = 'back' + cardCount;
 
+    // Attach elements to form
     flashForm.appendChild(setName);
     flashForm.appendChild(hiddenInputTwo);
     flashForm.appendChild(folderSelect);
@@ -188,6 +206,7 @@ createbtnFolder.addEventListener("click", function () {
     const nameText = document.createElement('input');
     nameText.name = "folder-name";
     nameText.required = true;
+    nameText.placeholder = "Enter New Folder Name";
 
     // Create submit button
     const submitbtn = createButton("submit", "Submit", "Submit");
@@ -211,6 +230,9 @@ usebtn.addEventListener("click", function(){
 
     sandbox.innerHTML = ''; // Clear the sanbox
 
+    // Define folder name
+    let folder_name = "";
+
 
     // Create entry form
     const flashForm = document.createElement("form");
@@ -224,8 +246,7 @@ usebtn.addEventListener("click", function(){
     const buttondiv = document.createElement('div');
     choose  = createButton("choose", "Choose", "button");
 
-    // Attach elements to sandbox
-    // flashForm.appendChild(card.cardDiv);
+    // Attach elements
     buttondiv.appendChild(choose);
     flashForm.appendChild(tableDiv);
     flashForm.appendChild(buttondiv);
@@ -234,11 +255,11 @@ usebtn.addEventListener("click", function(){
     
 
     // Recieve response
-    retrieve("/flash_card/showSets").then(data => {
+    retrieve("/flash_card/sendFolders").then(data => {
 
     // Make a table with user options
     rowAmnt = Object.keys(data).length;
-    const flashtable = createTable(rowAmnt,1,data);
+    const flashtable = createTable(rowAmnt,1,data,"folder_name");
     tableDiv.appendChild(flashtable);
     });
     
@@ -246,9 +267,6 @@ usebtn.addEventListener("click", function(){
 
     // When user chooses which set make another get request
     choose.addEventListener('click', () => {
-
-        // Define a choose variable to enable swapping between cards
-        let count = {value : 0, max : 0};
         // 1. Get all checkboxes (adjust selector as needed)
         const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
 
@@ -263,92 +281,64 @@ usebtn.addEventListener("click", function(){
         cardDiv.removeChild(flashForm);
 
         // Make a query to retrieve all the flashcards from each set
-        retrieve("/flash_card/showSets")
+        retrieve("/flash_card/sendFolders")
         .then(function extractIds(data){
-            let set_name = []; // Default decleration
+            let folderList = []; // Default decleration
 
             for(let i = 0; i < Object.keys(data).length; i++){
                 // If the set was selected add to set_name
-                if(values.includes(data[i].set_name)){
+                if(values.includes(data[i].folder_name)){
                     //Flashcard set is within values so extract
-                    set_name.push(data[i].set_name);
+                    folderList.push(data[i].folder_name);
                 }
                 else{
                     continue;
                 }
             }
-            return  set_name;
+            // Return list that contains all user selected user folders
+            return folderList;
         })
-        .then( set_name => retrieve("/flash_card/renderCards",set_name,"set_name"))
-        .then(function generateDeck(data){
-            for(let i = 0; i < Object.keys(data).length;i++){
-                flashcardArr.push(new Flashcard(data[i].front,data[i].back));
-            }
-            count.max = flashcardArr.length;
-        })
-        .then(function renderCards(){
-            sandbox.innerHTML = ''; // Clear the sanbox
-          
-            // Add label to display the flashcard text
-            textlabel = createLabel("fliplabel","");
-            textlabel.textContent = flashcardArr[0].front; // Display the front of the first flashcard
-            cardDiv.appendChild(textlabel);
+        .then(function (folderList) {
+                // Make a query to retrieve all the flashcards from each set
+                retrieve("/flash_card/listSet", folderList, "folder_list")
+                .then(function tableSet(setList){
 
-            // Add buttons for back,flip,and next actions
-            cardDiv.appendChild(createButton("back","Back","button"));
-            cardDiv.appendChild(createButton("flip","Flip","button"));
-            cardDiv.appendChild(createButton("next","Next","button"));
-        
+                    sandbox.innerHTML = ''; // Clear the sandbox
 
-            // Add functionality to the previously created buttons
-        
-            // Define functionality for the next button
-            const nextbtn = cardDiv.querySelector('#next');
-            nextbtn.addEventListener('click', () => goToNext(count));
+                    // Create new choose button
+                    choose  = createButton("choosetwo", "Choose2", "button");
+                    buttondiv.appendChild(choose);
 
-            function goToNext(count) {
-                if (count.value + 1 < count.max) {
-                    count.value++; // increment
-                    textlabel.textContent = flashcardArr[count.value].front;
-                }
+                    const setTableContainer = document.createElement('div');
+                    const setFormButtonContainer = document.createElement('div');
+                    const setSelectionForm = document.createElement('form');
+                    const flashcardContainer = document.createElement('div');
+
+                    const totalRows = Object.keys(setList).length;
+                    const flashcardTable = createTable(totalRows, 1, setList, "set_name");
+
+                    setTableContainer.appendChild(flashcardTable);
+                    flashcardContainer.classList.add("flashcard");
+
+                    const chooseSetButton = createButton("choose", "Choose", "button");
+
+                    // Attach elements
+                    setFormButtonContainer.appendChild(chooseSetButton);
+                    setSelectionForm.appendChild(setTableContainer);
+                    setSelectionForm.appendChild(setFormButtonContainer);
+                    flashcardContainer.appendChild(setSelectionForm);
+                    sandbox.appendChild(flashcardContainer);
+
+                    returnArr = [];
+                    returnArr.push(chooseSetButton);
+                    returnArr.push(setList);
                     
-                
-            }
-
-            // Define functionality for the back button
-            const backbtn = cardDiv.querySelector('#back');
-            backbtn.addEventListener('click', () => goToPrev(count));
-
-            function goToPrev(count) {
-                if (count.value - 1 >= 0) {
-                    count.value--; // decrement
-                    textlabel.textContent = flashcardArr[count.value].front;
-                }
-            }
-
-            
-            // Define functionality for the flip button
-            const flipbtn = cardDiv.querySelector('#flip'); // Find and grab the flip button
-            flipbtn.addEventListener('click', () => flipCard(count))
-
-            // Define function to handle argument passing and flipping logic
-            function flipCard(count){
-                console.log("Entered flipCard");
-                console.log(count.value);
-                // If true then show back and change bool value to false otherwise do inverse
-                 flashcardArr[count.value].isFront 
-                 ? (textlabel.textContent = flashcardArr[count.value].back, flashcardArr[count.value].isFront = false) 
-                 : (textlabel.textContent = flashcardArr[count.value].front,flashcardArr[count.value].isFront = true);
-            }
-
-
-            // Add newly created card to the sandbox
-            sandbox.append(cardDiv);
-        });       
-
-    });
-    
-
+                    return (returnArr);
+                })
+                .then( returnArr => {
+                    returnArr[0].addEventListener('click', () => displaySets(returnArr[1]));
+                });
+        });
     
 })
 
@@ -421,5 +411,83 @@ deletebtn.addEventListener("click", function(){
         .then(() => window.location.reload());
 
 
+        })
     })
 })
+
+
+// This function makes a GET request to then display the flashcards
+function displaySets(set_name){
+    // Define a choose variable to enable swapping between cards
+    let count = {value : 0, max : 0};
+
+    retrieveFlashcards("/flash_card/renderCards",set_name,"set_name")
+    .then(function generateDeck(data){
+        for(let i = 0; i < Object.keys(data).length;i++){
+            flashcardArr.push(new Flashcard(data[i].front,data[i].back));
+        }
+        
+        count.max = flashcardArr.length;
+    })
+    .then(function renderCards(){
+            sandbox.innerHTML = ''; // Clear the sanbox
+                
+            // Add label to display the flashcard text
+            textlabel = createLabel("fliplabel","");
+            textlabel.textContent = flashcardArr[0].front; // Display the front of the first flashcard
+            const cardDiv = document.createElement('div');
+            cardDiv.classList.add("flashcard");
+            cardDiv.appendChild(textlabel);
+
+            // Add buttons for back,flip,and next actions
+            cardDiv.appendChild(createButton("back","Back","button"));
+            cardDiv.appendChild(createButton("flip","Flip","button"));
+            cardDiv.appendChild(createButton("next","Next","button"));
+                
+
+            // Add functionality to the previously created buttons
+                
+            // Define functionality for the next button
+            const nextbtn = cardDiv.querySelector('#next');
+            nextbtn.addEventListener('click', () => goToNext(count));
+
+            function goToNext(count) {
+                if (count.value + 1 < count.max) {
+                    count.value++; // increment
+                    textlabel.textContent = flashcardArr[count.value].front;
+                }
+                            
+                        
+            }
+
+            // Define functionality for the back button
+            const backbtn = cardDiv.querySelector('#back');
+            backbtn.addEventListener('click', () => goToPrev(count));
+
+            function goToPrev(count) {
+                if (count.value - 1 >= 0) {
+                    count.value--; // decrement
+                    textlabel.textContent = flashcardArr[count.value].front;
+                }
+            }
+
+                    
+            // Define functionality for the flip button
+            const flipbtn = cardDiv.querySelector('#flip'); // Find and grab the flip button
+            flipbtn.addEventListener('click', () => flipCard(count))
+
+            // Define function to handle argument passing and flipping logic
+            function flipCard(count){
+                console.log("Entered flipCard");
+                console.log(count.value);
+                // If true then show back and change bool value to false otherwise do inverse
+                flashcardArr[count.value].isFront 
+                ? (textlabel.textContent = flashcardArr[count.value].back, flashcardArr[count.value].isFront = false) 
+                : (textlabel.textContent = flashcardArr[count.value].front,flashcardArr[count.value].isFront = true);
+            }
+
+
+                // Add newly created card to the sandbox
+            sandbox.append(cardDiv);
+    });   
+}
