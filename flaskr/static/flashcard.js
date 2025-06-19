@@ -1,26 +1,16 @@
+import {
+  createButton,
+  createLabel,
+  createTable,
+  retrieve,
+  selectAddOptions,
+  retrieveFlashcards,
+  Flashcard,
+  displaySets,
+  deleteSets,
+  deleteFolders
+} from './flashcardHelpers.js';
 
-// Define class
-class Flashcard {
-  constructor(frontText, backText) {
-    this.front = frontText;
-    this.back = backText;
-    this.isFront = true;
-  }
-  
-    // Upadate text info on card
-    updateText(frontText, backText) {
-        this.front = frontText;
-        this.back = backText;
-    }
-
-    updateBool(){
-        this.isFront ? this.isFront = false : this.isFront = true;
-    }
-
-
-}
-
-let flashcardArr = [];
 
 const createbtnCard = document.getElementById("create-set");
 const createbtnFolder = document.getElementById("create-folder");
@@ -30,81 +20,6 @@ const deletebtn = document.getElementById("delete");
 // sanbox correpsonds to the div that all 3 buttons will use to diplay info
 let sandbox = document.getElementById("sandbox-div") 
 
-
-// This function creates instances of buttons;
-function createButton(id, text,type) {
-    const btn = document.createElement("button");
-    btn.type = type;
-    btn.id = id;
-    btn.textContent = text;
-    return btn;
-}
-
-// This function creates a label
-function createLabel(id,text){
-    const flashlabel = document.createElement("label");
-    flashlabel.id = id;
-    flashlabel.textContent = text; 
-    return flashlabel;
-}
-
-function createTable(rowAmnt, colAmnt,data,field) {
-    const table = document.createElement("table");
-
-    for (let i = 0; i < rowAmnt; i++) {
-        const row = table.insertRow(); // Create row
-        const cell = row.insertCell(); // Create cell in row
-        checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.name = data[i][field];
-        checkbox.value = data[i][field];
-        const label = document.createElement("label");
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(data[i][field]));
-        cell.appendChild(label);
-    }
-
-    return table;
-}
-
-// Make a request to backend
-async function retrieve(destination,data,string) {
-    let response = null;
-
-    if (data){
-        const queryString = data.map(id => `${string}=${id}`).join('&');
-        response = await fetch(destination + "?" + queryString);
-    }
-    else{
-        response = await fetch(destination);
-    }
-
-    if (!response.ok) throw new Error("Fetch failed");
-    const answer = await response.json(); // or response.text() if not JSON
-    return answer;
-}
-
-// This function sends a request to the backend for all user folders
-function selectAddOptions(){
-    return retrieve('/flash_card/sendFolders');
-}
-
-// This funciton sends a request to the backend for user selected flashcards
-async function retrieveFlashcards(destination,data,string){
-    let response = null;
-
-    if (data){
-        const queryString = data.map(id => `${string}=${id.set_name}`).join('&');
-        response = await fetch(destination + "?" + queryString);
-    }
-    else{
-        response = await fetch(destination);
-    }
-
-    if (!response.ok) throw new Error("Fetch failed");
-    const answer = await response.json(); // or response.text() if not JSON
-    return answer;
-}
 
 
 // This eventListner here correspond to creating a flashcard set
@@ -126,11 +41,11 @@ createbtnCard.addEventListener("click", function () {
     const folderSelect = document.createElement("select");
     folderSelect.name = "folder-name";
     // Create default prompt for user
-    defualtOption = document.createElement('option');
-    defualtOption.textContent = "Choose folder";
-    defualtOption.disabled = true;
-    defualtOption.selected = true;     
-    folderSelect.add(defualtOption);
+    let defaultOption = document.createElement('option');
+    defaultOption.textContent = "Choose folder";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;     
+    folderSelect.add(defaultOption);
 
     // Add options to select from respsonse
     selectAddOptions()
@@ -244,7 +159,7 @@ usebtn.addEventListener("click", function(){
     // Create table div
     const tableDiv = document.createElement('div');
     const buttondiv = document.createElement('div');
-    choose  = createButton("choose", "Choose", "button");
+    let choose  = createButton("choose", "Choose", "button");
 
     // Attach elements
     buttondiv.appendChild(choose);
@@ -258,7 +173,7 @@ usebtn.addEventListener("click", function(){
     retrieve("/flash_card/sendFolders").then(data => {
 
     // Make a table with user options
-    rowAmnt = Object.keys(data).length;
+    let rowAmnt = Object.keys(data).length;
     const flashtable = createTable(rowAmnt,1,data,"folder_name");
     tableDiv.appendChild(flashtable);
     });
@@ -329,165 +244,135 @@ usebtn.addEventListener("click", function(){
                     flashcardContainer.appendChild(setSelectionForm);
                     sandbox.appendChild(flashcardContainer);
 
-                    returnArr = [];
+                    let returnArr = [];
                     returnArr.push(chooseSetButton);
                     returnArr.push(setList);
                     
                     return (returnArr);
                 })
                 .then( returnArr => {
-                    returnArr[0].addEventListener('click', () => displaySets(returnArr[1]));
+                    returnArr[0].addEventListener('click', () => displaySets(returnArr[1],sandbox));
                 });
         });
     
-})
-
-
-
-// ALL eventListners here correspond to deleting a flashcard set
-deletebtn.addEventListener("click", function(){
-    sandbox.innerHTML = ''; // Clear the sanbox
-
-    // Create elements of selection menu
-    const flashForm = document.createElement("form");
-    // Create div to hold cards
-    const cardDiv = document.createElement("div");
-    cardDiv.classList.add("flashcard");
-
-
-    // Create table div
-    const tableDiv = document.createElement('div');
-    deletebtnTwo  = createButton("delete", "Delete", "button");
-
-    // Attach elements to sandbox
-    // flashForm.appendChild(card.cardDiv);
-    flashForm.appendChild(tableDiv);
-    flashForm.appendChild(deletebtnTwo);
-    cardDiv.appendChild(flashForm);
-    sandbox.appendChild(cardDiv);
-    
-
-    // Recieve response
-    retrieve("/flash_card/showSets").then(data => {
-
-    // Make a table with user options
-    rowAmnt = Object.keys(data).length;
-    const flashtable = createTable(rowAmnt,1,data);
-    tableDiv.appendChild(flashtable);
-    });
-
-
-    deletebtnTwo.addEventListener('click', () => {
-
-        // 1. Get all checkboxes (adjust selector as needed)
-        const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
-
-        // 2. Filter checked ones
-        const checked = Array.from(checkboxes).filter(box => box.checked);
-
-        // 3. Extract their values
-        const values = checked.map(box => box.value);
-
-        // Make a query to retrieve all the flashcard sets
-        //This retrieve returns the set_names
-        retrieve("/flash_card/showSets")
-        .then(function extractIds(data){
-            let set_name = []; // Default decleration
-
-            // Determine which sets are selected from user input
-            for(let i = 0; i < Object.keys(data).length; i++){
-                // If the set was selected add to set_name
-                if(values.includes(data[i].set_name)){
-                    //Flashcard set is within values so extract
-                    set_name.push(data[i].set_name);
-                }
-                else{
-                    continue;
-                }
-            }
-            return  set_name;
-        })
-        .then((set_name) => retrieve("/flash_card/deleteSets",set_name,"set_name"))
-        .then(() => window.location.reload());
-
-
-        })
     })
+
 })
 
+// Event listener for deleting flashcard sets or folders
+deletebtn.addEventListener("click", function () {
+    sandbox.innerHTML = ''; // Clear the sandbox
 
-// This function makes a GET request to then display the flashcards
-function displaySets(set_name){
-    // Define a choose variable to enable swapping between cards
-    let count = {value : 0, max : 0};
+    // Create form container
+    const deleteForm = document.createElement("form");
+    const flashcardContainerDel = document.createElement("div");
+    flashcardContainerDel.classList.add("flashcard");
 
-    retrieveFlashcards("/flash_card/renderCards",set_name,"set_name")
-    .then(function generateDeck(data){
-        for(let i = 0; i < Object.keys(data).length;i++){
-            flashcardArr.push(new Flashcard(data[i].front,data[i].back));
+    // Create dropdown selector
+    const deleteTypeSelect = document.createElement('select');
+    deleteTypeSelect.name = "deleteType";
+
+    const defaultOption = new Option("Delete Folder or Set?", "", true, true);
+    defaultOption.disabled = true;
+
+    const folderOption = new Option("Delete Folder", "Folder");
+    const setOption = new Option("Delete Set", "Set");
+
+    deleteTypeSelect.add(defaultOption, undefined);
+    deleteTypeSelect.add(folderOption);
+    deleteTypeSelect.add(setOption);
+
+    // Create choose button
+    const chooseButton = createButton("choose-delete", "Choose", "button");
+
+    deleteForm.append(deleteTypeSelect, chooseButton);
+    flashcardContainerDel.appendChild(deleteForm);
+    sandbox.appendChild(flashcardContainerDel);
+
+    chooseButton.addEventListener('click', () => {
+        const choice = deleteTypeSelect.value;
+        sandbox.innerHTML = ''; // Clear everything for next UI
+        flashcardContainerDel.innerHTML = '';
+
+        if (choice === "Folder") {
+            retrieve("/flash_card/sendFolders").then(data => {
+                const tableContainer = document.createElement("div");
+                const folderTable = createTable(data.length, 1, data, "folder_name");
+                const deleteFolderBtn = createButton("delete-folder", "Delete Folder", "button");
+
+                tableContainer.appendChild(folderTable);
+                flashcardContainerDel.appendChild(tableContainer);
+                flashcardContainerDel.appendChild(deleteFolderBtn);
+                sandbox.append(flashcardContainerDel);
+
+                deleteFolderBtn.addEventListener('click', () => {
+                     // 1. Get all checkboxes inside sandbox (or more specific container if needed)
+                        const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
+
+                        // 2. Filter only the checked ones
+                        const checked = Array.from(checkboxes).filter(box => box.checked);
+
+                        // 3. Extract their values (these should be set_name if your table was made that way)
+                        const selectedFolderNames = checked.map(box => box.value);
+
+                        // 4. Pass to deleteSets
+                        deleteFolders(selectedFolderNames, "folder_name")
+                        .then(() => {
+                         window.location.reload();
+                        });
+                });
+            });
+
+        } else if (choice === "Set") {
+            retrieve("/flash_card/sendFolders")
+                .then(data => {
+                    const folderTable = createTable(data.length, 1, data, "folder_name");
+                    const selectFolderBtn = createButton("select-folder", "Choose Folder(s) to Enter", "button");
+
+                    const formContainer = document.createElement("form");
+                    formContainer.append(folderTable, selectFolderBtn);
+                    flashcardContainerDel.appendChild(formContainer);
+                    sandbox.appendChild(flashcardContainerDel);
+
+                    selectFolderBtn.addEventListener("click", () => {
+                        const checkedFolders = [...sandbox.querySelectorAll('input[type="checkbox"]:checked')]
+                            .map(box => box.value);
+
+                        retrieve("/flash_card/listSet", checkedFolders, "folder_list")
+                            .then(setList => {
+                                sandbox.innerHTML = '';
+                                flashcardContainerDel.innerHTML = '';
+
+                                const setTable = createTable(setList.length, 1, setList, "set_name");
+                                const deleteSetBtn = createButton("delete-set", "Delete", "button");
+
+                                flashcardContainerDel.appendChild(setTable);
+                                flashcardContainerDel.appendChild(deleteSetBtn);
+                                sandbox.appendChild(flashcardContainerDel);
+
+                                deleteSetBtn.addEventListener('click', () => {
+                                        // 1. Get all checkboxes inside sandbox (or more specific container if needed)
+                                        const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
+
+                                        // 2. Filter only the checked ones
+                                        const checked = Array.from(checkboxes).filter(box => box.checked);
+
+                                        // 3. Extract their values (these should be set_name if your table was made that way)
+                                        const selectedSetNames = checked.map(box => box.value);
+
+                                        // 4. Pass to deleteSets
+                                        deleteSets(selectedSetNames, "set_name")
+                                        .then(() => {
+                                            window.location.reload();
+                                        });
+                                });
+                            });
+                    });
+                });
         }
-        
-        count.max = flashcardArr.length;
-    })
-    .then(function renderCards(){
-            sandbox.innerHTML = ''; // Clear the sanbox
-                
-            // Add label to display the flashcard text
-            textlabel = createLabel("fliplabel","");
-            textlabel.textContent = flashcardArr[0].front; // Display the front of the first flashcard
-            const cardDiv = document.createElement('div');
-            cardDiv.classList.add("flashcard");
-            cardDiv.appendChild(textlabel);
-
-            // Add buttons for back,flip,and next actions
-            cardDiv.appendChild(createButton("back","Back","button"));
-            cardDiv.appendChild(createButton("flip","Flip","button"));
-            cardDiv.appendChild(createButton("next","Next","button"));
-                
-
-            // Add functionality to the previously created buttons
-                
-            // Define functionality for the next button
-            const nextbtn = cardDiv.querySelector('#next');
-            nextbtn.addEventListener('click', () => goToNext(count));
-
-            function goToNext(count) {
-                if (count.value + 1 < count.max) {
-                    count.value++; // increment
-                    textlabel.textContent = flashcardArr[count.value].front;
-                }
-                            
-                        
-            }
-
-            // Define functionality for the back button
-            const backbtn = cardDiv.querySelector('#back');
-            backbtn.addEventListener('click', () => goToPrev(count));
-
-            function goToPrev(count) {
-                if (count.value - 1 >= 0) {
-                    count.value--; // decrement
-                    textlabel.textContent = flashcardArr[count.value].front;
-                }
-            }
-
-                    
-            // Define functionality for the flip button
-            const flipbtn = cardDiv.querySelector('#flip'); // Find and grab the flip button
-            flipbtn.addEventListener('click', () => flipCard(count))
-
-            // Define function to handle argument passing and flipping logic
-            function flipCard(count){
-                console.log("Entered flipCard");
-                console.log(count.value);
-                // If true then show back and change bool value to false otherwise do inverse
-                flashcardArr[count.value].isFront 
-                ? (textlabel.textContent = flashcardArr[count.value].back, flashcardArr[count.value].isFront = false) 
-                : (textlabel.textContent = flashcardArr[count.value].front,flashcardArr[count.value].isFront = true);
-            }
+    });
+});
 
 
-                // Add newly created card to the sandbox
-            sandbox.append(cardDiv);
-    });   
-}
+
+

@@ -121,7 +121,6 @@ def listSet():
     
     return render_template('dash/flashcard.html')
 
-# Render base html for page
 @bp.route('/renderCards', methods=('GET','POST'))  
 def renderCards():
     user_id = session.get('user_id')
@@ -152,7 +151,6 @@ def renderCards():
     return render_template('dash/flashcard.html')
 
 
-# Render base html for page
 @bp.route('/deleteSets', methods=('GET','POST'))  
 def deleteSets():
     user_id = session.get('user_id')
@@ -205,6 +203,23 @@ def sendFolders():
         return jsonify(folder_list)
     
     return render_template('dash/flashcard.html')
-    
 
-     
+
+@bp.route('/deleteFolders',methods=('GET', 'POST'))
+def deleteFolders():
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    if request.method == 'GET':
+    
+        # Retreive appeneded data
+        folder_names = request.args.getlist('folder_name')
+
+        for i in range(len(folder_names)):
+            db.execute("DELETE FROM Folders WHERE folder_name = ?", (folder_names[i],))
+
+        db.commit()
+
+        data = {"Response" : True}
+
+        return jsonify(data)     

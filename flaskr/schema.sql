@@ -38,7 +38,8 @@ CREATE TABLE FlashcardSet (
   set_name TEXT NOT NULL,
   user_username TEXT NOT NULL,
   folder_name TEXT NOT NULL,
-  FOREIGN KEY (user_username) REFERENCES user(user_username) ON DELETE CASCADE
+  FOREIGN KEY (user_username) REFERENCES user(user_username) ON DELETE CASCADE,
+  FOREIGN KEY (folder_name) REFERENCES Folders(folder_name) ON DELETE CASCADE
   -- if a user is deleted, their sets are automatically deleted
 );
 
