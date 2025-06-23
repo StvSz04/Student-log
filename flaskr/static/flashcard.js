@@ -8,7 +8,8 @@ import {
   Flashcard,
   displaySets,
   deleteSets,
-  deleteFolders
+  deleteFolders,
+  createFlashInputs
 } from './flashcardHelpers.js';
 
 
@@ -65,19 +66,14 @@ createbtnCard.addEventListener("click", function () {
     const flashForm = document.createElement("form");
     flashForm.method = "POST";
     flashForm.action = "/flash_card/flashCreate";
-    const frontInput = document.createElement("input");
-    frontInput.placeholder = "Enter front"
-    frontInput.name = 'front' + cardCount;
-    const backInput = document.createElement("input");
-    backInput.placeholder = "Enter back"
-    backInput.name = 'back' + cardCount;
+    let returnedInputs = createFlashInputs(cardCount);
 
     // Attach elements to form
     flashForm.appendChild(setName);
     flashForm.appendChild(hiddenInputTwo);
     flashForm.appendChild(folderSelect);
-    flashForm.appendChild(frontInput);
-    flashForm.appendChild(backInput);
+    flashForm.appendChild(returnedInputs[0]);
+    flashForm.appendChild(returnedInputs[1]);
 
     const newFlashCardbtn = createButton("new", "New Card", "Button")
     const submitbtn = createButton("submit", "Submit", "Submit");
@@ -93,16 +89,11 @@ createbtnCard.addEventListener("click", function () {
 
         // Now create the next flashcard input
         cardCount += 1 // Increment
-        const newFront = document.createElement("input");
-        newFront.name = 'front' + cardCount;
-        newFront.placeholder = "Enter front"
-        const newBack = document.createElement("input");
-        newBack.name = 'back' + cardCount;
-        newBack.placeholder = "Enter back"
-        
+        returnedInputs = createFlashInputs(cardCount);
+
         // Simulate insertAfter
-        flashForm.insertBefore(newBack, lastInput.nextSibling);
-        flashForm.insertBefore(newFront, lastInput.nextSibling);
+        flashForm.insertBefore(returnedInputs[0], lastInput.nextSibling);
+        flashForm.insertBefore(returnedInputs[1], lastInput.nextSibling);
 
     });
 

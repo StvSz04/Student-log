@@ -180,3 +180,17 @@ export function deleteSets(setList){
 export function deleteFolders(folderList){
     return retrieve('/flash_card/deleteFolders',folderList,"folder_name");
 }
+
+export function createFlashInputs(cardCount){
+    const frontInput = document.createElement("input");
+    frontInput.placeholder = "Enter front"
+    frontInput.name = 'front' + cardCount;
+    frontInput.id = cardCount
+    const backInput = document.createElement("input");
+    backInput.placeholder = "Enter back"
+    backInput.name = 'back' + cardCount;
+    backInput.id = cardCount
+
+    return [frontInput, backInput]
+
+}
