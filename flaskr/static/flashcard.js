@@ -66,8 +66,10 @@ createbtnCard.addEventListener("click", function () {
     flashForm.method = "POST";
     flashForm.action = "/flash_card/flashCreate";
     const frontInput = document.createElement("input");
+    frontInput.placeholder = "Enter front"
     frontInput.name = 'front' + cardCount;
     const backInput = document.createElement("input");
+    backInput.placeholder = "Enter back"
     backInput.name = 'back' + cardCount;
 
     // Attach elements to form
@@ -93,9 +95,11 @@ createbtnCard.addEventListener("click", function () {
         cardCount += 1 // Increment
         const newFront = document.createElement("input");
         newFront.name = 'front' + cardCount;
+        newFront.placeholder = "Enter front"
         const newBack = document.createElement("input");
         newBack.name = 'back' + cardCount;
-
+        newBack.placeholder = "Enter back"
+        
         // Simulate insertAfter
         flashForm.insertBefore(newBack, lastInput.nextSibling);
         flashForm.insertBefore(newFront, lastInput.nextSibling);

@@ -615,7 +615,7 @@ li .username {
 /* Flash card section *//* Style for the flashcard container */
 .flashcard {
     margin: 2rem auto;
-    padding: 2rem;
+    padding: 3rem;
     max-width: 500px;
     background-color: #fff;
     border: 2px solid #ccc;
@@ -652,3 +652,30 @@ li .username {
     margin: 0;
 }
 
+.flashcard input{
+    background-color: #000000; /* Bright blue button background */
+    color: #ffffff; /* White text */
+    border: 2px solid #979494; /* Darker blue border */
+    padding: 12px 24px;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+}
+
+.flashcard select{
+    background-color: #000000; /* Bright blue button background */
+    color: #ffffff; /* White text */
+    border: 2px solid #979494; /* Darker blue border */
+    padding: 12px 10px;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+}
+
+.flashcard button{
+    background-color: #000000; /* Bright blue button background */
+    color: #ffffff; /* White text */
+    border: 2px solid #979494; /* Darker blue border */
+    padding: 15px 24px;
+    margin: 10px;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+}
