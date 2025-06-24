@@ -84,7 +84,7 @@ export async function retrieveFlashcards(destination,data,string){
     let response = null;
 
     if (data){
-        const queryString = data.map(id => `${string}=${id.set_name}`).join('&');
+        const queryString = data.map(id => `${string}=${id}`).join('&');
         response = await fetch(destination + "?" + queryString);
     }
     else{
@@ -159,8 +159,6 @@ export function displaySets(set_name,sandbox){
 
             // Define function to handle argument passing and flipping logic
             function flipCard(count){
-                console.log("Entered flipCard");
-                console.log(count.value);
                 // If true then show back and change bool value to false otherwise do inverse
                 flashcardArr[count.value].isFront 
                 ? (textlabel.textContent = flashcardArr[count.value].back, flashcardArr[count.value].isFront = false) 

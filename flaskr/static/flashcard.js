@@ -244,7 +244,7 @@ usebtn.addEventListener("click", function(){
                     setTableContainer.appendChild(flashcardTable);
                     flashcardContainer.classList.add("flashcard");
 
-                    const chooseSetButton = createButton("choose", "Choose", "button");
+                    const chooseSetButton = createButton("choose", "Choose3", "button");
 
                     // Attach elements
                     setFormButtonContainer.appendChild(chooseSetButton);
@@ -255,13 +255,26 @@ usebtn.addEventListener("click", function(){
 
                     let returnArr = [];
                     returnArr.push(chooseSetButton);
-                    returnArr.push(setList);
+                    // returnArr.push(setList);
                     
                     return (returnArr);
                 })
                 .then( returnArr => {
-                    returnArr[0].addEventListener('click', () => displaySets(returnArr[1],sandbox));
-                });
+                        returnArr[0].addEventListener('click', () => {
+                        
+                                // 1. Get all checkboxes (adjust selector as needed)
+                                const checkboxesFlashSets = sandbox.querySelectorAll('input[type="checkbox"]');
+
+                                // 2. Filter checked ones
+                                const checkedFlashSets = Array.from(checkboxesFlashSets).filter(box => box.checked);
+
+                                // 3. Extract their values
+                                const valuesFlashSets = checkedFlashSets.map(box => box.value);
+                                
+                                displaySets(valuesFlashSets,sandbox)
+                            }
+                        );
+                    });
         });
     
     })
