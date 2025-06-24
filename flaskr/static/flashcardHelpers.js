@@ -192,5 +192,13 @@ export function createFlashInputs(cardCount){
     backInput.id = cardCount
 
     return [frontInput, backInput]
+}
 
+export function createListnerTools(cardCount){
+    const frontstartbutton = createButton("front-start " + cardCount, "Start", "button");
+    const frontstopbutton = createButton("front-stop "  + cardCount, "Stop", "button");
+    const backstartbutton = createButton("back-start " + cardCount, "Start", "button");
+    const backstopbutton = createButton("back-stop "  + cardCount, "Stop", "button");
+
+    return [frontstartbutton,frontstopbutton,backstartbutton,backstopbutton];
 }

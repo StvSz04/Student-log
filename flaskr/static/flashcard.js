@@ -9,7 +9,8 @@ import {
   displaySets,
   deleteSets,
   deleteFolders,
-  createFlashInputs
+  createFlashInputs,
+  createListnerTools
 } from './flashcardHelpers.js';
 
 
@@ -66,14 +67,22 @@ createbtnCard.addEventListener("click", function () {
     const flashForm = document.createElement("form");
     flashForm.method = "POST";
     flashForm.action = "/flash_card/flashCreate";
-    let returnedInputs = createFlashInputs(cardCount);
+    const inputDiv = document.createElement('div');
+    // Create inputs and start/stop buttons associated with inputs
+    let returnedCreateFlashInputs = createFlashInputs(cardCount);
+    let returnedCreateListnerTools = createListnerTools(cardCount);
 
     // Attach elements to form
     flashForm.appendChild(setName);
     flashForm.appendChild(hiddenInputTwo);
     flashForm.appendChild(folderSelect);
-    flashForm.appendChild(returnedInputs[0]);
-    flashForm.appendChild(returnedInputs[1]);
+    inputDiv.appendChild(returnedCreateFlashInputs[0]);
+    inputDiv.appendChild(returnedCreateListnerTools[0]);
+    inputDiv.appendChild(returnedCreateListnerTools[1]);
+    inputDiv.appendChild(returnedCreateFlashInputs[1]);
+    inputDiv.appendChild(returnedCreateListnerTools[2]);
+    inputDiv.appendChild(returnedCreateListnerTools[3]);
+    flashForm.appendChild(inputDiv)
 
     const newFlashCardbtn = createButton("new", "New Card", "Button")
     const submitbtn = createButton("submit", "Submit", "Submit");
@@ -89,11 +98,16 @@ createbtnCard.addEventListener("click", function () {
 
         // Now create the next flashcard input
         cardCount += 1 // Increment
-        returnedInputs = createFlashInputs(cardCount);
+        returnedCreateFlashInputs = createFlashInputs(cardCount);
+        returnedCreateListnerTools = createListnerTools(cardCount);
 
         // Simulate insertAfter
-        flashForm.insertBefore(returnedInputs[0], lastInput.nextSibling);
-        flashForm.insertBefore(returnedInputs[1], lastInput.nextSibling);
+        inputDiv.insertBefore(returnedCreateFlashInputs[0], lastInput.nextSibling);
+        inputDiv.appendChild(returnedCreateListnerTools[0]);
+        inputDiv.appendChild(returnedCreateListnerTools[1]);
+        inputDiv.appendChild(returnedCreateFlashInputs[1]);
+        inputDiv.appendChild(returnedCreateListnerTools[2]);
+        inputDiv.appendChild(returnedCreateListnerTools[3]);
 
     });
 
