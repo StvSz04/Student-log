@@ -200,3 +200,7 @@ export function createListnerTools(cardCount){
 
     return [frontstartbutton,frontstopbutton,backstartbutton,backstopbutton];
 }
+
+export function createListeningFunction(startbutton,stopbutton,label){
+    
+}

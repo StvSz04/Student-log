@@ -10,7 +10,8 @@ import {
   deleteSets,
   deleteFolders,
   createFlashInputs,
-  createListnerTools
+  createListnerTools,
+  createListeningFunction
 } from './flashcardHelpers.js';
 
 
@@ -24,67 +25,74 @@ let sandbox = document.getElementById("sandbox-div")
 
 
 
-// This eventListner here correspond to creating a flashcard set
+// This event listener initializes the flashcard set creation UI when "Create Set" is clicked
 createbtnCard.addEventListener("click", function () {
+    // Clear the sandbox to remove any previous content
     sandbox.innerHTML = '';
 
-    
-  // Initialize set name input and label
+    // === Initialize the set name input ===
     const setName = document.createElement('input');
-    setName.type = 'text';                 // text input
-    setName.name = 'set-name';            // form submission key
-    setName.placeholder = 'Enter set name'; // Optional user-friendly hints
+    setName.type = 'text';                      // Standard text input
+    setName.name = 'set-name';                 // Used as key in form submission
+    setName.placeholder = 'Enter set name';    // Hint for user
 
+    // === Hidden input to store card count (used on form submission) ===
     const hiddenInputTwo = document.createElement('input');
     hiddenInputTwo.type = 'hidden';
     hiddenInputTwo.name = 'card-count';
 
-    // Define folder selection
+    // === Dropdown menu for selecting a folder ===
     const folderSelect = document.createElement("select");
     folderSelect.name = "folder-name";
-    // Create default prompt for user
+
+    // Create a disabled default option to prompt the user
     let defaultOption = document.createElement('option');
     defaultOption.textContent = "Choose folder";
     defaultOption.disabled = true;
-    defaultOption.selected = true;     
+    defaultOption.selected = true;
     folderSelect.add(defaultOption);
 
-    // Add options to select from respsonse
-    selectAddOptions()
-    .then(folders => {
+    // Dynamically populate folder dropdown options from server
+    selectAddOptions().then(folders => {
         folders.forEach(folder => {
             const option = document.createElement('option');
             option.value = folder.folder_name;
             option.textContent = folder.folder_name;
-            folderSelect.appendChild(option); 
+            folderSelect.appendChild(option);
         });
     });
 
-    // Define basic elements of form
-    let cardCount = 0;
+    // === Set up form and card container ===
+    let cardCount = 0; // Tracks the number of flashcards created
     const card = document.createElement("div");
-    card.classList.add("flashcard");
+    card.classList.add("flashcard"); // Main container for the card UI
+
     const flashForm = document.createElement("form");
     flashForm.method = "POST";
     flashForm.action = "/flash_card/flashCreate";
-    const inputDiv = document.createElement('div');
-    // Create inputs and start/stop buttons associated with inputs
+
+    const inputDiv = document.createElement('div'); // Container for flashcard input pairs
+
+    // Create initial input fields and speech recognition buttons
     let returnedCreateFlashInputs = createFlashInputs(cardCount);
     let returnedCreateListnerTools = createListnerTools(cardCount);
 
-    // Attach elements to form
+    // Append inputs and tools in order: front input → front tools → back input → back tools
+    inputDiv.appendChild(returnedCreateFlashInputs[0]);       // Front input
+    inputDiv.appendChild(returnedCreateListnerTools[0]);      // Front start button
+    inputDiv.appendChild(returnedCreateListnerTools[1]);      // Front stop button
+    inputDiv.appendChild(returnedCreateFlashInputs[1]);       // Back input
+    inputDiv.appendChild(returnedCreateListnerTools[2]);      // Back start button
+    inputDiv.appendChild(returnedCreateListnerTools[3]);      // Back stop button
+
+    // Assemble the form
     flashForm.appendChild(setName);
     flashForm.appendChild(hiddenInputTwo);
     flashForm.appendChild(folderSelect);
-    inputDiv.appendChild(returnedCreateFlashInputs[0]);
-    inputDiv.appendChild(returnedCreateListnerTools[0]);
-    inputDiv.appendChild(returnedCreateListnerTools[1]);
-    inputDiv.appendChild(returnedCreateFlashInputs[1]);
-    inputDiv.appendChild(returnedCreateListnerTools[2]);
-    inputDiv.appendChild(returnedCreateListnerTools[3]);
-    flashForm.appendChild(inputDiv)
+    flashForm.appendChild(inputDiv);
 
-    const newFlashCardbtn = createButton("new", "New Card", "Button")
+    // Create "New Card" and "Submit" buttons
+    const newFlashCardbtn = createButton("new", "New Card", "Button");
     const submitbtn = createButton("submit", "Submit", "Submit");
 
     flashForm.appendChild(newFlashCardbtn);
@@ -92,205 +100,203 @@ createbtnCard.addEventListener("click", function () {
     card.appendChild(flashForm);
     sandbox.appendChild(card);
 
+    // === Handler to add new flashcard input pair ===
     newFlashCardbtn.addEventListener("click", function (event) {
-        // Grab the last element, used for insertion, - 3 to account for newcard and submit buttons
+        // Grab the last input (used to insert the new card after it)
         let lastInput = flashForm.elements[flashForm.elements.length - 3];
 
-        // Now create the next flashcard input
-        cardCount += 1 // Increment
+        // Increment card count and create new inputs/buttons
+        cardCount += 1;
         returnedCreateFlashInputs = createFlashInputs(cardCount);
         returnedCreateListnerTools = createListnerTools(cardCount);
 
-        // Simulate insertAfter
+        // Insert front input and associated buttons
         inputDiv.insertBefore(returnedCreateFlashInputs[0], lastInput.nextSibling);
         inputDiv.appendChild(returnedCreateListnerTools[0]);
         inputDiv.appendChild(returnedCreateListnerTools[1]);
+
+        // Insert back input and associated buttons
         inputDiv.appendChild(returnedCreateFlashInputs[1]);
         inputDiv.appendChild(returnedCreateListnerTools[2]);
         inputDiv.appendChild(returnedCreateListnerTools[3]);
-
     });
 
-    // submitbtn.addEventListener("click", () => alert("Created flashcard set! " + name))
+    // === On form submit, store the final number of flashcards ===
     flashForm.addEventListener('submit', function (event) {
-        hiddenInputTwo.value = cardCount + 1;
+        hiddenInputTwo.value = cardCount + 1; // Add 1 because cardCount is 0-based
     });
 });
 
+
+// This event listener sets up the UI for creating a new flashcard folder
 createbtnFolder.addEventListener("click", function () {
-    
-    // Clear sandbox
+
+    // === Clear previous content from the sandbox ===
     sandbox.innerHTML = '';
 
-    // Create card to hold content
+    // === Create a container div to hold the form ===
     const card = document.createElement("div");
-    card.classList.add("flashcard");
+    card.classList.add("flashcard"); // Optional: reuse same styling as flashcards
 
-    // Initialize folder input for name
+    // === Create text input for folder name ===
     const nameText = document.createElement('input');
-    nameText.name = "folder-name";
-    nameText.required = true;
-    nameText.placeholder = "Enter New Folder Name";
+    nameText.name = "folder-name";                     // Key used in form submission
+    nameText.required = true;                          // Prevent form submission without input
+    nameText.placeholder = "Enter New Folder Name";    // Hint text for the user
 
-    // Create submit button
+    // === Create a submit button ===
     const submitbtn = createButton("submit", "Submit", "Submit");
 
-    // Create form to be used to submuit
+    // === Create the form to wrap input and submit button ===
     const flashForm = document.createElement("form");
-    flashForm.method = "POST";
-    flashForm.action = "/flash_card/folderCreate";
+    flashForm.method = "POST";                         // Form will send a POST request
+    flashForm.action = "/flash_card/folderCreate";     // Target route for form submission
 
-    // Attach button to form
-    flashForm.appendChild(nameText);
-    flashForm.appendChild(submitbtn);
-    card.appendChild(flashForm);
-    sandbox.append(card);
-
-})
-
-
-// ALL eventListners here correspond to using a flashcard set
-usebtn.addEventListener("click", function(){
-
-    sandbox.innerHTML = ''; // Clear the sanbox
-
-    // Define folder name
-    let folder_name = "";
+    // === Assemble and attach elements ===
+    flashForm.appendChild(nameText);                   // Add input to form
+    flashForm.appendChild(submitbtn);                  // Add submit button to form
+    card.appendChild(flashForm);                       // Add form to card container
+    sandbox.append(card);                              // Add card to the main UI
+});
 
 
-    // Create entry form
+
+// ALL event listeners here correspond to **using a flashcard set**
+usebtn.addEventListener("click", function () {
+    // === Clear any previous content ===
+    sandbox.innerHTML = '';
+
+    // === Set up UI ===
+    let folder_name = ""; // (Optional) to track selected folder if needed
+
+    // Create a form for selecting folders
     const flashForm = document.createElement("form");
-    // Create div to hold form
+
+    // Main container for the UI
     const cardDiv = document.createElement("div");
     cardDiv.classList.add("flashcard");
 
-
-    // Create table div
+    // Container for the dynamic table of folders
     const tableDiv = document.createElement('div');
+
+    // Container for action buttons
     const buttondiv = document.createElement('div');
-    let choose  = createButton("choose", "Choose", "button");
 
-    // Attach elements
+    // "Choose" button to confirm selected folders
+    let choose = createButton("choose", "Choose", "button");
+
+    // Assemble the form UI
     buttondiv.appendChild(choose);
-    flashForm.appendChild(tableDiv);
-    flashForm.appendChild(buttondiv);
-    cardDiv.appendChild(flashForm);
-    sandbox.appendChild(cardDiv);
-    
+    flashForm.appendChild(tableDiv);      // Will hold the folder selection table
+    flashForm.appendChild(buttondiv);     // Holds the "Choose" button
+    cardDiv.appendChild(flashForm);       // Add form to card container
+    sandbox.appendChild(cardDiv);         // Inject into the page
 
-    // Recieve response
+    // === Fetch available folder options from the backend ===
     retrieve("/flash_card/sendFolders").then(data => {
+        const rowAmnt = Object.keys(data).length;
 
-    // Make a table with user options
-    let rowAmnt = Object.keys(data).length;
-    const flashtable = createTable(rowAmnt,1,data,"folder_name");
-    tableDiv.appendChild(flashtable);
+        // Create a 1-column table displaying folder names with checkboxes
+        const flashtable = createTable(rowAmnt, 1, data, "folder_name");
+        tableDiv.appendChild(flashtable);
     });
-    
 
-
-    // When user chooses which set make another get request
+    // === Handle folder selection ===
     choose.addEventListener('click', () => {
-        // 1. Get all checkboxes (adjust selector as needed)
+        // 1. Get all folder checkboxes
         const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
 
-        // 2. Filter checked ones
+        // 2. Filter those that are checked
         const checked = Array.from(checkboxes).filter(box => box.checked);
 
-        // 3. Extract their values
+        // 3. Extract the selected folder names
         const values = checked.map(box => box.value);
 
-
-        // Remove the form from the card to allow space to present actual card front and back
+        // Remove the folder selection form to make room for next UI
         cardDiv.removeChild(flashForm);
 
-        // Make a query to retrieve all the flashcards from each set
+        // === Re-fetch folder data and match selected folders ===
         retrieve("/flash_card/sendFolders")
-        .then(function extractIds(data){
-            let folderList = []; // Default decleration
+        .then(function extractIds(data) {
+            let folderList = [];
 
-            for(let i = 0; i < Object.keys(data).length; i++){
-                // If the set was selected add to set_name
-                if(values.includes(data[i].folder_name)){
-                    //Flashcard set is within values so extract
+            for (let i = 0; i < Object.keys(data).length; i++) {
+                if (values.includes(data[i].folder_name)) {
                     folderList.push(data[i].folder_name);
                 }
-                else{
-                    continue;
-                }
             }
-            // Return list that contains all user selected user folders
+
+            // Return list of selected folder names
             return folderList;
         })
         .then(function (folderList) {
-                // Make a query to retrieve all the flashcards from each set
-                retrieve("/flash_card/listSet", folderList, "folder_list")
-                .then(function tableSet(setList){
+            // === Now retrieve flashcard sets inside the selected folders ===
+            retrieve("/flash_card/listSet", folderList, "folder_list")
+            .then(function tableSet(setList) {
+                // Clear the sandbox to prepare for flashcard set selection
+                sandbox.innerHTML = '';
 
-                    sandbox.innerHTML = ''; // Clear the sandbox
+                // Create UI containers
+                choose = createButton("choosetwo", "Choose2", "button");
+                buttondiv.appendChild(choose);
 
-                    // Create new choose button
-                    choose  = createButton("choosetwo", "Choose2", "button");
-                    buttondiv.appendChild(choose);
+                const setTableContainer = document.createElement('div');
+                const setFormButtonContainer = document.createElement('div');
+                const setSelectionForm = document.createElement('form');
+                const flashcardContainer = document.createElement('div');
 
-                    const setTableContainer = document.createElement('div');
-                    const setFormButtonContainer = document.createElement('div');
-                    const setSelectionForm = document.createElement('form');
-                    const flashcardContainer = document.createElement('div');
+                // Create table of flashcard sets
+                const totalRows = Object.keys(setList).length;
+                const flashcardTable = createTable(totalRows, 1, setList, "set_name");
+                setTableContainer.appendChild(flashcardTable);
 
-                    const totalRows = Object.keys(setList).length;
-                    const flashcardTable = createTable(totalRows, 1, setList, "set_name");
+                // Apply styling class
+                flashcardContainer.classList.add("flashcard");
 
-                    setTableContainer.appendChild(flashcardTable);
-                    flashcardContainer.classList.add("flashcard");
+                // Add final selection button
+                const chooseSetButton = createButton("choose", "Choose3", "button");
 
-                    const chooseSetButton = createButton("choose", "Choose3", "button");
+                // Assemble UI structure
+                setFormButtonContainer.appendChild(chooseSetButton);
+                setSelectionForm.appendChild(setTableContainer);
+                setSelectionForm.appendChild(setFormButtonContainer);
+                flashcardContainer.appendChild(setSelectionForm);
+                sandbox.appendChild(flashcardContainer);
 
-                    // Attach elements
-                    setFormButtonContainer.appendChild(chooseSetButton);
-                    setSelectionForm.appendChild(setTableContainer);
-                    setSelectionForm.appendChild(setFormButtonContainer);
-                    flashcardContainer.appendChild(setSelectionForm);
-                    sandbox.appendChild(flashcardContainer);
+                // Return button so we can add listener
+                return [chooseSetButton];
+            })
+            .then(returnArr => {
+                // Add event listener to the final "Choose3" button
+                returnArr[0].addEventListener('click', () => {
+                    // 1. Get all flashcard set checkboxes
+                    const checkboxesFlashSets = sandbox.querySelectorAll('input[type="checkbox"]');
 
-                    let returnArr = [];
-                    returnArr.push(chooseSetButton);
-                    // returnArr.push(setList);
-                    
-                    return (returnArr);
-                })
-                .then( returnArr => {
-                        returnArr[0].addEventListener('click', () => {
-                        
-                                // 1. Get all checkboxes (adjust selector as needed)
-                                const checkboxesFlashSets = sandbox.querySelectorAll('input[type="checkbox"]');
+                    // 2. Filter checked sets
+                    const checkedFlashSets = Array.from(checkboxesFlashSets).filter(box => box.checked);
 
-                                // 2. Filter checked ones
-                                const checkedFlashSets = Array.from(checkboxesFlashSets).filter(box => box.checked);
+                    // 3. Extract set names from checkboxes
+                    const valuesFlashSets = checkedFlashSets.map(box => box.value);
 
-                                // 3. Extract their values
-                                const valuesFlashSets = checkedFlashSets.map(box => box.value);
-                                
-                                displaySets(valuesFlashSets,sandbox)
-                            }
-                        );
-                    });
+                    // === Display the selected flashcard sets ===
+                    displaySets(valuesFlashSets, sandbox);
+                });
+            });
         });
-    
-    })
+    });
+});
 
-})
 
 // Event listener for deleting flashcard sets or folders
 deletebtn.addEventListener("click", function () {
-    sandbox.innerHTML = ''; // Clear the sandbox
+    // === Step 1: Clear UI and initialize containers ===
+    sandbox.innerHTML = ''; // Clear the sandbox display area
 
-    // Create form container
-    const deleteForm = document.createElement("form");
+    const deleteForm = document.createElement("form"); // Form for delete type selection
     const flashcardContainerDel = document.createElement("div");
-    flashcardContainerDel.classList.add("flashcard");
+    flashcardContainerDel.classList.add("flashcard"); // Apply shared card styling
 
-    // Create dropdown selector
+    // === Step 2: Create dropdown to choose delete type ===
     const deleteTypeSelect = document.createElement('select');
     deleteTypeSelect.name = "deleteType";
 
@@ -300,101 +306,99 @@ deletebtn.addEventListener("click", function () {
     const folderOption = new Option("Delete Folder", "Folder");
     const setOption = new Option("Delete Set", "Set");
 
-    deleteTypeSelect.add(defaultOption, undefined);
+    deleteTypeSelect.add(defaultOption);
     deleteTypeSelect.add(folderOption);
     deleteTypeSelect.add(setOption);
 
-    // Create choose button
+    // === Step 3: Create "Choose" button to confirm delete type ===
     const chooseButton = createButton("choose-delete", "Choose", "button");
 
+    // Assemble and display the form
     deleteForm.append(deleteTypeSelect, chooseButton);
     flashcardContainerDel.appendChild(deleteForm);
     sandbox.appendChild(flashcardContainerDel);
 
+    // === Step 4: Respond to user selecting delete type ===
     chooseButton.addEventListener('click', () => {
         const choice = deleteTypeSelect.value;
-        sandbox.innerHTML = ''; // Clear everything for next UI
+
+        // Clear UI for next step
+        sandbox.innerHTML = '';
         flashcardContainerDel.innerHTML = '';
 
+        // === If deleting a folder ===
         if (choice === "Folder") {
             retrieve("/flash_card/sendFolders").then(data => {
                 const tableContainer = document.createElement("div");
                 const folderTable = createTable(data.length, 1, data, "folder_name");
                 const deleteFolderBtn = createButton("delete-folder", "Delete Folder", "button");
 
+                // Display the folder selection table and delete button
                 tableContainer.appendChild(folderTable);
                 flashcardContainerDel.appendChild(tableContainer);
                 flashcardContainerDel.appendChild(deleteFolderBtn);
-                sandbox.append(flashcardContainerDel);
+                sandbox.appendChild(flashcardContainerDel);
 
+                // === Confirm deletion of selected folders ===
                 deleteFolderBtn.addEventListener('click', () => {
-                     // 1. Get all checkboxes inside sandbox (or more specific container if needed)
-                        const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
+                    const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
+                    const checked = Array.from(checkboxes).filter(box => box.checked);
+                    const selectedFolderNames = checked.map(box => box.value);
 
-                        // 2. Filter only the checked ones
-                        const checked = Array.from(checkboxes).filter(box => box.checked);
-
-                        // 3. Extract their values (these should be set_name if your table was made that way)
-                        const selectedFolderNames = checked.map(box => box.value);
-
-                        // 4. Pass to deleteSets
-                        deleteFolders(selectedFolderNames, "folder_name")
+                    deleteFolders(selectedFolderNames, "folder_name")
                         .then(() => {
-                         window.location.reload();
+                            window.location.reload(); // Refresh after deletion
                         });
                 });
             });
 
+        // === If deleting a set ===
         } else if (choice === "Set") {
-            retrieve("/flash_card/sendFolders")
-                .then(data => {
-                    const folderTable = createTable(data.length, 1, data, "folder_name");
-                    const selectFolderBtn = createButton("select-folder", "Choose Folder(s) to Enter", "button");
+            // Step 1: Let user choose folders to look inside
+            retrieve("/flash_card/sendFolders").then(data => {
+                const folderTable = createTable(data.length, 1, data, "folder_name");
+                const selectFolderBtn = createButton("select-folder", "Choose Folder(s) to Enter", "button");
 
-                    const formContainer = document.createElement("form");
-                    formContainer.append(folderTable, selectFolderBtn);
-                    flashcardContainerDel.appendChild(formContainer);
-                    sandbox.appendChild(flashcardContainerDel);
+                const formContainer = document.createElement("form");
+                formContainer.append(folderTable, selectFolderBtn);
+                flashcardContainerDel.appendChild(formContainer);
+                sandbox.appendChild(flashcardContainerDel);
 
-                    selectFolderBtn.addEventListener("click", () => {
-                        const checkedFolders = [...sandbox.querySelectorAll('input[type="checkbox"]:checked')]
-                            .map(box => box.value);
+                // Step 2: Once folders are selected, show sets inside
+                selectFolderBtn.addEventListener("click", () => {
+                    const checkedFolders = [...sandbox.querySelectorAll('input[type="checkbox"]:checked')]
+                        .map(box => box.value);
 
-                        retrieve("/flash_card/listSet", checkedFolders, "folder_list")
-                            .then(setList => {
-                                sandbox.innerHTML = '';
-                                flashcardContainerDel.innerHTML = '';
+                    retrieve("/flash_card/listSet", checkedFolders, "folder_list")
+                        .then(setList => {
+                            sandbox.innerHTML = '';
+                            flashcardContainerDel.innerHTML = '';
 
-                                const setTable = createTable(setList.length, 1, setList, "set_name");
-                                const deleteSetBtn = createButton("delete-set", "Delete", "button");
+                            const setTable = createTable(setList.length, 1, setList, "set_name");
+                            const deleteSetBtn = createButton("delete-set", "Delete", "button");
 
-                                flashcardContainerDel.appendChild(setTable);
-                                flashcardContainerDel.appendChild(deleteSetBtn);
-                                sandbox.appendChild(flashcardContainerDel);
+                            // Show sets and delete button
+                            flashcardContainerDel.appendChild(setTable);
+                            flashcardContainerDel.appendChild(deleteSetBtn);
+                            sandbox.appendChild(flashcardContainerDel);
 
-                                deleteSetBtn.addEventListener('click', () => {
-                                        // 1. Get all checkboxes inside sandbox (or more specific container if needed)
-                                        const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
+                            // Step 3: Confirm deletion of selected sets
+                            deleteSetBtn.addEventListener('click', () => {
+                                const checkboxes = sandbox.querySelectorAll('input[type="checkbox"]');
+                                const checked = Array.from(checkboxes).filter(box => box.checked);
+                                const selectedSetNames = checked.map(box => box.value);
 
-                                        // 2. Filter only the checked ones
-                                        const checked = Array.from(checkboxes).filter(box => box.checked);
-
-                                        // 3. Extract their values (these should be set_name if your table was made that way)
-                                        const selectedSetNames = checked.map(box => box.value);
-
-                                        // 4. Pass to deleteSets
-                                        deleteSets(selectedSetNames, "set_name")
-                                        .then(() => {
-                                            window.location.reload();
-                                        });
-                                });
+                                deleteSets(selectedSetNames, "set_name")
+                                    .then(() => {
+                                        window.location.reload(); // Refresh after deletion
+                                    });
                             });
-                    });
+                        });
                 });
+            });
         }
     });
 });
-
 
 
 
