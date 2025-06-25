@@ -617,8 +617,8 @@ li .username {
     margin: 2rem auto;
     padding: 3rem;
     max-width: 600px;
-    background-color: #fff;
-    border: 2px solid #ccc;
+    background-color: #333333;
+    border: 2px solid #333333;
     border-radius: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -641,7 +641,7 @@ li .username {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: #333333;
 }
 
 .optionBar ul {
