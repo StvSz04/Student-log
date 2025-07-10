@@ -610,3 +610,72 @@ li .username {
 .semesters_div{
     width: fit-content;
 }
+
+
+/* Flash card section *//* Style for the flashcard container */
+.flashcard {
+    margin: 2rem auto;
+    padding: 3rem;
+    max-width: 600px;
+    background-color: #333333;
+    border: 2px solid #333333;
+    border-radius: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: sans-serif;
+}
+
+
+/* Optional: Label for text content */
+.flashcard label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+
+/* Option bar */
+.optionBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #333333;
+}
+
+.optionBar ul {
+    display: flex;
+    gap: 20px; /* Space between buttons */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.flashcard input{
+    background-color: #000000; /* Bright blue button background */
+    color: #ffffff; /* White text */
+    border: 2px solid #979494; /* Darker blue border */
+    padding: 12px 24px;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+}
+
+.flashcard select{
+    background-color: #000000; /* Bright blue button background */
+    color: #ffffff; /* White text */
+    border: 2px solid #979494; /* Darker blue border */
+    padding: 12px 10px;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+}
+
+.flashcard button{
+    background-color: #000000; /* Bright blue button background */
+    color: #ffffff; /* White text */
+    border: 2px solid #979494; /* Darker blue border */
+    padding: 15px 24px;
+    margin: 10px;
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+}

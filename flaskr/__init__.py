@@ -2,7 +2,6 @@ import os
 
 from flask import Flask,render_template
 
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__,instance_relative_config=True)
@@ -59,5 +58,8 @@ def create_app(test_config=None):
 
     from . import comp
     app.register_blueprint(comp.bp)
+
+    from . import flashcard
+    app.register_blueprint(flashcard.bp)
 
     return app
