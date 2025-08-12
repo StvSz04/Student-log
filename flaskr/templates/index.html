@@ -6,8 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <body class="background">
-        <header>
+
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +15,8 @@
                 <section class="section-header">
                     <h1>Track Your Study Habits</h1>
                     <p>Log your study hours and view your progress over time. Customize your goals and stay on track!</p>
-                    <img src="{{ url_for('static', filename='images_folder/studylog.png') }}" alt="Image description" width="100" height="100">  
+                    <!-- <img src="{{ url_for('static', filename='images_folder/studylog.png') }}" alt="Image description" width="100" height="100">   -->
+                    <!-- <img class="hourglass" src="{{ url_for('static', filename='images_folder/hourglass.png') }}" alt="Image description" width="100" height="100">  -->
                 
                 </section>
             </head>
@@ -39,11 +39,4 @@
                     </li>
                 </ul>
             </section>
-        </header>
-
-        <!-- Footer Section -->
-        <footer>
-            <!-- Add footer content here if needed -->
-        </footer>
-    </body>
 {% endblock %}

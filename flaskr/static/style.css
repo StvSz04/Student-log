@@ -2,9 +2,20 @@
 * {
     font-family: 'Arial', sans-serif; /* Modern and clean font */
     box-sizing: border-box;
+    color : rgba(255, 255, 255, 0.75);
     margin: 0;
     padding: 0;
     transition: all 0.3s ease; /* Smooth transition for all properties */
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+li:hover{
+    text-shadow: 0px 1px 10px rgba(172, 184, 173, 0.75);
 }
 
 .div {
@@ -15,81 +26,72 @@
 
 
 
+
+
 /* Body */ 
 body {
-    color: #ffffff; /* Light text color for contrast against black */
+    background-image: linear-gradient(rgb(8, 5, 37),rgb(19, 9, 37), rgb(8, 5, 37)); 
     /*background-color: #000000; /* Black background for the entire website
     background-image: linear-gradient(to bottom, #131212, #4d4a79); */
     line-height: 2; /* Better readability */
-    animation: colorChange 5s ease infinite;
-    min-height: auto;
 }
 
+
 select {
-  background-color: #000000;
+  background-color: #1d1929;
   color: #fffbfb;
+  box-shadow:  1px 1px 10px 5px  rgba(56, 30, 99, 0.3);
 }
 
 input{
-    background-color: #000000;
-    color: #fffbfb;
+    background-color: #1d1929;
+    color: #ffffff;
+    box-shadow:  1px 1px 10px 5px  rgba(56, 30, 99, 0.3);
 }
 
 /* Table*/
 /* Styling for the entire table */
 .table {
-  background-color: #111010;
-  color: white; /* Text color to make it readable */
+  background-color: 2e0058;
+  color: black; /* Text color to make it readable */
   border-collapse: collapse;
   width: 100%;
 }
 
 /* Header Row */
 .table thead tr {
-  background-color: #111010; /* Slightly lighter black for header */
+  background-color: rgb(24, 14, 43); /* Slightly lighter black for header */
 }
 
 /* Table Header Text */
 .table tr th {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #ffffff; /* Dark gray border for better visibility */
-  background-color: #111010;
+  border-bottom: 1px solid #ffffff;
+  background-color: rgb(24, 14, 43);
   color: #ffffff;
 }
 
 /* Table Body */
 .table tbody tr td {
-  background-color: #111010;
+  background-color: rgb(24, 14, 43);
   color: #ffffff;
 }
 
 /* Table foot */
-.table tfoot tr td{
+.table tfoot tr td {
     padding: 10px;
     text-align: left;
     border: 1px solid #ffffff; /* Dark gray border for better visibility */
-    background-color: #111010;
+    background-color:rgb(24, 14, 43);
 }
 
-
-@keyframes colorChange {
-    0% {
-      background-color: #131212; /* Start with blue */
-    }
-    50% {
-      background-color: #272729; /* Midpoint color (red) */
-    }
-    100% {
-      background-color: #131212; /* End */
-    }
-  }
 
 /* Header */
 header {
     text-align: center;
     padding: 10px;
-    animation: colorChange 8s ease infinite
+    /* animation: colorChange 8s ease infinite */
 }
 footer{
     background-image: linear-gradient(to bottom, #979494, #43415e);
@@ -97,52 +99,53 @@ footer{
 }
 
 header h1 {
-    color: #ffffff; /* White text for contrast */
+    border-radius: 10px;
 }
 
 /* Navigation */
 nav {
-    background: #000000;
+    /* background: #000000; */
+    background-image: linear-gradient(rgb(17, 3, 41), rgb(22, 8, 49),rgb(8, 5, 37)); 
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.75rem 1.5rem;
-    border-radius: 2px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 5px;
+    margin-top: 0px;
     font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0px 2px 1px 1px rgb(80, 70, 124);
 }
 
 nav h1 {
     margin: 0;
     font-size: 1.5rem;
-    color: #ffffff;
     font-weight: 1000;
 }
 
 nav ul {
     display: flex;
+    float: left;
     list-style: none;
     margin: 0;
     padding: 0;
     gap: 1.25rem; /* cleaner spacing than margin on li */
 }
 
-nav a {
-    text-decoration: none;
-    color: #1b1a1a;
+nav li a {
     font-size: 1rem;
-    transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 nav a:hover {
-    color: #979494;
-    text-decoration: underline;
+    cursor: pointer;
+    text-shadow: 0px 1px 10px rgba(172, 184, 173, 0.75);
+    font-size: 1.3em;  /* Increases the font size on hover */
 }
+
+
+
+
 
 nav ul li p{
     font-weight: bold;
-    color: #979494;
     font-size: 1em; /* Optional: Adjust font size */
     padding-left: 5px; /* Optional: Add padding */
     vertical-align: middle;  /* Aligns vertically with surrounding text */
@@ -152,7 +155,7 @@ nav ul li p{
 
 
 .btn, button {
-    background-color: #000000; /* Bright blue button background */
+    background-color: #1d1929; /* Bright blue button background */
     color: #ffffff; /* White text */
     border: 2px solid #979494; /* Darker blue border */
     padding: 12px 24px;
@@ -162,8 +165,8 @@ nav ul li p{
 }   
 
 .btn:hover, button:hover {
-    background-color: #424040; /* Darker blue on hover */
-    border-color: #ffffff; /* Even darker blue border on hover */
+    background-color: #1a0731;
+    border-color: #ffffff; 
 }
 
 #timer-buttons {
@@ -175,30 +178,43 @@ nav ul li p{
 
 /* Sections */
 .section-header, .form-section {
-    background-color: #2a2a2a; /* Dark grey background for contrast */
+    background-color: transparent; /* Dark grey background for contrast */
     color: #e0e0e0; /* Light text color */
-    padding: 30px;
+    padding: 40px;
     border-radius: 15px; /* Rounded corners */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
     margin: 20px auto;
-    max-width: 800px; /* Center content and limit width */
+    max-width: 900px; /* Center content and limit width */
+    border-left: 5px groove rgba(56, 30, 99, 0.3);
+    border-right: 5px groove rgba(56, 30, 99, 0.3);   
+    text-align: center; 
 }   
 
+
+/* Index Section */
+@keyframes backgroundShadowPulse {
+    0%   {  box-shadow: 5px 5px 15px 10px  rgba(29, 19, 75, 0.5); }
+    50%  {  box-shadow: 5px 5px 10px 5px rgba(9, 0, 136,.5); }
+    100% {  box-shadow:  5px 5px 15px 10px rgba(29, 19, 75, 0.5); }
+}
+
 .section-header {
-    background-color: #1a1a1a; /* Darker grey for header background */
+    background-color: transparent; /* Darker grey for header background */
+    animation: backgroundShadowPulse 5s infinite;
 }
 
 .section-header h2, .form-section h2 {
-    background-color: #333333; /* Slightly lighter grey for headings */
+    background-color: transparent; /* Slightly lighter grey for headings */
     color: #ffffff; /* White text */
     padding: 15px;
     border-radius: 10px; /* Rounded corners */
     margin-bottom: 20px;
+    animation: backgroundShadowPulse 5s infinite;
 }
 
-.section-header h2:hover, .form-section h2:hover {
-    background-color: #444444; /* Slightly lighter grey on hover */
-}
+/* .section-header h2:hover, .form-section h2:hover {
+    
+} */
 
 /* Forms */
 form {
@@ -318,22 +334,19 @@ table select {
 }
 
 /* Features Section */
-@keyframes borderPulse {
-    0%   { border-bottom-color: #1f1d1d; }
-    50%  { border-bottom-color: #3b3b3d; }
-    100% { border-bottom-color: #1f1d1d; }
-}
+
 .features {
-    background-color: #2a2a2a; /* Dark grey background for contrast */
+    background-color: transparent; /* Dark grey background for contrast */
     color: #e0e0e0; /* Light text color */
     padding: 40px;
     border-radius: 15px; /* Rounded corners */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
     margin: 20px auto;
     max-width: 900px; /* Center content and limit width */
+    animation: backgroundShadowPulse 5s infinite;
 }
 
-.features h2 {
+.features h1 {
     background-color: #333333; /* Slightly lighter grey for headings */
     color: #ffffff; /* White text */
     padding: 20px;
@@ -342,11 +355,24 @@ table select {
     text-align: center;
     font-size: 24px; /* Larger font size for headings */
     border-bottom: 3px solid #000000; /* Blue underline for emphasis */
-    animation: borderPulse 8s ease infinite;
+}
+
+
+.features h2 {
+    background-color: transparent;
+    color: #ffffff; /* White text */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px; /* Larger font size for headings */
+    border-left: 5px groove rgba(56, 30, 99, 0.3);
+    border-right: 5px groove rgba(56, 30, 99, 0.3);
 }
 
 .features h2:hover {
-    background-color: #444444; /* Slightly lighter grey on hover */
+   border-left: 7px solid rgba(172, 172, 172, 0.75);
+   border-right: 7px solid rgba(172, 172, 172, 0.75);
 }
 
 .features ul {
@@ -358,14 +384,18 @@ table select {
     margin-bottom: 20px;
     padding: 20px;
     border-radius: 10px; /* Rounded corners */
-    background-color: #333333; /* Dark grey background for list items */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for list items */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+    background-color:transparent; /* Dark grey background for list items */
+    text-align: center;
+    border-top: 1px solid rgba(56, 30, 99, 0.3);
+    border-bottom: 1px solid rgba(56, 30, 99, 0.3);
 }
+
 
 .features li:hover {
     transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Deeper shadow on hover */
+    box-shadow: 1px 1px 4px 4px rgba(172, 172, 172, 0.75); /* Deeper shadow on hover */
+    /* border-top: 5px solid rgba(172, 172, 172, 0.75);
+    border-bottom: 5px solid rgba(172, 172, 172, 0.75); */
 }
 
 .features li::before {
@@ -415,10 +445,6 @@ table select {
 }
 
 /* Hover Effect for Rows */
-.table tr:hover {
-    background-color: #e9ecef;  /* Slightly darker background on hover */
-    transition: background-color 0.2s ease-in-out;
-}
 
 
 
@@ -446,23 +472,17 @@ ul {
   }
   ul li a {
     text-decoration: none; /* Removes the underline from links */
-    color: #979494; /* Set text color */
     font-weight: bold; /* Makes the text bold */
     display: block; /* Makes the entire <a> tag clickable */
     padding: 10px 20px; /* Adds padding around the link */
   }
   
-  ul li a:hover {
-    background-color: #646464; /* Changes background color on hover */
-    color: #131212; /* Changes text color on hover */
-  }
 
 
 /*username section */
 /* Style the username */
 li .username {
     font-weight: bold;
-    color: #979494;
     font-size: 1.2em; /* Optional: Adjust font size */
     padding-left: 5px; /* Optional: Add padding */
     vertical-align: middle;  /* Aligns vertically with surrounding text */
@@ -520,16 +540,20 @@ li .username {
     padding: 20px;
     min-height: 100vh; /* Full screen height */
     box-sizing: border-box;
+    flex-flow: row wrap;
+    /* This aligns items to the end line on main-axis */
+    justify-content: flex-end;
   }
   
 .explore {
-    background-color: #2a2a2a;
+    background-color: transparent;
     width: 100%;
     max-width: 600px;
     padding: 20px;
     margin: 0 auto;
     border-radius: 15px; /* Rounded corners */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    animation: backgroundShadowPulse 5s infinite;
   }
   
 .explore ul {
@@ -542,36 +566,46 @@ li .username {
     margin-bottom: 20px;
     padding: 20px;
     border-radius: 10px;
-    background-color: #333333;
+    background-color: transparent;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 1px groove rgba(56, 30, 99, 0.3);
+    border-bottom: 1px groove rgba(56, 30, 99, 0.3);
 }
 
-.explore a::before {
-    content: "\27A4";  /* icon */
-    color: #979494;
+/* .explore a::before {
+    content: "\27A4";
+    color: #001a4e;
     font-size: 20px;
     margin-right: 10px;
-}
+} */
 
 .explore li:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 1px 1px 4px 4px rgba(172, 172, 172, 0.75); /* Deeper shadow on hover */
+    /* border-top: 4px solid rgba(172, 172, 172, 0.75);
+    border-bottom: 5px solid rgba(172, 172, 172, 0.75) */
 }
 
 
   
   
   .explore h1 {
-    background-color: #333333; /* Slightly lighter grey for headings */
+    background-color: transparent;
     color: #ffffff; /* White text */
     padding: 20px;
     border-radius: 10px; /* Rounded corners */
     margin-bottom: 20px;
     text-align: center;
     font-size: 24px; /* Larger font size for headings */
-    border-bottom: 3px solid #000000; /* Blue underline for emphasis */
-    animation: borderPulse 5s ease infinite;
+    border-left: 1px groove rgba(56, 30, 99, 0.3);
+    border-right: 1px groove rgba(56, 30, 99, 0.3);
+  }
+
+  .explore h1:hover {
+    border-left: 5px solid rgba(172, 172, 172, 0.75);
+    border-right: 5px solid rgba(172, 172, 172, 0.75)
   }
   
 
@@ -585,13 +619,15 @@ li .username {
     box-sizing: border-box;
   }
 .auth{
-    background-color: #333333;
+    background-color: transparent;
     width: 100%;
     max-width: 600px;
     border-radius: 10px; /* Rounded corners */
     padding: 20px;
     margin: 0 auto;
     font-size: 24px; /* Larger font size for headings */
+    border-left: 5px groove rgba(56, 30, 99, 0.3);
+    border-right: 5px groove rgba(56, 30, 99, 0.3);
   }
 
 .authDiv{
@@ -617,8 +653,6 @@ li .username {
     margin: 2rem auto;
     padding: 3rem;
     max-width: 600px;
-    background-color: #333333;
-    border: 2px solid #333333;
     border-radius: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -641,7 +675,9 @@ li .username {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background-color: #333333;
+    background-color: transparent;
+    margin-top: 30px;
+        
 }
 
 .optionBar ul {
@@ -652,28 +688,34 @@ li .username {
     margin: 0;
 }
 
+.optionBar ul button:hover{
+    transform: translateY(-5px);
+    box-shadow: 1px 1px 4px 4px rgba(172, 172, 172, 0.75);
+    transition: all 0.3s ease;
+}
+
 .flashcard input{
-    background-color: #000000; /* Bright blue button background */
+    background-color: #000000;
     color: #ffffff; /* White text */
-    border: 2px solid #979494; /* Darker blue border */
+    border: 2px solid #979494; 
     padding: 12px 24px;
     border-radius: 8px; /* Rounded corners */
     cursor: pointer;
 }
 
 .flashcard select{
-    background-color: #000000; /* Bright blue button background */
+    background-color: #000000; 
     color: #ffffff; /* White text */
-    border: 2px solid #979494; /* Darker blue border */
+    border: 2px solid #979494;
     padding: 12px 10px;
     border-radius: 8px; /* Rounded corners */
     cursor: pointer;
 }
 
 .flashcard button{
-    background-color: #000000; /* Bright blue button background */
-    color: #ffffff; /* White text */
-    border: 2px solid #979494; /* Darker blue border */
+    background-color: #000000; 
+    color: #ffffff; 
+    border: 2px solid #979494; 
     padding: 15px 24px;
     margin: 10px;
     border-radius: 8px; /* Rounded corners */

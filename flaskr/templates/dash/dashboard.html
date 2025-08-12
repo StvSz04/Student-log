@@ -4,24 +4,67 @@
 
 {% block content %}
 <!-- Links to different user modules-->
- <header>
-  <div class="dashboard-container">
-      <section class="explore"> <h1>Explore</h1>
-      <ul>
-        <li><a href="{{ url_for('dash.go_to_log') }}">Log Hours</a></li>
-        <li><a href="{{ url_for('dash.go_to_timer') }}">Auto-Logger</a></li>
-        <li><a href="{{ url_for('dash.go_to_vis') }}">Visualize Hours</a></li>
-        <li><a href="{{ url_for('dash.go_to_flash') }}">Flashcards</a></li>
-        <li><a href="{{ url_for('dash.go_to_del') }}">Delete Course/Entry</a></li>
-        <!-- <li><a href="{{ url_for('dash.go_to_comp') }}">Compare</a></li> -->
-        <li><a href="{{ url_for('dash.go_to_settings') }}">Settings</a></li>
-        
-      </ul>
 
-      </section>
+<div">
+
+  <div style=" margin-top: 30px">
+
+    <section class="explore">
+      <h1>Explore</h1>
+
+
+
+    </section>
+
   </div>
-</header>
 
+  <div class="dashboard-container">
+
+    <section class="explore">
+      <div>
+        <ul>
+          <li><a href="{{ url_for('dash.go_to_log') }}">Log Hours</a></li>
+          <li><a href="{{ url_for('dash.go_to_timer') }}">Auto-Logger</a></li>
+
+        </ul>
+
+      </div>
+    </section>
+
+    <section class="explore">
+      <div>
+        <ul>
+          <li><a href="{{ url_for('dash.go_to_vis') }}">Graph Visualization</a></li>
+          <li><a href="{{ url_for('dash.go_to_vis') }}">Pie Chart Visualization</a></li>
+
+        </ul>
+
+      </div>
+
+    </section class="explore">
+
+    <section class="explore">
+      <div>
+        <ul>
+          <li><a href="{{ url_for('dash.go_to_flash') }}">Create/Edit Flashcards</a></li>
+          <li><a href="{{ url_for('dash.go_to_flash') }}">Use Flashcards</a></li>
+
+        </ul>
+
+      </div>
+
+    </section class="explore">
+
+    <section class="explore">
+      <div>
+        <ul>
+          <li><a href="{{ url_for('dash.go_to_del') }}">Delete Course/Entry</a></li>
+          <!-- <li><a href="{{ url_for('dash.go_to_comp') }}">Compare</a></li> -->
+          <li><a href="{{ url_for('dash.go_to_settings') }}">Settings</a></li>
+
+        </ul>
+
+      </div </section>
+  </div>
+</div>
 {% endblock %}
-
-

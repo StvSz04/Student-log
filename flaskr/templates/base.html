@@ -1,34 +1,33 @@
-<!doctype html>
-
-<title>{% block title %}{% endblock %}StudyLog</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<nav>
-  <h1>StudyLog</h1>
-  
-
-  <ul>
-    {% if g.user %}
-    {% block header %}{% endblock %}
-        <li><span class = "username">{{ g.user['username'] }}</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}StudyLog{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <nav>
+    <h1>StudyLog</h1>
+    <ul>
+      {% if g.user %}
+        {% block header %}{% endblock %}
+        <li><span class="username">{{ g.user['username'] }}</span></li>
         <li><a href="{{ url_for('dash.go_to_dashboard') }}">Dashboard</a></li>
         <li><a href="{{ url_for('home.go_to_homepage') }}">Homepage</a></li>
         <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+      {% else %}
+        <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+        <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+      {% endif %}
+    </ul>
+  </nav> 
 
-    {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>
-    {% endif %}
-  </ul>
-</nav>
+  <section class="content">
+    {% block content %}{% endblock %}
+  </section>
 
-<section class="content">
-
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
-
-{% block extra_scripts %}
-
-{% endblock %}
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
