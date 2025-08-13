@@ -9,7 +9,7 @@ from flaskr.db import get_db
 import sqlite3
 
 
-bp = Blueprint('del', __name__, url_prefix='/delete_course')
+bp = Blueprint('delete', __name__, url_prefix='/delete_course')
 
 @bp.route('/delete', methods=('GET','POST'))
 def delete_course():
@@ -18,6 +18,7 @@ def delete_course():
     courses = db.execute("SELECT course_name FROM course WHERE user_username = ?", (user_id,)).fetchall()
 
     if request.method == 'POST':
+
         course_to_remove = request.form.get('course') 
         if course_to_remove:
             if not course_to_remove.strip():
@@ -38,16 +39,7 @@ def delete_course():
                 except sqlite3.IntegrityError:
                     error = f"Course {course_to_remove} does not exist."
             #Updates the input into the
-            return redirect(url_for('del.delete_course'))
-         
-        course_entry = request.form.get('course_for_entries')
-        if course_entry:
-            entries = db.execute(
-                "SELECT hours, log_date FROM logged_hours WHERE user_username = ? AND course_name = ? ORDER BY log_date ASC",
-                (user_id, course_entry)
-            ).fetchall()
-
-            return render_template('dash/delete_course.html', entries=entries, courses=courses, course_entry=course_entry)
+            return redirect(url_for('delete.get_entries'))
                  
         entries_to_delete = request.form.getlist('entries_to_delete') 
         if entries_to_delete:
@@ -62,8 +54,26 @@ def delete_course():
                 )
                 db.commit()
 
-            return render_template('dash/delete_course.html', courses=courses)
-    
-    
-    return render_template('dash/delete_course.html', courses=courses)
+            return redirect(url_for('delete.get_entries'))
+        
+    return redirect(url_for('delete.get_entries'))
+
+
+@bp.route('/get_entries', methods=('GET','POST'))
+def get_entries():
+    db = get_db()
+    user_id = session.get('user_id')  
+    courses = db.execute("SELECT course_name FROM course WHERE user_username = ?", (user_id,)).fetchall()
+
+    course_entry = request.args.get('course_for_entries')
+    if course_entry:
+        entries = db.execute(
+            "SELECT hours, log_date FROM logged_hours WHERE user_username = ? AND course_name = ? ORDER BY log_date ASC",
+            (user_id, course_entry)
+        ).fetchall()
+        
+        return render_template('dash/delete_course.html', entries=entries, courses=courses, course_entry=course_entry)
+
+    return render_template('dash/delete_course.html', courses=courses, course_entry=course_entry)
+
 

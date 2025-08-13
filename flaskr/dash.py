@@ -39,7 +39,7 @@ def go_to_vis():
 # delete_courses page
 @bp.route('/delete')
 def go_to_del():
-    return redirect(url_for('del.delete_course'))
+    return redirect(url_for('delete.delete_course'))
 
 # settings page
 @bp.route('/settings')

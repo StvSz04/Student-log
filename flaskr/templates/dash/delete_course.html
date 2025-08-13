@@ -10,44 +10,49 @@
 <main>
     <section class="form-section">
         <h2>Delete a Course</h2>
-        <form id="add-course-form" method="POST" action="{{ url_for('del.delete_course') }}">
+        <form id="add-course-form" method="POST" action="{{ url_for('delete.delete_course') }}">
             <label for="course-name">Course Name:</label>
             <select id="course-select" name="course" required>
-                <option value="" disabled selected>Select a course...</option> 
+                <option value="" disabled selected>Select a course...</option>
                 {% for course in courses %}
-                <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
+                <option value="{{ course[0] }}">{{ course[0] }}</option>
                 {% endfor %}
             </select>
             <button type="submit">Delete Course</button>
         </form>
     </section>
-    
-    
+
+
     <section class="form-section">
         <h2>Delete an Entry</h2>
+
+
+        <form method="GET" action="{{ url_for('delete.get_entries') }}">
+            <label for="course">Choose a course:</label>
+            <select id="course" name="course_for_entries">
+                <option value="" disabled selected>Select a course...</option>
+                {% for course in courses %}
+                <option value="{{ course[0] }}">{{ course[0] }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Select Course</button>
+        </form>
+
+
+        {% if course_entry and entries %}
+
         <table class="table">
             <!-- Table Header -->
             <thead>
                 <tr>
                     <!-- Dropdown for selecting a course -->
-                    <th>
-                        <form method="POST" action="{{ url_for('del.delete_course') }}">
-                        <label for="course">Choose a course:</label>
-                        <select id="course" name="course_for_entries">
-                            <option value="" disabled selected>Select a course...</option> 
-                            {% for course in courses %}
-                            <option value="{{ course['course_name'] }}">{{ course['course_name'] }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit">Select Course</button>
-                        </form>
-                    </th>
+                    <th>Course</th>
                     <th>Hours</th>
                     <th>Date</th>
                     <th>Delete</th>
                 </tr>
             </thead>
-            <form method="POST" action="{{ url_for('del.delete_course') }}">
+            <form method="POST" action="{{ url_for('delete.delete_course') }}">
                 <tbody>
                     {% for entry in entries %}
                     <tr>
@@ -56,11 +61,9 @@
                         <td>{{ entry[1] }}</td> <!-- log_date -->
                         <td>
                             <label for="myCheck">Checkbox:</label>
-                            <input type="checkbox" 
-                                class="entry-checkbox" 
-                                name="entries_to_delete" 
+                            <input type="checkbox" class="entry-checkbox" name="entries_to_delete"
                                 value="{{ course_entry }},{{ entry[0] }},{{ entry[1] }}">
-                                
+
                         </td>
                     </tr>
                     {% endfor %}
@@ -75,10 +78,11 @@
             </form>
         </table>
     </section>
-    
-    
+
+    {% else %}
+     <p> No entries</p>
+    {% endif %}
+
 
 </main>
 {% endblock %}
-
-
