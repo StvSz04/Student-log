@@ -550,7 +550,7 @@ li .username {
     width: 100%;
     max-width: 600px;
     padding: 20px;
-    margin: 0 auto;
+    margin: 10px auto;
     border-radius: 15px; /* Rounded corners */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
     animation: backgroundShadowPulse 5s infinite;
