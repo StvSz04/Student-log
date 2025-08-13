@@ -223,3 +223,76 @@ def deleteFolders():
         data = {"Response" : True}
 
         return jsonify(data)     
+    
+# For creating Falshcard sets
+@bp.route('/flashUpdate', methods=('GET','POST'))
+def flashcardUpdate():
+    user_id = session.get('user_id')
+    db = get_db()
+    
+    if request.method == 'POST':
+        # Recieve data from POST
+        setName = request.form.get("set-name") 
+        newSetName = request.form.get("new-set-name")
+        cardCount = request.form.get("card-count")
+        folderName = request.form.get("folder-name")
+        print("Set Name: ", setName)
+        print("Folder Name: ", folderName)
+        cardsFront = []
+        cardsBack = []
+        
+        try:
+            # Insert flashcard set to db
+            cursor = db.execute(
+                "UPDATE FlashcardSet SET folder_name = ?, set_name =? WHERE set_name = ? AND user_username = ?",
+                (folderName, newSetName,setName,user_id)
+            )
+
+            db.commit() # Commit changes
+
+            # Grab setId
+            setId = db.execute(
+                    "SELECT set_id FROM FlashcardSet WHERE set_name = ? AND user_username = ?",
+                    (newSetName, user_id)
+                ).fetchone()[0]
+        
+            # For each flash card insert into db
+            for i in range(0, int(cardCount)):
+                cardsFront.append(request.form.get(f"front{i}"))
+                cardsBack.append(request.form.get(f"back{i}"))
+
+                # Skip blanks
+                if cardsFront[i] is None or cardsBack[i] is None:
+                    continue
+
+                # Delete
+                if cardsFront[i] == "deleted" or cardsBack[i] == "deleted":
+                    db.execute(
+                        "DELETE FROM Flashcard WHERE set_id = ? AND place = ?",
+                        (setId, i)
+                    )
+
+                cursor = db.execute(
+                    "UPDATE Flashcard SET front = ?, back = ? WHERE set_id = ? AND place = ?",
+                    (cardsFront[i],cardsBack[i],setId,i)
+                )
+
+                if cursor.rowcount == 0:
+                    db.execute(
+                        "INSERT INTO Flashcard (set_id, place, front, back) VALUES (?, ?, ?, ?)",
+                        (setId, i, cardsFront[i], cardsBack[i])
+                    )
+
+            db.commit()
+                
+            print("Success")
+            return redirect(url_for('flash.flashcard'))
+            
+        except Exception as e:
+            print("FAILED!!!", e)
+            return redirect(url_for('flash.flashcard'))
+
+
+     
+     
+    return render_template('dash/flashcard.html')

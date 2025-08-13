@@ -16,7 +16,8 @@ import {
   createFolder,
   creatUsebtn,
   createDeletebtn,
-  populateEntries
+  populateEntries,
+  createEdit
 } from './flashcardHelpers.js';
 
 
@@ -24,7 +25,7 @@ const createbtnCard = document.getElementById("create-set");
 const createbtnFolder = document.getElementById("create-folder");
 const usebtn = document.getElementById("use");
 const deletebtn = document.getElementById("delete");
-// const editbtn = document.getElementById('edit');
+const editbtn = document.getElementById('edit');
 
 // sanbox correpsonds to the div that all 3 buttons will use to diplay info
 let sandbox = document.getElementById("sandbox-div") 
@@ -44,7 +45,7 @@ usebtn.addEventListener("click", () => creatUsebtn(sandbox));
 deletebtn.addEventListener("click", () => createDeletebtn(sandbox));
 
 // Even listener for edting flashcard sets
-// editbtn.addEventListener("click", () => populateEntries(sandbox));
+editbtn.addEventListener("click", () => createEdit(sandbox));
 
 
 

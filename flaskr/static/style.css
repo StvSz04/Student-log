@@ -155,7 +155,7 @@ nav ul li p{
 
 
 .btn, button {
-    background-color: #1d1929; /* Bright blue button background */
+    background-color: #140d27; 
     color: #ffffff; /* White text */
     border: 2px solid #979494; /* Darker blue border */
     padding: 12px 24px;
@@ -165,7 +165,7 @@ nav ul li p{
 }   
 
 .btn:hover, button:hover {
-    background-color: #1a0731;
+    box-shadow:  1px 1px 10px 5px rgba(172, 172, 172, 0.75); /* Deeper shadow on hover */
     border-color: #ffffff; 
 }
 
@@ -652,11 +652,13 @@ li .username {
 .flashcard {
     margin: 2rem auto;
     padding: 3rem;
-    max-width: 600px;
+    min-width: 400px;
+    max-width: 700px;
     border-radius: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     font-family: sans-serif;
+    background-image: repeating-linear-gradient(rgb(19, 2, 51),rgb(12, 11, 11), rgb(19, 2, 51));
 }
 
 
@@ -668,6 +670,12 @@ li .username {
     font-size: 1.2rem;
 }
 
+.inputDiv {
+    display: flex;           /* Makes children line up horizontally */
+    flex-wrap: wrap;
+    align-items: center;     /* Vertically center everything */
+    gap: 10px;               /* Optional: space between items */
+}
 
 /* Option bar */
 .optionBar {
@@ -716,8 +724,11 @@ li .username {
     background-color: #000000; 
     color: #ffffff; 
     border: 2px solid #979494; 
-    padding: 15px 24px;
+    padding: 0.5em 1em;
     margin: 10px;
     border-radius: 8px; /* Rounded corners */
     cursor: pointer;
+    display: inline-block;     /* Make it only as wide as needed */
+    white-space: nowrap;       /* Prevent text from wrapping */
+    width: auto;               /* Ensure it doesn't stretch */
 }
