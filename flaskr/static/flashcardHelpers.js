@@ -282,6 +282,20 @@ export function createSet(sandbox) {
     inputDiv.appendChild(returnedCreateFlashInputs[0]);       // Front input
     inputDiv.appendChild(returnedCreateFlashInputs[1]);       // Back input
 
+    let deletebtn = createButton("delete-card", "DELETE", "button")
+            inputDiv.appendChild(deletebtn);
+
+            deletebtn.addEventListener('click', () => {
+                    // Remove the front input
+                returnedCreateFlashInputs[0].type = 'hidden';
+                returnedCreateFlashInputs[0].value = "deleted";
+                // Remove the back input
+                returnedCreateFlashInputs[1].type = 'hidden';
+                returnedCreateFlashInputs[1].value =  "deleted";
+                // Remove the delete button itself
+                inputDiv.removeChild(deletebtn);
+            });
+
     // Assemble the form
     flashForm.appendChild(setName);
     flashForm.appendChild(hiddenInputTwo);
@@ -299,32 +313,87 @@ export function createSet(sandbox) {
 
     // === Handler to add new flashcard input pair ===
     newFlashCardbtn.addEventListener("click", function (event) {
-        // Grab the last input (used to insert the new card after it)
+        
+        try {
 
 
-        let lastInput = flashForm.elements[flashForm.elements.length - 3];
+            // Grab the last input (used to insert the new card after it)
+            let lastInput = flashForm.elements[flashForm.elements.length - 3];
 
-        // Increment card count and create new inputs/buttons
-        cardCount += 1;
-        const returnedCreateFlashInputs = createFlashInputs(cardCount);
-        // returnedCreateListnerTools = createListnerTools(cardCount);
+            // Increment card count and create new inputs/buttons
+            const returnedCreateFlashInputs = createFlashInputs(cardCount);
+            // returnedCreateListnerTools = createListnerTools(cardCount);
 
-        // Insert front input and associated buttons
-        inputDiv.insertBefore(returnedCreateFlashInputs[0], lastInput.nextSibling)
+            // Insert front input and associated buttons
+            inputDiv.insertBefore(returnedCreateFlashInputs[0], lastInput.nextSibling)
 
-        // Insert back input and associated buttons
-        inputDiv.appendChild(returnedCreateFlashInputs[1]);
-        let deletebtn = createButton("delete-card", "DELETE", "button")
-        inputDiv.appendChild(deletebtn);
+            // Insert back input and associated buttons
+            inputDiv.appendChild(returnedCreateFlashInputs[1]);
 
-        deletebtn.addEventListener('click', () => {
-            // Remove the front input
-            inputDiv.removeChild(returnedCreateFlashInputs[0]);
-            // Remove the back input
-            inputDiv.removeChild(returnedCreateFlashInputs[1]);
-            // Remove the delete button itself
-            inputDiv.removeChild(deletebtn);
-        });
+            // Set place
+            const place = document.createElement("input");
+            place.type = "hidden";   
+            place.name = "place" + cardCount; 
+            place.value = cardCount;
+
+            inputDiv.appendChild(place);
+
+            cardCount += 1;
+
+            console.log(place.value);
+
+            let deletebtn = createButton("delete-card", "DELETE", "button")
+            inputDiv.appendChild(deletebtn);
+
+            deletebtn.addEventListener('click', () => {
+                // Remove the front input
+                inputDiv.removeChild(returnedCreateFlashInputs[0]);
+                // Remove the back input
+                inputDiv.removeChild(returnedCreateFlashInputs[1]);
+                // Remove the delete button itself
+                inputDiv.removeChild(deletebtn);
+
+                cardCount -= 1;
+            });
+        }
+        catch {
+            // Increment card count and create new inputs/buttons
+            const returnedCreateFlashInputs = createFlashInputs(cardCount);
+            // returnedCreateListnerTools = createListnerTools(cardCount);
+
+            // Insert front input and associated buttons
+            inputDiv.appendChild(returnedCreateFlashInputs[0])
+
+            // Insert back input and associated buttons
+            inputDiv.appendChild(returnedCreateFlashInputs[1]);
+
+            // Set place
+            const place = document.createElement("input");
+            place.type = "hidden";   
+            place.name = "place" + cardCount; 
+            place.value = cardCount;
+
+            inputDiv.appendChild(place);
+        
+
+            let deletebtn = createButton("delete-card", "DELETE", "button")
+            inputDiv.appendChild(deletebtn);
+
+
+            cardCount += 1;
+
+            deletebtn.addEventListener('click', () => {
+                // Remove the front input
+                returnedCreateFlashInputs[0].type = 'hidden';
+                returnedCreateFlashInputs[0].value = "deleted";
+                // Remove the back input
+                returnedCreateFlashInputs[1].type = 'hidden';
+                returnedCreateFlashInputs[1].value =  "deleted";
+                // Remove the delete button itself
+                inputDiv.removeChild(deletebtn);
+            });
+        }
+
 
 
     });
