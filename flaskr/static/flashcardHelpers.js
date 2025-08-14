@@ -269,23 +269,27 @@ export function createSet(sandbox) {
     let returnedCreateFlashInputs = createFlashInputs(cardCount);
     // let returnedCreateListnerTools = createListnerTools(cardCount);
 
-    // Append inputs and tools in order: front input → front tools → back input → back tools
+    // Append inputs and tools in order: front input → back input
     inputDiv.appendChild(returnedCreateFlashInputs[0]);       // Front input
     inputDiv.appendChild(returnedCreateFlashInputs[1]);       // Back input
 
-    let deletebtn = createButton("delete-card", "DELETE", "button")
-            inputDiv.appendChild(deletebtn);
+    cardCount += 1;
 
-            deletebtn.addEventListener('click', () => {
-                    // Remove the front input
-                returnedCreateFlashInputs[0].type = 'hidden';
-                returnedCreateFlashInputs[0].value = "deleted";
-                // Remove the back input
-                returnedCreateFlashInputs[1].type = 'hidden';
-                returnedCreateFlashInputs[1].value =  "deleted";
-                // Remove the delete button itself
-                inputDiv.removeChild(deletebtn);
-            });
+    let deletebtn = createButton("delete-card", "DELETE", "button")
+    inputDiv.appendChild(deletebtn);
+
+    deletebtn.addEventListener('click', () => {
+        // Remove the front input
+        returnedCreateFlashInputs[0].type = 'hidden';
+        returnedCreateFlashInputs[0].value = "deleted";
+        // Remove the back input
+        returnedCreateFlashInputs[1].type = 'hidden';
+        returnedCreateFlashInputs[1].value = "deleted";
+
+        cardCount -= 1;
+        // Remove the delete button itself
+        inputDiv.removeChild(deletebtn);
+    });
 
     // Assemble the form
     flashForm.appendChild(setName);
@@ -304,7 +308,7 @@ export function createSet(sandbox) {
 
     // === Handler to add new flashcard input pair ===
     newFlashCardbtn.addEventListener("click", function (event) {
-        
+
         try {
 
 
@@ -321,8 +325,8 @@ export function createSet(sandbox) {
             // Insert back input and associated buttons
             inputDiv.appendChild(returnedCreateFlashInputs[1]);
 
-            cardCount += 1;
 
+            cardCount += 1;
 
             let deletebtn = createButton("delete-card", "DELETE", "button")
             inputDiv.appendChild(deletebtn);
@@ -341,7 +345,6 @@ export function createSet(sandbox) {
         catch {
             // Increment card count and create new inputs/buttons
             const returnedCreateFlashInputs = createFlashInputs(cardCount);
-            // returnedCreateListnerTools = createListnerTools(cardCount);
 
             // Insert front input and associated buttons
             inputDiv.appendChild(returnedCreateFlashInputs[0])
@@ -349,32 +352,32 @@ export function createSet(sandbox) {
             // Insert back input and associated buttons
             inputDiv.appendChild(returnedCreateFlashInputs[1]);
 
+            cardCount += 1;
 
             let deletebtn = createButton("delete-card", "DELETE", "button")
             inputDiv.appendChild(deletebtn);
 
-
-            cardCount += 1;
-
             deletebtn.addEventListener('click', () => {
                 // Remove the front input
-                returnedCreateFlashInputs[0].type = 'hidden';
-                returnedCreateFlashInputs[0].value = "deleted";
+                inputDiv.removeChild(returnedCreateFlashInputs[0]);
                 // Remove the back input
-                returnedCreateFlashInputs[1].type = 'hidden';
-                returnedCreateFlashInputs[1].value =  "deleted";
+                inputDiv.removeChild(returnedCreateFlashInputs[1]);
                 // Remove the delete button itself
                 inputDiv.removeChild(deletebtn);
+
+                // Remove the delete button itself
+                inputDiv.removeChild(deletebtn);
+
+                cardCount -= 1;
             });
         }
-
 
 
     });
 
     // === On form submit, store the final number of flashcards ===
     flashForm.addEventListener('submit', function (event) {
-        hiddenInputTwo.value = cardCount + 1; // Add 1 because cardCount is 0-based
+        hiddenInputTwo.value = cardCount; // Add 1 because cardCount is 0-based
     });
 }
 
@@ -780,20 +783,20 @@ export function populateEntries(set_name, sandbox) {
         catch {
             // Increment card count and create new inputs/buttons
             const returnedCreateFlashInputs = createFlashInputs(cardCount);
-            
+
             // Insert front input and associated buttons
             inputDiv.appendChild(returnedCreateFlashInputs[0])
 
             // Insert back input and associated buttons
             inputDiv.appendChild(returnedCreateFlashInputs[1]);
-            
+
             cardCount += 1;
 
             let deletebtn = createButton("delete-card", "DELETE", "button")
             inputDiv.appendChild(deletebtn);
 
             deletebtn.addEventListener('click', () => {
-               // Remove the front input
+                // Remove the front input
                 inputDiv.removeChild(returnedCreateFlashInputs[0]);
                 // Remove the back input
                 inputDiv.removeChild(returnedCreateFlashInputs[1]);

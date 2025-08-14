@@ -39,7 +39,7 @@ def flashcardCreate():
     if request.method == 'POST':
         # Recieve data from POST
         setName = request.form.get("set-name") 
-        cardCount = request.form.get("card-count")
+        cardCount = int(request.form.get("card-count"))
         folderName = request.form.get("folder-name")
         print("Set Name: ", setName)
         print("Folder Name: ", folderName)
@@ -57,21 +57,23 @@ def flashcardCreate():
 
             db.commit() # Commit changes
         
-            # For each flash card insert into db
-            for i in range(0, int(cardCount)):
-                cardsFront.append(request.form.get(f"front{i}"))
-                cardsBack.append(request.form.get(f"back{i}"))
+            fronts = [value for key, value in request.form.items() if key.startswith("front")]
+            backs = [value for key, value in request.form.items() if key.startswith("back")]
 
-                db.execute(
-                    "INSERT INTO Flashcard (set_id,place,front,back) VALUES (?, ?,?,?)",
-                    (setId,i,cardsFront[i],cardsBack[i])
-                )
-                db.commit()
+            print(len(fronts),len(backs))
+            print(fronts,backs)
+
+
+            for i in range(0,cardCount):       
+                print(i,cardCount)
+                db.execute("INSERT INTO Flashcard (set_id, place, front, back) VALUES (?, ?, ?, ?)",
+                        (setId, i, fronts[i], backs[i]))
+            db.commit()
 
             return redirect(url_for('flash.flashcard'))
             
-        except:
-            print("FAILED!!!")
+        except Exception as e:
+            print("FAILED!!!", e)
             return redirect(url_for('flash.flashcard'))
 
 
