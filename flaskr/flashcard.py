@@ -241,8 +241,8 @@ def flashcardUpdate():
 
         
         try:
-            # Insert flashcard set to db
-            cursor = db.execute(
+            # Update folder or setname
+            db.execute(
                 "UPDATE FlashcardSet SET folder_name = ?, set_name =? WHERE set_name = ? AND user_username = ?",
                 (folderName, newSetName,setName,user_id)
             )
@@ -254,34 +254,21 @@ def flashcardUpdate():
                     "SELECT set_id FROM FlashcardSet WHERE set_name = ? AND user_username = ?",
                     (newSetName, user_id)
                 ).fetchone()[0]
+            
+            #  Delete all set info
+            db.execute("DELETE FROM Flashcard WHERE set_id = ?",(setId,))
+            db.commit() # Commit changes
         
             # For each flash card insert into db
-            i = 0
-            while i < cardCount - 1:
-                front = request.form.get(f"front{i}")
-                back = request.form.get(f"back{i}")
-                place = int(request.form.get(f"place{i}"))
-                print(place)
+            # Grab every html element that startwith "ront" and "back"
+            fronts = [value for key, value in request.form.items() if key.startswith("front")]
+            backs = [value for key, value in request.form.items() if key.startswith("back")]
 
-                if front is None or back is None:
-                    i += 1
-                    continue
-
-                if front == "deleted" and back == "deleted":
-                    print("removing card", place)
-                    db.execute("DELETE FROM Flashcard WHERE set_id = ? AND place = ?", (setId, place))
-                    i += 1
-        
-                else:
-                    existing = db.execute("SELECT 1 FROM Flashcard WHERE set_id = ? AND place = ?", (setId, place)).fetchone()
-                    if existing is None:
-                        db.execute("INSERT INTO Flashcard (set_id, place, front, back) VALUES (?, ?, ?, ?)",
-                                (setId, place, front, back))
-                    else:
-                        db.execute("UPDATE Flashcard SET front = ?, back = ? WHERE set_id = ? AND place = ?",
-                                (front, back, setId, place))
-                    i += 1
-
+            for i in range(0,cardCount):       
+            
+                db.execute("INSERT INTO Flashcard (set_id, place, front, back) VALUES (?, ?, ?, ?)",
+                        (setId, i, fronts[i], backs[i]))
+                
             db.commit()
 
 
