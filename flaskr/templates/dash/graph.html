@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,22 +15,16 @@
 {% endblock %}
 
 {% block content %}
-<body class = "visualize_body">
-    <div>
-        <label> Choose Custom Colors</label>
-    </div>
-    <div id="courseColors" class = "courseColors">
-        {% for course in study_data['classes_data'] %}
-        <label for="custom_color"> {{course}}</label>
-        <input type="color" id="input-{{ loop.index }}" class="color-picker" value="#000000" data-course="{{ course }}">
-        {% endfor %}
-    </div>
 
-    <div>
+<body class="visualize_body">
+
+    {% if study_data.classes_data%}
+
+     <div>
         <label> Choose Semesters/Years</label>
     </div>
-    <div id="semesters" class = "semesters_div">
-        <form  id = "semester_range_form" method = "post" action = "{{ url_for('vis.display_graphs') }}">
+    <div id="semesters" class="semesters_div">
+        <form id="semester_range_form" method="post" action="{{ url_for('vis.display_graphs') }}">
             <input type="date" id="low-date" name="low-date" required>
             <input type="date" id="high-date" name="high-date" required>
             <button type="submit"> Submit Semesters</button>
@@ -37,32 +32,23 @@
     </div>
 
     <div class="center-container">
-        <!-- Pie Chart Slot -->
-        <h2>Pie Chart</h2>
-        <div class="div" id="pie-chart" style="width:750px;height:500px;">
-            <div id="pie-chart-data"></div> <!-- Placeholder for the pie chart -->
-        </div>
-
-
-
 
         <!-- Time Graph Slot -->
-        <h2>Time Graph</h2>
-          <!-- User input for ranges-->
-        <div class="slot" id="time-graph">
+        <!-- User input for ranges-->
+        <div class="time-graph" id="time-graph">
         </div>
-        <div> 
+        <div>
             <form id="log-hours-form" method="post" action="">
                 <label for="hours">Week Range Low</label>
-                <input type="range" id="low" name="low" min="0" max="52" value = "0">
+                <input type="range" id="low" name="low" min="0" max="52" value="0">
                 <p>Current Value: <span id="rangeValueLow">0 </span></p>
 
                 <label for="high">Week Range High</label>
-                <input type="range" id="high" name="high" min="0" max="52"  value = "52">
+                <input type="range" id="high" name="high" min="0" max="52" value="52">
                 <p>Current Value: <span id="rangeValueHigh">52</span></p>
             </form>
             <div>
-                <button onclick="updateGraph()" width = 40>Update Graph</button> 
+                <button onclick="updateGraph()" width=40>Update Graph</button>
             </div>
             <!-- Range value script-->
             <script>
@@ -83,29 +69,38 @@
                 rangeInputHigh.addEventListener("input", updateValue);
 
             </script>
-         </div>
+        </div>
 
+    </div>
+    <div>
+        <label> Choose Custom Colors</label>
+    </div>
+    <div id="courseColors" class="courseColors">
+        {% for course in study_data['classes_data'] %}
+        <label for="custom_color"> {{course}}</label>
+        <input type="color" id="input-{{ loop.index }}" class="color-picker" value="#000000" data-course="{{ course }}">
+        {% endfor %}
     </div>
 
     <footer>
         <!-- Add footer content here if needed -->
     </footer>
-    
+
     <!-- Embed the study_data as JSON in the HTML -->
-     <!--  Script for pie chart-->
+    <!--  Script for pie chart-->
     <script>
         // Convert the passed study_data dictionary into a JavaScript object 
         // so that the Js on the server can actually render this python dictionary, Jinja expression
-        const studyData = {{study_data | tojson}};
-        
-         //<Prepare the data for the pie chart & graph
+        const studyData = {{ study_data | tojson}};
+
+        //<Prepare the data for the pie chart & graph
         const values = studyData['hours_data'];  // Extract hours data
         const labels = studyData['classes_data'];  // Extract course names
         const weeklyHours = studyData['study_hours_data']; // Extract all weekly hours keyed to a course names
 
         // Funciton for updating semester/range
         const form = document.getElementById('semester_range_form');
-        form.addEventListener('submit', function(event) {
+        form.addEventListener('submit', function (event) {
             update_pie_chart();
             updateGraph();
         });
@@ -115,7 +110,7 @@
         function getRandomHexColor() {
             const letters = '0123456789ABCDEF';
             let color = '#';
-            
+
             for (let i = 0; i < 6; i++) {
                 color += letters[Math.floor(Math.random() * 16)];
             }
@@ -127,27 +122,27 @@
         // Assign each course to an initial color
         const courseColors = {}; // Object to hold course-color mapping
         const customColors = []; // Array to hold ordered list of colors
-        
+
         for (let i = 0; i < labels.length; i++) {
-                const tempName = labels[i];
-                courseColors[tempName] = {
-                    colors: getRandomHexColor()
-                    };
-                customColors.push(courseColors[tempName].colors);
+            const tempName = labels[i];
+            courseColors[tempName] = {
+                colors: getRandomHexColor()
+            };
+            customColors.push(courseColors[tempName].colors);
         }
-        
+
         // Function to match intial colors for color picker with randomly generated intial colors
         function set_colors() {
             const inputs = document.querySelectorAll('.color-picker');
             inputs.forEach(input => {
                 const course = input.dataset.course;
                 input.value = courseColors[course].colors;
-                
-            });  
+
+            });
         }
 
         // Function to update colors based on user input
-        function update_colors(){
+        function update_colors() {
             // Clear old colors
             customColors.length = 0;
             // Obtain attr
@@ -159,63 +154,26 @@
             for (let i = 0; i < labels.length; i++) {
                 const tempName = labels[i];
                 customColors.push(courseColors[tempName].colors);
-            } 
+            }
             // Replot with new colors
             update_lines();
             update_graph_colors();
-            update_pie_chart();
         }
 
         document.addEventListener("DOMContentLoaded", function () {
             set_colors();
         });
 
-       const inputs = document.querySelectorAll('.color-picker');
+        const inputs = document.querySelectorAll('.color-picker');
         inputs.forEach(input => {
             input.addEventListener('input', update_colors);
         });
 
-
-        // Pie Chart section
-        var data = [{
-            values: values,
-            labels: labels,
-            textinfo: "label+percent",
-            //textposition: "outside",
-            type: 'pie',  // Pie chart type
-            marker: {
-                colors: customColors
-            }
-        }];
-
-        var layout = {
-            title: {
-                text: 'Study Hours per Course',
-                font: { color: 'white' }
-            },
-            paper_bgcolor: 'rgba(64, 64, 64, 1)', // Dark gray background
-            plot_bgcolor: '#979494', // Lighter gray plot area
-            font: {
-                color: 'white' // Applies to all text: axis labels, legend, etc.
-            },
-            legend: {
-                font: {
-                    color: 'white'
-                }
-            }
-        };
-
-        function update_pie_chart(){
-            Plotly.newPlot('pie-chart', data, layout,  {displayModeBar: false});
-        }
-        // Create pie chart using the div, data taken from json, and layout
-        Plotly.newPlot('pie-chart', data, layout,  {displayModeBar: false});
-
         //----------------------------------------------------------------------
         const numLines = labels.length; // get length for, for loop, lables contains course names
         const allCourseLines = []; // Store all course lines in this array to pass to Plotly.newPlot() as the data parameter
-        function update_lines(){
-        allCourseLines.length = 0;  // Clear old data
+        function update_lines() {
+            allCourseLines.length = 0;  // Clear old data
 
             for (let i = 0; i < numLines; i++) {
                 const CourseLine = {}; // Dict for each course storing needed date and time keys for a line
@@ -225,7 +183,7 @@
                 const courseName = labels[i]; // Get the current course name from the labels array
 
                 // Check if there is weekly hours otherwise keep it blank
-                if (courseName in weeklyHours){
+                if (courseName in weeklyHours) {
                     courseData = weeklyHours[courseName];
                 }
 
@@ -240,12 +198,12 @@
                 CourseLine['y'] = hours; // y-axis data (hours studied)
                 CourseLine['type'] = 'scatter'; // Line type for Plotly graph
                 CourseLine['name'] = courseName; // Set the name for the line
-                CourseLine['line'] = {color: courseColors[courseName].colors}
+                CourseLine['line'] = { color: courseColors[courseName].colors }
 
                 allCourseLines.push(CourseLine); // Push the course line data to the allCourseLines array
             }
         }
-        
+
         //
         update_lines();
 
@@ -255,62 +213,62 @@
         //const H = document.getElementById("high").value;
 
         // Graph design i.e axis titles
-            var layoutGraph = {    
-                title: {
+        var layoutGraph = {
+            title: {
                 text: 'Timeline of Weekly Study Hours',
                 font: { color: 'white' }
             },
-               xaxis: {
-                    title: {
-                        text: 'Weeks',
-                        font: { color: 'white' }
-                    },
-                    tickfont: { color: 'white' },
-                    range: [0, 52],
-                    gridcolor: 'black',         // Dark gray grid
-                    zerolinecolor: 'black',     // Axis zero-line
-                    linecolor: 'black'          // Axis line
+            xaxis: {
+                title: {
+                    text: 'Weeks',
+                    font: { color: 'white' }
                 },
+                tickfont: { color: 'white' },
+                range: [0, 52],
+                gridcolor: 'black',         // Dark gray grid
+                zerolinecolor: 'black',     // Axis zero-line
+                linecolor: 'black'          // Axis line
+            },
 
-                yaxis: {
-                    title: {
-                        text: 'Hours',
-                        font: { color: 'white' }
-                    },
-                    tickfont: { color: 'white' },
-                    gridcolor: 'black',         // Dark gray grid
-                    zerolinecolor: 'black',     // Axis zero-line
-                    linecolor: 'black'          // Axis line
+            yaxis: {
+                title: {
+                    text: 'Hours',
+                    font: { color: 'white' }
                 },
+                tickfont: { color: 'white' },
+                gridcolor: 'black',         // Dark gray grid
+                zerolinecolor: 'black',     // Axis zero-line
+                linecolor: 'black'          // Axis line
+            },
 
-                paper_bgcolor: 'rgba(64, 64, 64, 1)', // Dark background
-                plot_bgcolor: 'rgba(80, 80, 80, 1)', // Darker gray for plot area
+            paper_bgcolor: 'rgba(0,0,0,0)', // background
+            plot_bgcolor: ' rgba(19, 2, 51,1)',
 
 
+            font: {
+                color: 'white' // General fallback font color
+            },
+
+            legend: {
                 font: {
-                    color: 'white' // General fallback font color
-                },
-
-                legend: {
-                    font: {
-                        color: 'white'
-                    }
+                    color: 'white'
                 }
-            };
+            }
+        };
         // Function to update graph colors
-        function update_graph_colors(){
+        function update_graph_colors() {
             Plotly.newPlot('time-graph', allCourseLines, layoutGraph);
         }
         // Function uses low and high range values to update graph
         function updateGraph() {
             const L = parseFloat(document.getElementById("low").value);
             const H = parseFloat(document.getElementById("high").value);
-            var layoutGraph = {    
+            var layoutGraph = {
                 title: {
-                text: 'Timeline of Weekly Study Hours',
-                font: { color: 'white' }
-            },
-               xaxis: {
+                    text: 'Timeline of Weekly Study Hours',
+                    font: { color: 'white' }
+                },
+                xaxis: {
                     title: {
                         text: 'Weeks',
                         font: { color: 'white' }
@@ -333,8 +291,8 @@
                     linecolor: 'black'          // Axis line
                 },
 
-                paper_bgcolor: 'rgba(64, 64, 64, 1)', // Dark background
-                plot_bgcolor: 'rgba(80, 80, 80, 1)', // Darker gray for plot area
+                paper_bgcolor: 'rgba(0,0,0,0)', // background
+                plot_bgcolor: ' rgba(19, 2, 51,1)',
 
 
                 font: {
@@ -352,7 +310,7 @@
         }
 
         // Now pass allCourseLines to Plotly.newPlot() as the data parameter
-        Plotly.newPlot('time-graph', allCourseLines, layoutGraph,  {staticPlot: true}, {displayModeBar: false});
+        Plotly.newPlot('time-graph', allCourseLines, layoutGraph, { staticPlot: true }, { displayModeBar: false });
 
 
 
@@ -360,7 +318,9 @@
     </script>
 
 
-   
+    {% else %}
+    <script> alert("No courses")</script>
+    {% endif %}
 
 </body>
 {% endblock %}

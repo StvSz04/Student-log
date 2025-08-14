@@ -33,8 +33,12 @@ def go_to_log():
 
 # Log_courses page
 @bp.route('/graphs')
-def go_to_vis():
+def go_to_graph():
     return redirect(url_for('vis.display_graphs'))
+
+@bp.route('/pie')
+def go_to_pie():
+    return redirect(url_for('vis.display_pie'))
 
 # delete_courses page
 @bp.route('/delete')

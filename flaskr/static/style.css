@@ -733,3 +733,27 @@ li .username {
     white-space: nowrap;       /* Prevent text from wrapping */
     width: auto;               /* Ensure it doesn't stretch */
 }
+
+
+.center-container{
+    background-color: transparent;
+    display: flex;
+    justify-content: center; /* horizontal center */
+    align-items: center;     /* vertical center */
+}
+
+.pie-div {
+    background-color: transparent;
+    width: 600px;
+    height: 600px;
+}
+
+.time-graph {
+    background-color: transparent;
+    width: 800px;
+    height:500px;
+}
+
+.courseColors{
+    background-color: transparent;
+}
